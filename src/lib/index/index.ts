@@ -94,7 +94,7 @@ export function listStations(): StationSummary[] {
   return stationsCache;
 }
 
-const UNRELIABLE_TIERS = new Set(["unreliable", "unreliable (entrapment history)"]);
+const UNRELIABLE_TIERS = new Set(["unreliable"]);
 
 /**
  * Aggregates a station's elevators/escalators into a single accessibility

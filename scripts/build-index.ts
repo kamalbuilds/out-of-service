@@ -140,6 +140,19 @@ function sum(nums: number[]): number {
   return nums.filter((n) => Number.isFinite(n)).reduce((a, b) => a + b, 0);
 }
 
+// Linear-interpolation percentile over an ascending-sorted array (numpy's default
+// "linear" method / R-7). Returns null for an empty population.
+function percentile(sortedAsc: number[], p: number): number | null {
+  if (sortedAsc.length === 0) return null;
+  if (sortedAsc.length === 1) return sortedAsc[0];
+  const idx = (p / 100) * (sortedAsc.length - 1);
+  const lo = Math.floor(idx);
+  const hi = Math.ceil(idx);
+  if (lo === hi) return sortedAsc[lo];
+  const frac = idx - lo;
+  return sortedAsc[lo] + (sortedAsc[hi] - sortedAsc[lo]) * frac;
+}
+
 // Parse "117, L" -> { stopId: "117", line: "L" }. Returns null for "N/A"-style values.
 function parseAdaNeighbor(raw: string | undefined): { stopId: string; line: string } | null {
   if (!raw) return null;
@@ -195,23 +208,125 @@ interface EquipmentIndexEntry {
     group: "EL" | "ES";
     group_size: number;
   };
-  tier: string;
+  tier: "reliable" | "watch" | "unreliable" | "unknown";
+  tier_reason: string;
 }
 
-const TIER_THRESHOLDS = {
-  // Based on trailing-24-month mean 24-hour availability and entrapment count.
-  RELIABLE_AVAILABILITY: 0.97,
-  WATCH_AVAILABILITY: 0.93,
-  // unreliable: below WATCH_AVAILABILITY, or any entrapments in the trailing 24 months
-  ENTRAPMENT_ANY: 1,
-};
+// Tier is computed per equipment type (EL and ES have very different baseline
+// reliability, so pooling them would bias thresholds toward whichever type has
+// more entries). Thresholds are percentiles of the *eligible* population for that
+// type: entries with >= MIN_MONTHS_FOR_TIER months on record and a computable
+// trailing-24-month availability. Entries below that bar are always "unknown",
+// and never count toward computing thresholds for entries that do qualify.
+const MIN_MONTHS_FOR_TIER = 6;
 
-function computeTier(availMean: number | null, entrapments24m: number): string {
-  if (entrapments24m >= TIER_THRESHOLDS.ENTRAPMENT_ANY) return "unreliable (entrapment history)";
-  if (availMean === null) return "insufficient data";
-  if (availMean >= TIER_THRESHOLDS.RELIABLE_AVAILABILITY) return "reliable";
-  if (availMean >= TIER_THRESHOLDS.WATCH_AVAILABILITY) return "watch";
-  return "unreliable";
+interface TierThresholds {
+  population_size: number;
+  p25_availability_24h_mean_24m: number;
+  p75_availability_24h_mean_24m: number;
+  p50_unscheduled_24m: number;
+  p75_unscheduled_24m: number;
+  p75_entrapments_24m: number;
+  p90_entrapments_24m: number;
+}
+
+function computeTypeThresholds(eligible: EquipmentIndexEntry[]): TierThresholds {
+  const avails = eligible
+    .map((e) => e.metrics.availability_24h_mean_24m)
+    .filter((v): v is number => v !== null)
+    .sort((a, b) => a - b);
+  const unsched = eligible.map((e) => e.metrics.unscheduled_24m).sort((a, b) => a - b);
+  const entrap = eligible.map((e) => e.metrics.entrapments_24m).sort((a, b) => a - b);
+
+  return {
+    population_size: eligible.length,
+    p25_availability_24h_mean_24m: percentile(avails, 25) ?? 0,
+    p75_availability_24h_mean_24m: percentile(avails, 75) ?? 1,
+    p50_unscheduled_24m: percentile(unsched, 50) ?? 0,
+    p75_unscheduled_24m: percentile(unsched, 75) ?? 0,
+    p75_entrapments_24m: percentile(entrap, 75) ?? 0,
+    p90_entrapments_24m: percentile(entrap, 90) ?? 0,
+  };
+}
+
+function fmt(n: number): string {
+  return Number.isInteger(n) ? String(n) : n.toFixed(4);
+}
+
+function computeTier(
+  entry: EquipmentIndexEntry,
+  t: TierThresholds
+): { tier: EquipmentIndexEntry["tier"]; tier_reason: string } {
+  const months = entry.metrics.months_observed;
+  const avail = entry.metrics.availability_24h_mean_24m;
+  const unsched = entry.metrics.unscheduled_24m;
+  const entrap = entry.metrics.entrapments_24m;
+
+  if (months < MIN_MONTHS_FOR_TIER) {
+    return {
+      tier: "unknown",
+      tier_reason: `insufficient data: months_observed=${months} < ${MIN_MONTHS_FOR_TIER}`,
+    };
+  }
+  if (avail === null) {
+    return {
+      tier: "unknown",
+      tier_reason: "insufficient data: no valid _24_hour_availability readings in the trailing 24 months",
+    };
+  }
+
+  const unreliableReasons: string[] = [];
+  if (avail <= t.p25_availability_24h_mean_24m) {
+    unreliableReasons.push(
+      `availability_24h_mean_24m ${fmt(avail)} <= p25 ${fmt(t.p25_availability_24h_mean_24m)}`
+    );
+  }
+  if (unsched >= t.p75_unscheduled_24m) {
+    unreliableReasons.push(`unscheduled_24m ${fmt(unsched)} >= p75 ${fmt(t.p75_unscheduled_24m)}`);
+  }
+  if (entrap >= t.p90_entrapments_24m) {
+    unreliableReasons.push(`entrapments_24m ${fmt(entrap)} >= p90 ${fmt(t.p90_entrapments_24m)}`);
+  }
+  if (unreliableReasons.length > 0) {
+    return { tier: "unreliable", tier_reason: `unreliable: ${unreliableReasons.join("; ")}` };
+  }
+
+  const isReliable =
+    avail >= t.p75_availability_24h_mean_24m &&
+    unsched <= t.p50_unscheduled_24m &&
+    entrap < t.p75_entrapments_24m;
+  if (isReliable) {
+    return {
+      tier: "reliable",
+      tier_reason: `reliable: availability_24h_mean_24m ${fmt(avail)} >= p75 ${fmt(
+        t.p75_availability_24h_mean_24m
+      )} and unscheduled_24m ${fmt(unsched)} <= p50 ${fmt(t.p50_unscheduled_24m)} and entrapments_24m ${fmt(
+        entrap
+      )} < p75 ${fmt(t.p75_entrapments_24m)}`,
+    };
+  }
+
+  return {
+    tier: "watch",
+    tier_reason: `watch: availability_24h_mean_24m ${fmt(avail)} between p25 ${fmt(
+      t.p25_availability_24h_mean_24m
+    )} and p75 ${fmt(t.p75_availability_24h_mean_24m)}; unscheduled_24m ${fmt(unsched)} (p50 ${fmt(
+      t.p50_unscheduled_24m
+    )}, p75 ${fmt(t.p75_unscheduled_24m)}); entrapments_24m ${fmt(entrap)} (p75 ${fmt(
+      t.p75_entrapments_24m
+    )}, p90 ${fmt(t.p90_entrapments_24m)})`,
+  };
+}
+
+function tierHistogram(entries: EquipmentIndexEntry[]): Record<string, { count: number; share: number }> {
+  const hist: Record<string, number> = { reliable: 0, watch: 0, unreliable: 0, unknown: 0 };
+  for (const e of entries) hist[e.tier] = (hist[e.tier] ?? 0) + 1;
+  const total = entries.length;
+  const out: Record<string, { count: number; share: number }> = {};
+  for (const [tier, count] of Object.entries(hist)) {
+    out[tier] = { count, share: total > 0 ? count / total : 0 };
+  }
+  return out;
 }
 
 async function main() {
@@ -277,7 +392,7 @@ async function main() {
     ).toFixed(1)}%`
   );
 
-  // ---- build per-equipment entries ----
+  // ---- pass 1: build per-equipment entries with metrics, but tier/tier_reason pending ----
   const entries: EquipmentIndexEntry[] = [];
 
   for (const [code, rows] of byCode.entries()) {
@@ -365,7 +480,9 @@ async function main() {
         group: equipmentType === "ES" ? "ES" : "EL",
         group_size: 0,
       },
-      tier: computeTier(availMean, entrapments24m),
+      // pending: filled in pass 2, once per-type thresholds are known
+      tier: "unknown",
+      tier_reason: "",
     });
   }
 
@@ -383,9 +500,41 @@ async function main() {
     });
   }
 
+  // ---- pass 2: per-type percentile thresholds, then assign tier + tier_reason ----
+  const tierThresholdsByType: Record<"EL" | "ES", TierThresholds> = {} as Record<"EL" | "ES", TierThresholds>;
+  for (const group of ["EL", "ES"] as const) {
+    const eligible = entries.filter(
+      (e) =>
+        e.rank.group === group &&
+        e.metrics.months_observed >= MIN_MONTHS_FOR_TIER &&
+        e.metrics.availability_24h_mean_24m !== null
+    );
+    tierThresholdsByType[group] = computeTypeThresholds(eligible);
+  }
+
+  for (const e of entries) {
+    const group = e.rank.group;
+    const { tier, tier_reason } = computeTier(e, tierThresholdsByType[group]);
+    e.tier = tier;
+    e.tier_reason = tier_reason;
+  }
+
   entries.sort((a, b) => a.equipment_code.localeCompare(b.equipment_code));
 
   writeFileSync(join(DATA_DIR, "index.json"), JSON.stringify(entries, null, 2));
+
+  // ---- tier histogram, per type, printed and stored ----
+  const histogramByType: Record<string, Record<string, { count: number; share: number }>> = {};
+  console.log("\n=== TIER HISTOGRAM ===");
+  for (const group of ["EL", "ES"] as const) {
+    const groupEntries = entries.filter((e) => e.rank.group === group);
+    const hist = tierHistogram(groupEntries);
+    histogramByType[group] = hist;
+    console.log(`${group} (n=${groupEntries.length}):`);
+    for (const [tier, { count, share }] of Object.entries(hist)) {
+      console.log(`  ${tier}: ${count} (${(share * 100).toFixed(1)}%)`);
+    }
+  }
 
   const distinctCodes = byCode.size;
   const meta = {
@@ -413,6 +562,8 @@ async function main() {
       },
     },
     index_entry_count: entries.length,
+    tier_thresholds: tierThresholdsByType,
+    tier_histogram: histogramByType,
   };
   writeFileSync(join(DATA_DIR, "index-meta.json"), JSON.stringify(meta, null, 2));
 

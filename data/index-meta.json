@@ -1,5 +1,5 @@
 {
-  "build_timestamp": "2026-09-03T10:52:03.287Z",
+  "build_timestamp": "2026-09-03T11:21:50.267Z",
   "total_rows_pulled": 82385,
   "distinct_equipment_code": 695,
   "date_range": {
@@ -25,5 +25,63 @@
       "share": 0.9815340909090909
     }
   },
-  "index_entry_count": 695
+  "index_entry_count": 695,
+  "tier_thresholds": {
+    "EL": {
+      "population_size": 407,
+      "p25_availability_24h_mean_24m": 0.9763846775082494,
+      "p75_availability_24h_mean_24m": 0.9881636246942025,
+      "p50_unscheduled_24m": 30,
+      "p75_unscheduled_24m": 47.5,
+      "p75_entrapments_24m": 8,
+      "p90_entrapments_24m": 14
+    },
+    "ES": {
+      "population_size": 282,
+      "p25_availability_24h_mean_24m": 0.953058203502802,
+      "p75_availability_24h_mean_24m": 0.9770883454831814,
+      "p50_unscheduled_24m": 105.5,
+      "p75_unscheduled_24m": 180.75,
+      "p75_entrapments_24m": 0,
+      "p90_entrapments_24m": 0
+    }
+  },
+  "tier_histogram": {
+    "EL": {
+      "reliable": {
+        "count": 81,
+        "share": 0.19612590799031476
+      },
+      "watch": {
+        "count": 172,
+        "share": 0.41646489104116224
+      },
+      "unreliable": {
+        "count": 154,
+        "share": 0.3728813559322034
+      },
+      "unknown": {
+        "count": 6,
+        "share": 0.014527845036319613
+      }
+    },
+    "ES": {
+      "reliable": {
+        "count": 0,
+        "share": 0
+      },
+      "watch": {
+        "count": 0,
+        "share": 0
+      },
+      "unreliable": {
+        "count": 282,
+        "share": 1
+      },
+      "unknown": {
+        "count": 0,
+        "share": 0
+      }
+    }
+  }
 }

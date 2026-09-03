@@ -6,6 +6,8 @@ import { toolsForRole } from "@/lib/webmcp/tools";
 import { subscribeToolLog, getToolLog, type ToolLogEntry } from "@/lib/webmcp/log";
 import { registerTools, type RegisteredInfo, type RegistrationTarget } from "@/lib/webmcp/register";
 import { ensureModelContext, type WebMcpLayer } from "@/lib/webmcp/runtime";
+import { ConfirmCard } from "@/components/webmcp/ConfirmCard";
+import { ReportForm } from "@/components/webmcp/ReportForm";
 
 /**
  * `@mcp-b/webmcp-types` types `execute` as `(input) => ...` because that is what the polyfill
@@ -26,11 +28,23 @@ export type WebMCPToolsProps = {
   readers: TripReaders;
   /** Hide the badge/log panel (the tools still register). */
   headless?: boolean;
+  /**
+   * Render the declarative report_broken_equipment form here. Rider sessions only.
+   * Set false and mount <ReportForm> yourself to place it elsewhere on the page.
+   */
+  reportForm?: boolean;
 };
 
 const EMPTY_LOG: ToolLogEntry[] = [];
 
-export function WebMCPTools({ role, trip, actions, readers, headless = false }: WebMCPToolsProps) {
+export function WebMCPTools({
+  role,
+  trip,
+  actions,
+  readers,
+  headless = false,
+  reportForm = true,
+}: WebMCPToolsProps) {
   const [layer, setLayer] = useState<WebMcpLayer>("unavailable");
   const [context, setContext] = useState<SpecModelContext | null>(null);
   const [registered, setRegistered] = useState<RegisteredInfo[]>([]);
@@ -113,9 +127,20 @@ export function WebMCPTools({ role, trip, actions, readers, headless = false }: 
 
   const log = useSyncExternalStore(subscribeToolLog, getToolLog, () => EMPTY_LOG);
 
-  if (headless) return null;
+  // The confirm card travels with the tools: a mutating tool that cannot reach a human is a
+  // mutating tool that hangs. Mounting it here means no page can register tools without it.
+  const gate = (
+    <>
+      <ConfirmCard />
+      {reportForm && role === "rider" && trip && <ReportForm actions={actions} />}
+    </>
+  );
+
+  if (headless) return gate;
 
   return (
+    <>
+      {gate}
     <section
       data-webmcp-panel
       data-webmcp-layer={layer}
@@ -183,6 +208,7 @@ export function WebMCPTools({ role, trip, actions, readers, headless = false }: 
         )}
       </div>
     </section>
+    </>
   );
 }
 

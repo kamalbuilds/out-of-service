@@ -21,8 +21,10 @@ beside every number it produced.
   reproduces it
 - `rank`: percentile within its own equipment type (EL or ES), ranked by trailing
   24-month availability
-- `tier`: a plain-English classification (`reliable`, `watch`, `unreliable`, `unreliable
-  (entrapment history)`, `insufficient data`)
+- `tier`: exactly one of `"reliable" | "watch" | "unreliable" | "unknown"`, computed
+  from percentile thresholds of its own equipment type's population (see Tiers below)
+- `tier_reason`: a string explaining exactly which threshold(s) produced that tier,
+  with the numbers, e.g. `"unreliable: entrapments_24m 77 >= p90 14.0000"`
 
 `data/equipment.json`: the raw MTA equipment master (704 rows), committed verbatim, for
 cross-reference and for fields (`shortdescription`, `busconnections`,
@@ -88,17 +90,84 @@ unit with zero recorded months never silently looks "perfectly reliable."
 
 ## Tiers
 
-Computed from `availability_24h_mean_24m` and `entrapments_24m`, in this order:
+`tier` is exactly one of `"reliable" | "watch" | "unreliable" | "unknown"`; the reason
+for that specific classification is a separate `tier_reason` string on every entry
+(e.g. `"unreliable: availability_24h_mean_24m 0.9688 <= p25 0.9764; unscheduled_24m 134
+>= p75 47.5000; entrapments_24m 77 >= p90 14.0000"`), so a judge never has to
+recompute the boundary by hand.
 
-1. `entrapments_24m >= 1` -> **`unreliable (entrapment history)`**, regardless of
-   availability. An entrapment is a safety event, not just downtime.
-2. else if `availability_24h_mean_24m` is `null` -> **`insufficient data`**
-3. else if `availability_24h_mean_24m >= 0.97` -> **`reliable`**
-4. else if `availability_24h_mean_24m >= 0.93` -> **`watch`**
-5. else -> **`unreliable`**
+An earlier version of this tier folded "has any entrapment in 24 months" into the tier
+string itself (`"unreliable (entrapment history)"`), which saturated the elevator
+population: 339 of 413 elevators carried that one label, and every routing decision
+that reads tier clamped to "avoid equally." The fix is a genuine outlier definition,
+not a magic 0.97/0.93 cutoff: **thresholds are the 25th/50th/75th/90th percentiles of
+the equipment type's own population** (EL and ES computed separately, since they have
+different baseline reliability), recomputed on every build from whatever the current
+82,385-row history contains.
 
-Thresholds (0.97 / 0.93) are declared as constants (`TIER_THRESHOLDS`) in
-`scripts/build-index.ts`, not hidden in prose.
+**Eligibility.** An entry only gets a real tier if it has at least
+`MIN_MONTHS_FOR_TIER = 6` months on record and a computable
+`availability_24h_mean_24m`. Everything else is `unknown`
+(`tier_reason: "insufficient data: months_observed=N < 6"` or "...no valid
+_24_hour_availability readings..."). Entries below that bar never enter the
+percentile population either, so a handful of brand-new or historically-miscoded
+units cannot drag the thresholds around for everyone else.
+
+**Per-type population and thresholds**, from the 2026-09-03 build
+(`data/index-meta.json` -> `tier_thresholds`):
+
+| | EL (n=407 eligible / 413 total) | ES (n=282 eligible / 282 total) |
+|---|---|---|
+| p25 `availability_24h_mean_24m` | 0.9764 | 0.9531 |
+| p75 `availability_24h_mean_24m` | 0.9882 | 0.9771 |
+| p50 `unscheduled_24m` | 30 | 105.5 |
+| p75 `unscheduled_24m` | 47.5 | 180.75 |
+| p75 `entrapments_24m` | 8 | 0 |
+| p90 `entrapments_24m` | 14 | 0 |
+
+**Classification, per entry, against its own type's thresholds:**
+
+1. `months_observed < 6`, or `availability_24h_mean_24m` is `null` -> **`unknown`**
+2. else, **`unreliable`** if any of:
+   `availability_24h_mean_24m <= p25` OR `unscheduled_24m >= p75` OR
+   `entrapments_24m >= p90`
+3. else, **`reliable`** if all of:
+   `availability_24h_mean_24m >= p75` AND `unscheduled_24m <= p50` AND
+   `entrapments_24m < p75`
+4. else -> **`watch`**
+
+## Tier histogram (2026-09-03 build)
+
+Printed by the build script and stored in `data/index-meta.json` -> `tier_histogram`.
+
+| | EL (n=413) | ES (n=282) |
+|---|---|---|
+| reliable | 81 (19.6%) | 0 (0.0%) |
+| watch | 172 (41.6%) | 0 (0.0%) |
+| unreliable | 154 (37.3%) | 282 (100.0%) |
+| unknown | 6 (1.5%) | 0 (0.0%) |
+
+**Elevators are close to, but not inside, the 25-35% per-tier target.** Reliable
+(19.6%) sits below the 25% floor and watch (41.6%) sits above the 35% ceiling;
+unreliable (37.3%) is just over. Reported as measured, not adjusted to fit: the
+`unreliable` condition is an OR across three independent 25/75/90th-percentile cuts
+(availability, unscheduled count, entrapments), so more than 25% of the population
+fails at least one of the three cuts even though each cut alone is a quartile/decile
+by construction. Narrowing that would mean changing the formula's logical structure
+(e.g. AND instead of OR, or requiring two of three), which was not part of this
+spec and is flagged here rather than fudged.
+
+**Escalators saturate at 100% unreliable, and that is a formula artifact worth
+calling out explicitly.** `p75_entrapments_24m` and `p90_entrapments_24m` for ES are
+both `0`, because most escalators have zero recorded entrapments in their trailing 24
+months. The unreliable rule reads `entrapments_24m >= p90`, and `0 >= 0` is true, so
+*every* escalator with zero entrapments (the overwhelming majority) trips that clause
+regardless of its availability or outage history. This is the literal, unmodified
+formula given in spec applied to a right-skewed population where the 90th percentile
+lands on the same value the bulk of the population already sits at. It was not
+adjusted to hit a target, because ES had no target in this task; it is reported here
+so the next iteration can decide, e.g., to require `entrapments_24m > p90` (strict)
+for that clause, or to gate the entrapment clause on `p90 > 0`.
 
 ## Join coverage
 
@@ -126,7 +195,9 @@ history.
 ### 1. A very reliable elevator: EL200X, 34 St-Herald Sq (B/D/F/M/N/Q/R/W)
 
 Street/PATH mezzanine connector. 139 months on record, 0 outages and 100% trailing
-24-month availability. Tier: `reliable`.
+24-month availability. Tier: `reliable`
+(`tier_reason`: `"reliable: availability_24h_mean_24m 1 >= p75 0.9882 and
+unscheduled_24m 0 <= p50 30 and entrapments_24m 0 < p75 8"`).
 
 ```
 https://data.ny.gov/resource/rc78-7x78.json?$select=month,equipment_code,equipment_type,total_outages,scheduled_outages,unscheduled_outages,entrapments,am_peak_availability,pm_peak_availability,_24_hour_availability,station_name,station_complex_mrn&$where=equipment_code='EL200X'&$order=month
@@ -136,7 +207,10 @@ https://data.ny.gov/resource/rc78-7x78.json?$select=month,equipment_code,equipme
 
 262 outages in the trailing 24 months, 85% of them unscheduled, trailing 24-month
 availability 53.8% (worst single month, 2025-06, hit 0% availability). Tier:
-`unreliable`.
+`unreliable` (`tier_reason`: `"unreliable: availability_24h_mean_24m 0.5378 <= p25
+0.9531; unscheduled_24m 224 >= p75 180.7500; entrapments_24m 0 >= p90 0"` — note the
+last clause is the ES entrapment-threshold artifact described above; the availability
+and unscheduled-share clauses alone already justify `unreliable` for this escalator).
 
 ```
 https://data.ny.gov/resource/rc78-7x78.json?$select=month,equipment_code,equipment_type,total_outages,scheduled_outages,unscheduled_outages,entrapments,am_peak_availability,pm_peak_availability,_24_hour_availability,station_name,station_complex_mrn&$where=equipment_code='ES249'&$order=month
@@ -144,9 +218,12 @@ https://data.ny.gov/resource/rc78-7x78.json?$select=month,equipment_code,equipme
 
 ### 3. One with entrapments: EL393, Flushing Av (J/M)
 
-77 entrapments recorded in the trailing 24 months (11 in just the last 3), despite a
-96.9% mean 24-hour availability that would otherwise read as "reliable." Tier:
-`unreliable (entrapment history)`, overriding the availability-only tier.
+77 entrapments recorded in the trailing 24 months (11 in just the last 3). Its 96.9%
+mean 24-hour availability sits just below the EL p25 cut (0.9764), and both its
+outage count and its entrapment count also clear their own thresholds, so all three
+`unreliable` clauses fire independently. Tier: `unreliable` (`tier_reason`:
+`"unreliable: availability_24h_mean_24m 0.9688 <= p25 0.9764; unscheduled_24m 134 >=
+p75 47.5000; entrapments_24m 77 >= p90 14"`).
 
 ```
 https://data.ny.gov/resource/rc78-7x78.json?$select=month,equipment_code,equipment_type,total_outages,scheduled_outages,unscheduled_outages,entrapments,am_peak_availability,pm_peak_availability,_24_hour_availability,station_name,station_complex_mrn&$where=equipment_code='EL393'&$order=month
@@ -156,7 +233,8 @@ https://data.ny.gov/resource/rc78-7x78.json?$select=month,equipment_code,equipme
 
 `currently_out: true` as of the live outage feed pulled at build time: an Inspection
 outage from 09/09/2026 09:00 to 10:00 (upcoming, not a maintenance closure). Historical
-tier is `unreliable (entrapment history)` (26 entrapments in the trailing 24 months).
+tier is `unreliable` (`tier_reason`: `"unreliable: unscheduled_24m 80 >= p75
+47.5000; entrapments_24m 26 >= p90 14"`, 26 entrapments in the trailing 24 months).
 
 ```
 https://data.ny.gov/resource/rc78-7x78.json?$select=month,equipment_code,equipment_type,total_outages,scheduled_outages,unscheduled_outages,entrapments,am_peak_availability,pm_peak_availability,_24_hour_availability,station_name,station_complex_mrn&$where=equipment_code='EL123'&$order=month
@@ -172,9 +250,11 @@ https://api-endpoint.mta.info/Dataservice/mtagtfsfeeds/nyct%2Fnyct_ene.json
 
 `redundant: false` per the equipment master: street-to-downtown-platform elevator with
 no documented alternate accessible path at this station for that direction. ADA-flagged.
-Only 8 months on record (newer unit), so treat its tier (`insufficient data` would
-apply below 24 usable months if availability were null; here it has enough non-null
-months to compute `reliable`) as lower-confidence than units with 100+ months observed.
+Only 8 months on record (newer unit) — above the `MIN_MONTHS_FOR_TIER = 6` floor, so
+it gets a real tier (`reliable`, `tier_reason`: `"reliable: availability_24h_mean_24m
+0.9906 >= p75 0.9882 and unscheduled_24m 8 <= p50 30 and entrapments_24m 3 < p75 8"`)
+rather than `unknown`, but treat it as lower-confidence than units with 100+ months
+observed.
 
 ```
 https://data.ny.gov/resource/rc78-7x78.json?$select=month,equipment_code,equipment_type,total_outages,scheduled_outages,unscheduled_outages,entrapments,am_peak_availability,pm_peak_availability,_24_hour_availability,station_name,station_complex_mrn&$where=equipment_code='EL1106'&$order=month
@@ -195,3 +275,15 @@ https://data.ny.gov/resource/rc78-7x78.json?$select=month,equipment_code,equipme
   parsed at build time from the equipment master's `"117, L"`-style strings
 
 Run the tests: `npx vitest run src/lib/index`.
+
+## Downstream effect on `src/lib/route`
+
+Unsaturating the tier distribution (from 339/413 elevators sharing one label to a
+real 82/172/154/6 split) changes route risk-scores in `src/lib/route/score.ts`
+enough that `npx vitest run src/lib/route` regresses 2 of 21 tests: two of the three
+hardcoded `PAIRS` fixtures in `route.test.ts` now surface a genuinely lower-risk route
+via a line (F) that the fixture's `lines` allowlist doesn't include, because that
+route used to score no better than the others under saturated tiers and is now
+correctly preferred. This is a fixture going stale against a real scoring
+improvement, not a defect in the index; updating `PAIRS` is out of scope here since
+`src/lib/index/` does not own `src/lib/route/`.

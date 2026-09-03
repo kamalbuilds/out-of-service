@@ -53,7 +53,7 @@ export interface EquipmentRank {
   group_size: number;
 }
 
-export type Tier = "reliable" | "watch" | "unreliable" | "unreliable (entrapment history)" | "insufficient data";
+export type Tier = "reliable" | "watch" | "unreliable" | "unknown";
 
 export interface EquipmentIndexEntry {
   equipment_code: string;
@@ -73,7 +73,8 @@ export interface EquipmentIndexEntry {
   current_outage: CurrentOutage | null;
   metrics: EquipmentMetrics;
   rank: EquipmentRank;
-  tier: Tier | string;
+  tier: Tier;
+  tier_reason: string;
 }
 
 export interface StationSummary {
