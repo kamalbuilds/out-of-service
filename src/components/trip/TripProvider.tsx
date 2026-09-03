@@ -87,14 +87,9 @@ export function TripProvider({
   }, []);
 
   /*
-   * Trip SSE: the rider sees the companion's proposal without reloading.
-   *
-   * Both streams drop while the tab is hidden and reconnect when it comes
-   * back. A browser allows six sockets per origin over HTTP/1.1, and one open
-   * trip page holds two of them forever; without this, three tabs on the same
-   * dev server deadlock every other request, including the POST that creates
-   * the next trip. On reconnect the server sends the current trip first, so
-   * nothing is missed by having been away.
+   * Trip SSE: the rider sees the companion's proposal without reloading, in a
+   * background tab as much as a foreground one, so this stream is never
+   * dropped while the page is open.
    */
   useEffect(() => {
     let stopped = false;
@@ -108,7 +103,7 @@ export function TripProvider({
     };
 
     const connect = () => {
-      if (stopped || source || document.hidden) return;
+      if (stopped || source) return;
       setTripStream("connecting");
       const es = new EventSource(`/api/trip/${tripId}/stream`);
       source = es;
@@ -124,23 +119,25 @@ export function TripProvider({
       es.addEventListener("error", () => setTripStream("closed"));
     };
 
-    const onVisibility = () => {
-      if (document.hidden) disconnect();
-      else connect();
-    };
-
     connect();
-    document.addEventListener("visibilitychange", onVisibility);
 
     return () => {
       stopped = true;
       if (retry) clearTimeout(retry);
-      document.removeEventListener("visibilitychange", onVisibility);
       disconnect();
     };
   }, [tripId, apply]);
 
-  /* Live SSE: an elevator on this route goes out and both columns re-render. */
+  /*
+   * Live SSE: an elevator on this route goes out and both columns re-render.
+   *
+   * This one is dropped while the tab is hidden. A browser allows six sockets
+   * per origin over HTTP/1.1 and an open trip page would otherwise hold two of
+   * them forever, so three tabs on one dev server deadlock every other request
+   * to it, including the POST that creates the next trip. Backgrounding the
+   * live stream keeps a trip page to one persistent socket; on return the
+   * server's first event is a full snapshot, so nothing is missed.
+   */
   useEffect(() => {
     let source: EventSource | null = null;
 
