@@ -39,6 +39,8 @@ export type Outage = {
   outageDate?: string;
   estimatedReturn?: string | null;
   upcoming?: boolean;
+  /** Forced out by the shared `?demo=1` control, not the MTA feed. */
+  simulated?: boolean;
 };
 
 /** What `/api/stations` puts on the wire: the index row plus the tool-layer aliases. */
@@ -89,9 +91,10 @@ export interface TripReaders {
  * between a companion and an accept.
  */
 export interface TripActions {
-  createTrip(input: CreateTripInput): Promise<Trip>;
+  createTrip(input: CreateTripInput): Promise<Trip & { riderUrl: string; companionUrl: string }>;
   acceptRoute(routeId: string): Promise<Trip>;
   acceptReroute(proposalId: string): Promise<Trip>;
+  rejectReroute(proposalId: string): Promise<Trip>;
   proposeReroute(route: Route, reason: string): Promise<Trip>;
   watch(codes: string[]): Promise<Trip>;
   addNote(text: string): Promise<Trip>;
