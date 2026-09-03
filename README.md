@@ -224,6 +224,12 @@ For a live cross-check of any equipment code, the MTA publishes the same feed at
 https://new.mta.info/elevator-escalator-status. EL290X at 42 St/Port Authority-Bus Terminal has
 been out since 28 October 2024, roughly 675 days, with an estimated return of 31 December 2026.
 
+Calling a tool from a console instead of the panel: in Chrome 149 to 152 builds,
+`document.modelContext.executeTool(name, args)` expects `args` as a JSON string
+(`JSON.stringify(input)`), not a plain object, despite the spec IDL saying `object`
+(webmachinelearning/webmcp issue #278). Passing an object throws. Our tool log and evals use the
+string form.
+
 ## Which layer runs
 
 `document.modelContext` only. Never `navigator.modelContext`: the getter moved from Navigator to

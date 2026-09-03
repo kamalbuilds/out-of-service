@@ -246,7 +246,11 @@ correct.
 object `{query:'Jay St',limit:2}` throws `UnknownError: Failed to parse input arguments`, and
 `JSON.stringify(...)` succeeds. The return is a `DOMString`, not a parsed object. MCP-B's
 polyfill agrees (`parseChromeToolInput` calls `JSON.parse` on its input). Tool authors are
-unaffected: `execute` always receives a parsed object.
+unaffected: `execute` always receives a parsed object. In short, for any agent calling this
+directly: in Chrome 149 to 152 builds, `document.modelContext.executeTool(name, args)` expects
+`args` as a JSON string (`JSON.stringify(input)`), not a plain object, despite the spec IDL
+saying `object` (webmachinelearning/webmcp issue #278). Passing an object throws. Our tool log
+and evals use the string form.
 
 ## Security
 
@@ -299,6 +303,19 @@ unaffected: `execute` always receives a parsed object.
   the parts that would be.
 - Cross-origin exposure is not used: no `exposedTo`, no `fromOrigins`, so every tool is
   same-origin only, which is `registerTool`'s default.
+- **Spotlighting is not a `get_trip`-only behaviour: it is a property of the origin.** Andrew
+  Galloni's review found that `GET /api/trip/:id` returned notes and report descriptions
+  completely raw, delimiter-free, because `spotlight()` only ran inside the `get_trip` tool's own
+  execute path: a second, careless caller talking to this origin over plain `fetch` instead of
+  `document.modelContext` got the identical untrusted text with none of the boundary. Fixed by
+  moving `spotlight()` into `src/lib/spotlight.ts` and applying it in `stripKeysAndSpotlight()`
+  (`src/lib/store/index.ts`), used by both `GET /api/trip/:id` and the trip SSE stream, so
+  `notes[].text`, `reports[].description` and `proposals[].reason` come back
+  `<untrusted-user-text>`-wrapped from every unauthenticated read of a trip, tool or REST, not
+  only the one Chrome routes through `document.modelContext`. The one exception is the trip page
+  itself: a person reading their own trip is not the model the boundary exists for, so
+  `TripProvider` (`src/components/trip/TripProvider.tsx`) unwraps the markup with `unspotlight()`
+  before it reaches a component, the same way it always displayed plain text.
 
 ## Tests
 
