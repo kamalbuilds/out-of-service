@@ -107,12 +107,12 @@ export function findRoutes(
       transfers: s.transfers,
       ...result,
     };
-    return { route, stops: s.stops, dependencies };
+    return { route, stops: s.stops, dependencies, rawScore: result.rawScore };
   });
 
   scored.sort(
     (a, b) =>
-      a.route.riskScore - b.route.riskScore ||
+      a.rawScore - b.rawScore ||
       a.stops - b.stops ||
       a.route.transfers - b.route.transfers ||
       a.route.id.localeCompare(b.route.id),
@@ -141,9 +141,25 @@ export function explainRoute(route: Route, graph: StationGraph = getGraph()): El
   return routeElevators(legs, graph);
 }
 
-function legDirection(graph: StationGraph, leg: RouteLeg): Direction {
-  const edges = graph.adjacency.get(leg.fromStop)?.get(leg.line) ?? [];
-  return edges.find((e) => e.to === leg.toStop)?.direction ?? "north";
+/**
+ * A leg can span several ADA stops, so `toStop` is usually not a direct neighbour.
+ * Walks the line from `fromStop` in each direction until it hits `toStop`.
+ */
+export function legDirection(graph: StationGraph, leg: { line: string; fromStop: string; toStop: string }): Direction {
+  for (const want of ["north", "south"] as Direction[]) {
+    const seen = new Set([leg.fromStop]);
+    let at = leg.fromStop;
+    for (let hop = 0; hop < 60; hop++) {
+      const next = (graph.adjacency.get(at)?.get(leg.line) ?? []).find((e) => e.direction === want && !seen.has(e.to));
+      if (!next) break;
+      if (next.to === leg.toStop) return want;
+      seen.add(next.to);
+      at = next.to;
+    }
+  }
+  throw new Error(
+    `leg ${leg.line} ${leg.fromStop} -> ${leg.toStop} is not reachable on that line in either direction; the route did not come from this graph`,
+  );
 }
 
 /**
@@ -189,6 +205,8 @@ function search(graph: StationGraph, fromId: string, toId: string, maxTransfers:
     for (const edge of graph.adjacency.get(cur.node)?.get(cur.line) ?? []) {
       if (cur.path.includes(edge.to)) continue; // no revisits
       const last = cur.legs[cur.legs.length - 1];
+      // riding the same line back the other way is a cross-platform reversal, not a ride
+      if (last && last.line === cur.line && last.toStop === cur.node && last.direction !== edge.direction) continue;
       const legs =
         last && last.line === cur.line && last.toStop === cur.node && last.direction === edge.direction
           ? [

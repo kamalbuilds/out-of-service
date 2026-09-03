@@ -18,7 +18,16 @@ export type LiveOutageLike = {
   reason?: string;
 };
 
-export type ScoredRoute = Pick<Route, "elevators" | "riskScore" | "riskLabel" | "broken" | "explanation">;
+export type ScoredRoute = Pick<Route, "elevators" | "riskScore" | "riskLabel" | "broken" | "explanation"> & {
+  /**
+   * riskScore before the 0-100 clamp. 307 of the 384 ADA elevators in the current
+   * index carry tier "unreliable (entrapment history)", so any route with more than
+   * four dependencies clamps to 100 and the clamped scores stop ranking. Ranking
+   * uses rawScore; riskScore stays exactly as the spec defines it.
+   */
+  rawScore: number;
+  breakdown: { tiers: number; transfers: number; outage: number };
+};
 
 const TIER_WEIGHT: Record<Tier, number> = { unreliable: 25, watch: 10, unknown: 8, reliable: 2 };
 const TRANSFER_WEIGHT = 15;
@@ -118,11 +127,15 @@ export function scoreRoute(route: ScoreInput, index: RouteIndex | undefined, liv
     }
   }
 
-  score += TRANSFER_WEIGHT * route.transfers;
-  if (broken) score += BROKEN_WEIGHT;
+  const tierPoints = score;
+  const transferPoints = TRANSFER_WEIGHT * route.transfers;
+  const outagePoints = broken ? BROKEN_WEIGHT : 0;
+  score = tierPoints + transferPoints + outagePoints;
   const riskScore = Math.max(0, Math.min(100, Math.round(score)));
 
   return {
+    rawScore: Math.round(score),
+    breakdown: { tiers: Math.round(tierPoints), transfers: transferPoints, outage: outagePoints },
     elevators,
     riskScore,
     riskLabel: labelFor(riskScore),
