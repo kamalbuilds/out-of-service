@@ -86,42 +86,64 @@ export function TripProvider({
     setTrip(next);
   }, []);
 
-  /* Trip SSE: the rider sees the companion's proposal without reloading. */
+  /*
+   * Trip SSE: the rider sees the companion's proposal without reloading.
+   *
+   * Both streams drop while the tab is hidden and reconnect when it comes
+   * back. A browser allows six sockets per origin over HTTP/1.1, and one open
+   * trip page holds two of them forever; without this, three tabs on the same
+   * dev server deadlock every other request, including the POST that creates
+   * the next trip. On reconnect the server sends the current trip first, so
+   * nothing is missed by having been away.
+   */
   useEffect(() => {
     let stopped = false;
     let source: EventSource | null = null;
     let retry: ReturnType<typeof setTimeout> | undefined;
 
+    const disconnect = () => {
+      source?.close();
+      source = null;
+      setTripStream("closed");
+    };
+
     const connect = () => {
-      if (stopped) return;
+      if (stopped || source || document.hidden) return;
       setTripStream("connecting");
-      source = new EventSource(`/api/trip/${tripId}/stream`);
-      source.addEventListener("open", () => setTripStream("open"));
-      source.addEventListener("trip", (e) => {
+      const es = new EventSource(`/api/trip/${tripId}/stream`);
+      source = es;
+      es.addEventListener("open", () => setTripStream("open"));
+      es.addEventListener("trip", (e) => {
         apply(JSON.parse((e as MessageEvent).data) as Trip);
         setTripStream("open");
       });
-      source.addEventListener("end", () => {
-        source?.close();
-        setTripStream("closed");
+      es.addEventListener("end", () => {
+        disconnect();
         retry = setTimeout(connect, 500);
       });
-      source.addEventListener("error", () => {
-        setTripStream("closed");
-      });
+      es.addEventListener("error", () => setTripStream("closed"));
     };
+
+    const onVisibility = () => {
+      if (document.hidden) disconnect();
+      else connect();
+    };
+
     connect();
+    document.addEventListener("visibilitychange", onVisibility);
 
     return () => {
       stopped = true;
       if (retry) clearTimeout(retry);
-      source?.close();
+      document.removeEventListener("visibilitychange", onVisibility);
+      disconnect();
     };
   }, [tripId, apply]);
 
   /* Live SSE: an elevator on this route goes out and both columns re-render. */
   useEffect(() => {
-    const source = new EventSource("/api/live/stream");
+    let source: EventSource | null = null;
+
     const take = (e: Event) => {
       const data = JSON.parse((e as MessageEvent).data) as Partial<LiveSnapshot>;
       setLive((prev) => ({
@@ -135,11 +157,35 @@ export function TripProvider({
       }));
       setLiveStream("open");
     };
-    source.addEventListener("snapshot", take);
-    source.addEventListener("change", take);
-    source.addEventListener("heartbeat", () => setLiveStream("open"));
-    source.addEventListener("error", () => setLiveStream("closed"));
-    return () => source.close();
+
+    const connect = () => {
+      if (source || document.hidden) return;
+      const es = new EventSource("/api/live/stream");
+      source = es;
+      es.addEventListener("snapshot", take);
+      es.addEventListener("change", take);
+      es.addEventListener("heartbeat", () => setLiveStream("open"));
+      es.addEventListener("error", () => setLiveStream("closed"));
+    };
+
+    const disconnect = () => {
+      source?.close();
+      source = null;
+      setLiveStream("closed");
+    };
+
+    const onVisibility = () => {
+      if (document.hidden) disconnect();
+      else connect();
+    };
+
+    connect();
+    document.addEventListener("visibilitychange", onVisibility);
+
+    return () => {
+      document.removeEventListener("visibilitychange", onVisibility);
+      disconnect();
+    };
   }, []);
 
   /* ?demo=1 only. Never written to the store, never sent to the index. */

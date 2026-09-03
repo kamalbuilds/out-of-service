@@ -43,11 +43,16 @@ export function listStations(): StationSummary[] {
       const t = normaliseTier(e.tier);
       if (TIER_ORDER[t] > TIER_ORDER[worst]) worst = t;
     }
+    // The equipment master writes a station's lines as "A/C/E" in one field and
+    // sometimes also as separate rows, so split on both separators and dedupe.
+    const lines = [
+      ...new Set(s.lines.flatMap((l) => l.split(/[,/]/).map((x) => x.trim())).filter(Boolean)),
+    ];
     return {
       id: stationId(s),
       name: s.station,
-      gtfsStopIds: s.gtfs_stop_ids,
-      lines: s.lines,
+      gtfsStopIds: s.gtfs_stop_ids.flatMap((g) => g.split("/").map((x) => x.trim())).filter(Boolean),
+      lines,
       elevatorCount: elevators,
       worstTier: worst,
       ada: true,
