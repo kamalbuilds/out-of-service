@@ -8,6 +8,16 @@ Live: https://out-of-service-sepia.vercel.app
 Repo: https://github.com/kamalbuilds/out-of-service (MIT)
 Built for The WebMCP Challenge.
 
+## Why this matters
+
+MTA reports 160 accessible stations of 472
+(https://www.mta.info/article/accessibility-disability-pride-month-2026,
+https://gothamist.com/news/mta-settles-suit-to-make-subway-elevators-more-reliable). The CIDNY v.
+MTA settlement, reached July 29, 2026, requires advance elevator-outage notice, platform
+announcements every 15 minutes and real-time rerouting information
+(https://dralegal.org/press/ny-subway-elevators-settlement/); advocates count at least 25 elevator
+outages a day with a median of about four hours (Gothamist, same URL).
+
 ## What it does
 
 1. The rider opens `/`, picks two accessible stations and their constraints, and gets a trip id
@@ -82,6 +92,9 @@ Three keyless MTA sources, joined into one committed artifact (docs/DATA.md).
 | `data.ny.gov` dataset `rc78-7x78` | monthly availability, outage counts, entrapments per unit | 82,385 rows, 2015-01 to 2026-07 |
 | `nyct_ene_equipments.json` (MTA) | equipment master: what each unit connects, ADA flag, redundancy, next ADA station | 704 rows |
 | `nyct_ene.json` (MTA) | live outage feed, refreshed continuously | 85 records at build time |
+
+Numbers are the 2026-09-03 build snapshot (data/index-meta.json); live counts move with the MTA
+feed, call /api/health for current values.
 
 `data/index.json` is 695 records, one per equipment code, 413 elevators and 282 escalators across
 123 accessible station complexes (data/index-meta.json, `GET /api/health`). Each record carries

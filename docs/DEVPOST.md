@@ -37,21 +37,30 @@ what it can do updates because the subway changed.
 Times Sq-42 St to 34 St-Penn Station has three one-seat rides: the A, the C and the E. Choosing
 between them today means opening the MTA status page, looking up four equipment codes by hand, and
 learning only whether each is out right now. Nothing tells you how often that elevator has failed
-before, or which of the three routes actually depends on it. One `route_accessible` call returns
-all three routes scored: the A at 13 (low risk), the C and the E at 88 (avoid, broken), because
+before, or which of the three routes actually depends on it. Before: four equipment-code lookups
+across three pages, the MTA status page, the data.ny.gov dataset and a route-planning app, then a
+guess. After: one `route_accessible` call that returns three scored routes with every dependent
+elevator's history attached, the A at 13 (low risk), the C and the E at 88 (avoid, broken), because
 EL228 at Penn Station is out, non-redundant, and required by the C and E platforms. Every number
 carries the query that produced it, so the rider can check the claim rather than trust it.
 
 ## What people and agents can now do together that was difficult before
 
-Two agents can work the same trip with a real division of labour. The companion's agent watches
-the live feed and calls `propose_reroute` with a reason. The rider's agent surfaces the proposal
-and calls `accept_reroute`, which parks inside a confirmation card in the rider's own page. The
-rider presses Confirm, or presses Reject and types why, and the rejection reaches the model as a
-sentence: "The rider rejected the reroute: that transfer is too long for me." The companion's
-agent cannot accept anything, in that window or by forging the call, because the server re-checks
-the role. Filing a maintenance report against real MTA equipment is drafted by the agent and sent
-by the human. Nothing here is possible with DOM scraping or a shared login.
+Two agents work the same trip with a real division of labour. The companion's agent watches
+the live feed and calls `propose_reroute` with a reason; the rider's agent surfaces it and calls
+`accept_reroute`, which parks inside a confirmation card until the rider presses Confirm, or
+Reject with a typed reason that reaches the model as a sentence: "The rider rejected the reroute:
+that transfer is too long for me." The companion's agent cannot accept anything, even by forging
+the call, because the server re-checks the role. Nothing here is possible with DOM scraping or a
+shared login.
+
+MTA reports 160 accessible stations of 472
+(https://www.mta.info/article/accessibility-disability-pride-month-2026,
+https://gothamist.com/news/mta-settles-suit-to-make-subway-elevators-more-reliable). The CIDNY v.
+MTA settlement, reached July 29, 2026, requires advance elevator-outage notice, platform
+announcements every 15 minutes and real-time rerouting information
+(https://dralegal.org/press/ny-subway-elevators-settlement/); advocates count at least 25 elevator
+outages a day with a median of about four hours (Gothamist, same URL).
 
 ## How WebMCP was implemented
 
