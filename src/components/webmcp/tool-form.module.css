@@ -1,0 +1,38 @@
+/*
+ * Declarative WebMCP form styling.
+ *
+ * :tool-form-active matches a <form> whose declarative tool has been filled by an agent and is
+ * waiting for a human to submit it. :tool-submit-active matches that form's submit button.
+ * Neither pseudo-class exists in browsers without WebMCP, so the rules are inert there and the
+ * .agentFilled class set from the window "toolactivated" event carries the same styling.
+ */
+.toolForm {
+  border: 4px solid #000;
+  background: #fff;
+  color: #000;
+}
+
+.toolForm:where(:tool-form-active),
+.toolForm.agentFilled {
+  outline: 6px solid #f5a524;
+  outline-offset: 4px;
+  background: #fff8e6;
+}
+
+.toolForm:where(:tool-form-active)::before,
+.toolForm.agentFilled::before {
+  content: "An agent filled this in. Read it, then press the button yourself.";
+  display: block;
+  background: #f5a524;
+  color: #000;
+  font-family: var(--font-geist-mono), ui-monospace, monospace;
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 6px 12px;
+}
+
+.submit:where(:tool-submit-active),
+.agentFilled .submit {
+  box-shadow: 0 0 0 4px #f5a524;
+}
