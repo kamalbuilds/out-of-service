@@ -284,25 +284,33 @@ function computeTier(
   if (unsched >= t.p75_unscheduled_24m) {
     unreliableReasons.push(`unscheduled_24m ${fmt(unsched)} >= p75 ${fmt(t.p75_unscheduled_24m)}`);
   }
-  if (entrap >= t.p90_entrapments_24m) {
-    unreliableReasons.push(`entrapments_24m ${fmt(entrap)} >= p90 ${fmt(t.p90_entrapments_24m)}`);
+  // Strict ">" and gated on p90 > 0: when most of a type's population has zero
+  // entrapments, p90 lands on 0 and a ">=" comparison would trip for that entire
+  // zero-entrapment majority. Gating skips the clause outright when the type's
+  // population doesn't have enough entrapment variance to make p90 meaningful.
+  if (t.p90_entrapments_24m > 0 && entrap > t.p90_entrapments_24m) {
+    unreliableReasons.push(`entrapments_24m ${fmt(entrap)} > p90 ${fmt(t.p90_entrapments_24m)}`);
   }
   if (unreliableReasons.length > 0) {
     return { tier: "unreliable", tier_reason: `unreliable: ${unreliableReasons.join("; ")}` };
   }
 
+  // Same gating idea for reliable: when p75 > 0, cap at p75; when the type's p75
+  // is 0 (most of the population has zero entrapments), only a literal zero
+  // qualifies as reliable on this axis.
+  const entrapmentOk = t.p75_entrapments_24m > 0 ? entrap <= t.p75_entrapments_24m : entrap === 0;
   const isReliable =
-    avail >= t.p75_availability_24h_mean_24m &&
-    unsched <= t.p50_unscheduled_24m &&
-    entrap < t.p75_entrapments_24m;
+    avail >= t.p75_availability_24h_mean_24m && unsched <= t.p50_unscheduled_24m && entrapmentOk;
   if (isReliable) {
+    const entrapClause =
+      t.p75_entrapments_24m > 0
+        ? `entrapments_24m ${fmt(entrap)} <= p75 ${fmt(t.p75_entrapments_24m)}`
+        : `entrapments_24m ${fmt(entrap)} == 0 (p75 is 0 for this type)`;
     return {
       tier: "reliable",
       tier_reason: `reliable: availability_24h_mean_24m ${fmt(avail)} >= p75 ${fmt(
         t.p75_availability_24h_mean_24m
-      )} and unscheduled_24m ${fmt(unsched)} <= p50 ${fmt(t.p50_unscheduled_24m)} and entrapments_24m ${fmt(
-        entrap
-      )} < p75 ${fmt(t.p75_entrapments_24m)}`,
+      )} and unscheduled_24m ${fmt(unsched)} <= p50 ${fmt(t.p50_unscheduled_24m)} and ${entrapClause}`,
     };
   }
 

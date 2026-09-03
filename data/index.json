@@ -95,7 +95,7 @@
       "group_size": 413
     },
     "tier": "unreliable",
-    "tier_reason": "unreliable: availability_24h_mean_24m 0.9606 <= p25 0.9764; unscheduled_24m 95 >= p75 47.5000; entrapments_24m 14 >= p90 14"
+    "tier_reason": "unreliable: availability_24h_mean_24m 0.9606 <= p25 0.9764; unscheduled_24m 95 >= p75 47.5000"
   },
   {
     "equipment_code": "EL105",
@@ -242,7 +242,7 @@
       "group_size": 413
     },
     "tier": "unreliable",
-    "tier_reason": "unreliable: availability_24h_mean_24m 0.9706 <= p25 0.9764; unscheduled_24m 76 >= p75 47.5000; entrapments_24m 18 >= p90 14"
+    "tier_reason": "unreliable: availability_24h_mean_24m 0.9706 <= p25 0.9764; unscheduled_24m 76 >= p75 47.5000; entrapments_24m 18 > p90 14"
   },
   {
     "equipment_code": "EL108",
@@ -444,7 +444,7 @@
       "group_size": 413
     },
     "tier": "reliable",
-    "tier_reason": "reliable: availability_24h_mean_24m 0.9906 >= p75 0.9882 and unscheduled_24m 8 <= p50 30 and entrapments_24m 3 < p75 8"
+    "tier_reason": "reliable: availability_24h_mean_24m 0.9906 >= p75 0.9882 and unscheduled_24m 8 <= p50 30 and entrapments_24m 3 <= p75 8"
   },
   {
     "equipment_code": "EL111",
@@ -940,7 +940,7 @@
       "group_size": 413
     },
     "tier": "reliable",
-    "tier_reason": "reliable: availability_24h_mean_24m 0.9968 >= p75 0.9882 and unscheduled_24m 0 <= p50 30 and entrapments_24m 0 < p75 8"
+    "tier_reason": "reliable: availability_24h_mean_24m 0.9968 >= p75 0.9882 and unscheduled_24m 0 <= p50 30 and entrapments_24m 0 <= p75 8"
   },
   {
     "equipment_code": "EL120",
@@ -1148,7 +1148,7 @@
       "group_size": 413
     },
     "tier": "unreliable",
-    "tier_reason": "unreliable: unscheduled_24m 80 >= p75 47.5000; entrapments_24m 26 >= p90 14"
+    "tier_reason": "unreliable: unscheduled_24m 80 >= p75 47.5000; entrapments_24m 26 > p90 14"
   },
   {
     "equipment_code": "EL124",
@@ -1209,7 +1209,7 @@
       "group_size": 413
     },
     "tier": "reliable",
-    "tier_reason": "reliable: availability_24h_mean_24m 0.9958 >= p75 0.9882 and unscheduled_24m 22 <= p50 30 and entrapments_24m 6 < p75 8"
+    "tier_reason": "reliable: availability_24h_mean_24m 0.9958 >= p75 0.9882 and unscheduled_24m 22 <= p50 30 and entrapments_24m 6 <= p75 8"
   },
   {
     "equipment_code": "EL125",
@@ -1264,7 +1264,7 @@
       "group_size": 413
     },
     "tier": "unreliable",
-    "tier_reason": "unreliable: unscheduled_24m 48 >= p75 47.5000; entrapments_24m 18 >= p90 14"
+    "tier_reason": "unreliable: unscheduled_24m 48 >= p75 47.5000; entrapments_24m 18 > p90 14"
   },
   {
     "equipment_code": "EL126",
@@ -1319,7 +1319,7 @@
       "group_size": 413
     },
     "tier": "unreliable",
-    "tier_reason": "unreliable: availability_24h_mean_24m 0.9703 <= p25 0.9764; unscheduled_24m 87 >= p75 47.5000; entrapments_24m 26 >= p90 14"
+    "tier_reason": "unreliable: availability_24h_mean_24m 0.9703 <= p25 0.9764; unscheduled_24m 87 >= p75 47.5000; entrapments_24m 26 > p90 14"
   },
   {
     "equipment_code": "EL127",
@@ -1374,7 +1374,7 @@
       "group_size": 413
     },
     "tier": "unreliable",
-    "tier_reason": "unreliable: availability_24h_mean_24m 0.9698 <= p25 0.9764; unscheduled_24m 111 >= p75 47.5000; entrapments_24m 19 >= p90 14"
+    "tier_reason": "unreliable: availability_24h_mean_24m 0.9698 <= p25 0.9764; unscheduled_24m 111 >= p75 47.5000; entrapments_24m 19 > p90 14"
   },
   {
     "equipment_code": "EL128",
@@ -1606,7 +1606,7 @@
       "group_size": 413
     },
     "tier": "unreliable",
-    "tier_reason": "unreliable: availability_24h_mean_24m 0.8926 <= p25 0.9764; unscheduled_24m 74 >= p75 47.5000; entrapments_24m 27 >= p90 14"
+    "tier_reason": "unreliable: availability_24h_mean_24m 0.8926 <= p25 0.9764; unscheduled_24m 74 >= p75 47.5000; entrapments_24m 27 > p90 14"
   },
   {
     "equipment_code": "EL131",
@@ -2021,7 +2021,7 @@
       "group_size": 413
     },
     "tier": "unreliable",
-    "tier_reason": "unreliable: availability_24h_mean_24m 0.9760 <= p25 0.9764; unscheduled_24m 51 >= p75 47.5000; entrapments_24m 15 >= p90 14"
+    "tier_reason": "unreliable: availability_24h_mean_24m 0.9760 <= p25 0.9764; unscheduled_24m 51 >= p75 47.5000; entrapments_24m 15 > p90 14"
   },
   {
     "equipment_code": "EL138",
@@ -2357,7 +2357,7 @@
       "group_size": 413
     },
     "tier": "unreliable",
-    "tier_reason": "unreliable: unscheduled_24m 152 >= p75 47.5000; entrapments_24m 32 >= p90 14"
+    "tier_reason": "unreliable: unscheduled_24m 152 >= p75 47.5000; entrapments_24m 32 > p90 14"
   },
   {
     "equipment_code": "EL143",
@@ -2534,7 +2534,7 @@
       "group_size": 413
     },
     "tier": "unreliable",
-    "tier_reason": "unreliable: availability_24h_mean_24m 0.9764 <= p25 0.9764; entrapments_24m 14 >= p90 14"
+    "tier_reason": "unreliable: availability_24h_mean_24m 0.9764 <= p25 0.9764"
   },
   {
     "equipment_code": "EL146",
@@ -2797,7 +2797,7 @@
       "group_size": 413
     },
     "tier": "reliable",
-    "tier_reason": "reliable: availability_24h_mean_24m 0.9882 >= p75 0.9882 and unscheduled_24m 16 <= p50 30 and entrapments_24m 1 < p75 8"
+    "tier_reason": "reliable: availability_24h_mean_24m 0.9882 >= p75 0.9882 and unscheduled_24m 16 <= p50 30 and entrapments_24m 1 <= p75 8"
   },
   {
     "equipment_code": "EL160",
@@ -2907,7 +2907,7 @@
       "group_size": 413
     },
     "tier": "reliable",
-    "tier_reason": "reliable: availability_24h_mean_24m 0.9915 >= p75 0.9882 and unscheduled_24m 0 <= p50 30 and entrapments_24m 0 < p75 8"
+    "tier_reason": "reliable: availability_24h_mean_24m 0.9915 >= p75 0.9882 and unscheduled_24m 0 <= p50 30 and entrapments_24m 0 <= p75 8"
   },
   {
     "equipment_code": "EL178",
@@ -3133,7 +3133,7 @@
       "group_size": 413
     },
     "tier": "unreliable",
-    "tier_reason": "unreliable: availability_24h_mean_24m 0.9666 <= p25 0.9764; unscheduled_24m 48 >= p75 47.5000; entrapments_24m 17 >= p90 14"
+    "tier_reason": "unreliable: availability_24h_mean_24m 0.9666 <= p25 0.9764; unscheduled_24m 48 >= p75 47.5000; entrapments_24m 17 > p90 14"
   },
   {
     "equipment_code": "EL181",
@@ -3243,7 +3243,7 @@
       "group_size": 413
     },
     "tier": "unreliable",
-    "tier_reason": "unreliable: availability_24h_mean_24m 0.9437 <= p25 0.9764; unscheduled_24m 161 >= p75 47.5000; entrapments_24m 18 >= p90 14"
+    "tier_reason": "unreliable: availability_24h_mean_24m 0.9437 <= p25 0.9764; unscheduled_24m 161 >= p75 47.5000; entrapments_24m 18 > p90 14"
   },
   {
     "equipment_code": "EL183",
@@ -3350,7 +3350,7 @@
       "group_size": 413
     },
     "tier": "unreliable",
-    "tier_reason": "unreliable: availability_24h_mean_24m 0.9684 <= p25 0.9764; unscheduled_24m 60 >= p75 47.5000; entrapments_24m 24 >= p90 14"
+    "tier_reason": "unreliable: availability_24h_mean_24m 0.9684 <= p25 0.9764; unscheduled_24m 60 >= p75 47.5000; entrapments_24m 24 > p90 14"
   },
   {
     "equipment_code": "EL185",
@@ -3457,7 +3457,7 @@
       "group_size": 413
     },
     "tier": "unreliable",
-    "tier_reason": "unreliable: unscheduled_24m 50 >= p75 47.5000; entrapments_24m 14 >= p90 14"
+    "tier_reason": "unreliable: unscheduled_24m 50 >= p75 47.5000"
   },
   {
     "equipment_code": "EL187",
@@ -3998,7 +3998,7 @@
       "group_size": 413
     },
     "tier": "unreliable",
-    "tier_reason": "unreliable: availability_24h_mean_24m 0.9617 <= p25 0.9764; unscheduled_24m 68 >= p75 47.5000; entrapments_24m 23 >= p90 14"
+    "tier_reason": "unreliable: availability_24h_mean_24m 0.9617 <= p25 0.9764; unscheduled_24m 68 >= p75 47.5000; entrapments_24m 23 > p90 14"
   },
   {
     "equipment_code": "EL196",
@@ -4267,7 +4267,7 @@
       "group_size": 413
     },
     "tier": "reliable",
-    "tier_reason": "reliable: availability_24h_mean_24m 1 >= p75 0.9882 and unscheduled_24m 0 <= p50 30 and entrapments_24m 0 < p75 8"
+    "tier_reason": "reliable: availability_24h_mean_24m 1 >= p75 0.9882 and unscheduled_24m 0 <= p50 30 and entrapments_24m 0 <= p75 8"
   },
   {
     "equipment_code": "EL201",
@@ -4597,7 +4597,7 @@
       "group_size": 413
     },
     "tier": "unreliable",
-    "tier_reason": "unreliable: entrapments_24m 15 >= p90 14"
+    "tier_reason": "unreliable: entrapments_24m 15 > p90 14"
   },
   {
     "equipment_code": "EL207X",
@@ -4707,7 +4707,7 @@
       "group_size": 413
     },
     "tier": "reliable",
-    "tier_reason": "reliable: availability_24h_mean_24m 0.9998 >= p75 0.9882 and unscheduled_24m 0 <= p50 30 and entrapments_24m 0 < p75 8"
+    "tier_reason": "reliable: availability_24h_mean_24m 0.9998 >= p75 0.9882 and unscheduled_24m 0 <= p50 30 and entrapments_24m 0 <= p75 8"
   },
   {
     "equipment_code": "EL209",
@@ -4839,8 +4839,14 @@
     },
     "is_active": true,
     "non_nyct": false,
-    "currently_out": false,
-    "current_outage": null,
+    "currently_out": true,
+    "current_outage": {
+      "reason": "Maintenance",
+      "outagedate": "09/03/2026 07:18:00 AM",
+      "estimatedreturntoservice": "09/03/2026 03:00:00 PM",
+      "is_upcoming": false,
+      "is_maintenance": false
+    },
     "metrics": {
       "months_observed": 139,
       "last_month_observed": "2026-07",
@@ -4927,7 +4933,7 @@
       "group_size": 413
     },
     "tier": "reliable",
-    "tier_reason": "reliable: availability_24h_mean_24m 0.9887 >= p75 0.9882 and unscheduled_24m 23 <= p50 30 and entrapments_24m 3 < p75 8"
+    "tier_reason": "reliable: availability_24h_mean_24m 0.9887 >= p75 0.9882 and unscheduled_24m 23 <= p50 30 and entrapments_24m 3 <= p75 8"
   },
   {
     "equipment_code": "EL213",
@@ -5092,7 +5098,7 @@
       "group_size": 413
     },
     "tier": "unreliable",
-    "tier_reason": "unreliable: unscheduled_24m 54 >= p75 47.5000; entrapments_24m 23 >= p90 14"
+    "tier_reason": "unreliable: unscheduled_24m 54 >= p75 47.5000; entrapments_24m 23 > p90 14"
   },
   {
     "equipment_code": "EL216",
@@ -5208,7 +5214,7 @@
       "group_size": 413
     },
     "tier": "reliable",
-    "tier_reason": "reliable: availability_24h_mean_24m 0.9898 >= p75 0.9882 and unscheduled_24m 14 <= p50 30 and entrapments_24m 6 < p75 8"
+    "tier_reason": "reliable: availability_24h_mean_24m 0.9898 >= p75 0.9882 and unscheduled_24m 14 <= p50 30 and entrapments_24m 6 <= p75 8"
   },
   {
     "equipment_code": "EL218",
@@ -5269,7 +5275,7 @@
       "group_size": 413
     },
     "tier": "reliable",
-    "tier_reason": "reliable: availability_24h_mean_24m 0.9900 >= p75 0.9882 and unscheduled_24m 9 <= p50 30 and entrapments_24m 0 < p75 8"
+    "tier_reason": "reliable: availability_24h_mean_24m 0.9900 >= p75 0.9882 and unscheduled_24m 9 <= p50 30 and entrapments_24m 0 <= p75 8"
   },
   {
     "equipment_code": "EL219",
@@ -5329,8 +5335,8 @@
       "group": "EL",
       "group_size": 413
     },
-    "tier": "unreliable",
-    "tier_reason": "unreliable: entrapments_24m 14 >= p90 14"
+    "tier": "watch",
+    "tier_reason": "watch: availability_24h_mean_24m 0.9889 between p25 0.9764 and p75 0.9882; unscheduled_24m 37 (p50 30, p75 47.5000); entrapments_24m 14 (p75 8, p90 14)"
   },
   {
     "equipment_code": "EL220",
@@ -5391,7 +5397,7 @@
       "group_size": 413
     },
     "tier": "reliable",
-    "tier_reason": "reliable: availability_24h_mean_24m 0.9916 >= p75 0.9882 and unscheduled_24m 15 <= p50 30 and entrapments_24m 6 < p75 8"
+    "tier_reason": "reliable: availability_24h_mean_24m 0.9916 >= p75 0.9882 and unscheduled_24m 15 <= p50 30 and entrapments_24m 6 <= p75 8"
   },
   {
     "equipment_code": "EL221",
@@ -5452,7 +5458,7 @@
       "group_size": 413
     },
     "tier": "unreliable",
-    "tier_reason": "unreliable: unscheduled_24m 49 >= p75 47.5000; entrapments_24m 30 >= p90 14"
+    "tier_reason": "unreliable: unscheduled_24m 49 >= p75 47.5000; entrapments_24m 30 > p90 14"
   },
   {
     "equipment_code": "EL222",
@@ -5742,7 +5748,7 @@
       "group_size": 413
     },
     "tier": "unreliable",
-    "tier_reason": "unreliable: entrapments_24m 21 >= p90 14"
+    "tier_reason": "unreliable: entrapments_24m 21 > p90 14"
   },
   {
     "equipment_code": "EL227",
@@ -5925,7 +5931,7 @@
       "group_size": 413
     },
     "tier": "reliable",
-    "tier_reason": "reliable: availability_24h_mean_24m 0.9884 >= p75 0.9882 and unscheduled_24m 20 <= p50 30 and entrapments_24m 4 < p75 8"
+    "tier_reason": "reliable: availability_24h_mean_24m 0.9884 >= p75 0.9882 and unscheduled_24m 20 <= p50 30 and entrapments_24m 4 <= p75 8"
   },
   {
     "equipment_code": "EL22X",
@@ -6426,7 +6432,7 @@
       "group_size": 413
     },
     "tier": "reliable",
-    "tier_reason": "reliable: availability_24h_mean_24m 0.9932 >= p75 0.9882 and unscheduled_24m 12 <= p50 30 and entrapments_24m 2 < p75 8"
+    "tier_reason": "reliable: availability_24h_mean_24m 0.9932 >= p75 0.9882 and unscheduled_24m 12 <= p50 30 and entrapments_24m 2 <= p75 8"
   },
   {
     "equipment_code": "EL238",
@@ -6713,7 +6719,7 @@
       "group_size": 413
     },
     "tier": "unreliable",
-    "tier_reason": "unreliable: availability_24h_mean_24m 0.9761 <= p25 0.9764; entrapments_24m 14 >= p90 14"
+    "tier_reason": "unreliable: availability_24h_mean_24m 0.9761 <= p25 0.9764"
   },
   {
     "equipment_code": "EL245",
@@ -7361,7 +7367,7 @@
       "group_size": 413
     },
     "tier": "reliable",
-    "tier_reason": "reliable: availability_24h_mean_24m 0.9975 >= p75 0.9882 and unscheduled_24m 0 <= p50 30 and entrapments_24m 0 < p75 8"
+    "tier_reason": "reliable: availability_24h_mean_24m 0.9975 >= p75 0.9882 and unscheduled_24m 0 <= p50 30 and entrapments_24m 0 <= p75 8"
   },
   {
     "equipment_code": "EL273",
@@ -7526,7 +7532,7 @@
       "group_size": 413
     },
     "tier": "unreliable",
-    "tier_reason": "unreliable: availability_24h_mean_24m 0.9515 <= p25 0.9764; unscheduled_24m 95 >= p75 47.5000; entrapments_24m 25 >= p90 14"
+    "tier_reason": "unreliable: availability_24h_mean_24m 0.9515 <= p25 0.9764; unscheduled_24m 95 >= p75 47.5000; entrapments_24m 25 > p90 14"
   },
   {
     "equipment_code": "EL278",
@@ -7734,7 +7740,7 @@
       "group_size": 413
     },
     "tier": "unreliable",
-    "tier_reason": "unreliable: availability_24h_mean_24m 0.9728 <= p25 0.9764; unscheduled_24m 62 >= p75 47.5000; entrapments_24m 15 >= p90 14"
+    "tier_reason": "unreliable: availability_24h_mean_24m 0.9728 <= p25 0.9764; unscheduled_24m 62 >= p75 47.5000; entrapments_24m 15 > p90 14"
   },
   {
     "equipment_code": "EL281",
@@ -7948,7 +7954,7 @@
       "group_size": 413
     },
     "tier": "reliable",
-    "tier_reason": "reliable: availability_24h_mean_24m 0.9971 >= p75 0.9882 and unscheduled_24m 11 <= p50 30 and entrapments_24m 1 < p75 8"
+    "tier_reason": "reliable: availability_24h_mean_24m 0.9971 >= p75 0.9882 and unscheduled_24m 11 <= p50 30 and entrapments_24m 1 <= p75 8"
   },
   {
     "equipment_code": "EL285",
@@ -7997,7 +8003,7 @@
       "group_size": 413
     },
     "tier": "reliable",
-    "tier_reason": "reliable: availability_24h_mean_24m 0.9977 >= p75 0.9882 and unscheduled_24m 8 <= p50 30 and entrapments_24m 2 < p75 8"
+    "tier_reason": "reliable: availability_24h_mean_24m 0.9977 >= p75 0.9882 and unscheduled_24m 8 <= p50 30 and entrapments_24m 2 <= p75 8"
   },
   {
     "equipment_code": "EL286",
@@ -8046,7 +8052,7 @@
       "group_size": 413
     },
     "tier": "reliable",
-    "tier_reason": "reliable: availability_24h_mean_24m 0.9950 >= p75 0.9882 and unscheduled_24m 25 <= p50 30 and entrapments_24m 0 < p75 8"
+    "tier_reason": "reliable: availability_24h_mean_24m 0.9950 >= p75 0.9882 and unscheduled_24m 25 <= p50 30 and entrapments_24m 0 <= p75 8"
   },
   {
     "equipment_code": "EL287X",
@@ -8150,7 +8156,7 @@
       "group_size": 413
     },
     "tier": "reliable",
-    "tier_reason": "reliable: availability_24h_mean_24m 1 >= p75 0.9882 and unscheduled_24m 0 <= p50 30 and entrapments_24m 0 < p75 8"
+    "tier_reason": "reliable: availability_24h_mean_24m 1 >= p75 0.9882 and unscheduled_24m 0 <= p50 30 and entrapments_24m 0 <= p75 8"
   },
   {
     "equipment_code": "EL289X",
@@ -8205,7 +8211,7 @@
       "group_size": 413
     },
     "tier": "reliable",
-    "tier_reason": "reliable: availability_24h_mean_24m 0.9999 >= p75 0.9882 and unscheduled_24m 0 <= p50 30 and entrapments_24m 0 < p75 8"
+    "tier_reason": "reliable: availability_24h_mean_24m 0.9999 >= p75 0.9882 and unscheduled_24m 0 <= p50 30 and entrapments_24m 0 <= p75 8"
   },
   {
     "equipment_code": "EL290X",
@@ -8321,7 +8327,7 @@
       "group_size": 413
     },
     "tier": "reliable",
-    "tier_reason": "reliable: availability_24h_mean_24m 0.9972 >= p75 0.9882 and unscheduled_24m 0 <= p50 30 and entrapments_24m 0 < p75 8"
+    "tier_reason": "reliable: availability_24h_mean_24m 0.9972 >= p75 0.9882 and unscheduled_24m 0 <= p50 30 and entrapments_24m 0 <= p75 8"
   },
   {
     "equipment_code": "EL292",
@@ -8590,7 +8596,7 @@
       "group_size": 413
     },
     "tier": "unreliable",
-    "tier_reason": "unreliable: unscheduled_24m 69 >= p75 47.5000; entrapments_24m 16 >= p90 14"
+    "tier_reason": "unreliable: unscheduled_24m 69 >= p75 47.5000; entrapments_24m 16 > p90 14"
   },
   {
     "equipment_code": "EL298",
@@ -8810,7 +8816,7 @@
       "group_size": 413
     },
     "tier": "reliable",
-    "tier_reason": "reliable: availability_24h_mean_24m 0.9933 >= p75 0.9882 and unscheduled_24m 28 <= p50 30 and entrapments_24m 2 < p75 8"
+    "tier_reason": "reliable: availability_24h_mean_24m 0.9933 >= p75 0.9882 and unscheduled_24m 28 <= p50 30 and entrapments_24m 2 <= p75 8"
   },
   {
     "equipment_code": "EL303",
@@ -8865,7 +8871,7 @@
       "group_size": 413
     },
     "tier": "reliable",
-    "tier_reason": "reliable: availability_24h_mean_24m 0.9942 >= p75 0.9882 and unscheduled_24m 21 <= p50 30 and entrapments_24m 5 < p75 8"
+    "tier_reason": "reliable: availability_24h_mean_24m 0.9942 >= p75 0.9882 and unscheduled_24m 21 <= p50 30 and entrapments_24m 5 <= p75 8"
   },
   {
     "equipment_code": "EL304",
@@ -8920,7 +8926,7 @@
       "group_size": 413
     },
     "tier": "reliable",
-    "tier_reason": "reliable: availability_24h_mean_24m 0.9909 >= p75 0.9882 and unscheduled_24m 18 <= p50 30 and entrapments_24m 4 < p75 8"
+    "tier_reason": "reliable: availability_24h_mean_24m 0.9909 >= p75 0.9882 and unscheduled_24m 18 <= p50 30 and entrapments_24m 4 <= p75 8"
   },
   {
     "equipment_code": "EL305",
@@ -8975,7 +8981,7 @@
       "group_size": 413
     },
     "tier": "reliable",
-    "tier_reason": "reliable: availability_24h_mean_24m 0.9915 >= p75 0.9882 and unscheduled_24m 13 <= p50 30 and entrapments_24m 6 < p75 8"
+    "tier_reason": "reliable: availability_24h_mean_24m 0.9915 >= p75 0.9882 and unscheduled_24m 13 <= p50 30 and entrapments_24m 6 <= p75 8"
   },
   {
     "equipment_code": "EL306",
@@ -9036,7 +9042,7 @@
       "group_size": 413
     },
     "tier": "reliable",
-    "tier_reason": "reliable: availability_24h_mean_24m 0.9883 >= p75 0.9882 and unscheduled_24m 14 <= p50 30 and entrapments_24m 5 < p75 8"
+    "tier_reason": "reliable: availability_24h_mean_24m 0.9883 >= p75 0.9882 and unscheduled_24m 14 <= p50 30 and entrapments_24m 5 <= p75 8"
   },
   {
     "equipment_code": "EL307",
@@ -9097,7 +9103,7 @@
       "group_size": 413
     },
     "tier": "unreliable",
-    "tier_reason": "unreliable: entrapments_24m 18 >= p90 14"
+    "tier_reason": "unreliable: entrapments_24m 18 > p90 14"
   },
   {
     "equipment_code": "EL308",
@@ -9244,7 +9250,7 @@
       "group_size": 413
     },
     "tier": "unreliable",
-    "tier_reason": "unreliable: availability_24h_mean_24m 0.9761 <= p25 0.9764; unscheduled_24m 48 >= p75 47.5000; entrapments_24m 21 >= p90 14"
+    "tier_reason": "unreliable: availability_24h_mean_24m 0.9761 <= p25 0.9764; unscheduled_24m 48 >= p75 47.5000; entrapments_24m 21 > p90 14"
   },
   {
     "equipment_code": "EL311",
@@ -9562,7 +9568,7 @@
       "group_size": 413
     },
     "tier": "reliable",
-    "tier_reason": "reliable: availability_24h_mean_24m 0.9894 >= p75 0.9882 and unscheduled_24m 20 <= p50 30 and entrapments_24m 1 < p75 8"
+    "tier_reason": "reliable: availability_24h_mean_24m 0.9894 >= p75 0.9882 and unscheduled_24m 20 <= p50 30 and entrapments_24m 1 <= p75 8"
   },
   {
     "equipment_code": "EL318",
@@ -9938,7 +9944,7 @@
       "group_size": 413
     },
     "tier": "unreliable",
-    "tier_reason": "unreliable: unscheduled_24m 53 >= p75 47.5000; entrapments_24m 23 >= p90 14"
+    "tier_reason": "unreliable: unscheduled_24m 53 >= p75 47.5000; entrapments_24m 23 > p90 14"
   },
   {
     "equipment_code": "EL325",
@@ -10100,7 +10106,7 @@
       "group_size": 413
     },
     "tier": "reliable",
-    "tier_reason": "reliable: availability_24h_mean_24m 0.9926 >= p75 0.9882 and unscheduled_24m 0 <= p50 30 and entrapments_24m 0 < p75 8"
+    "tier_reason": "reliable: availability_24h_mean_24m 0.9926 >= p75 0.9882 and unscheduled_24m 0 <= p50 30 and entrapments_24m 0 <= p75 8"
   },
   {
     "equipment_code": "EL328",
@@ -10497,7 +10503,7 @@
       "group_size": 413
     },
     "tier": "unreliable",
-    "tier_reason": "unreliable: unscheduled_24m 65 >= p75 47.5000; entrapments_24m 36 >= p90 14"
+    "tier_reason": "unreliable: unscheduled_24m 65 >= p75 47.5000; entrapments_24m 36 > p90 14"
   },
   {
     "equipment_code": "EL335",
@@ -10558,7 +10564,7 @@
       "group_size": 413
     },
     "tier": "reliable",
-    "tier_reason": "reliable: availability_24h_mean_24m 0.9893 >= p75 0.9882 and unscheduled_24m 15 <= p50 30 and entrapments_24m 4 < p75 8"
+    "tier_reason": "reliable: availability_24h_mean_24m 0.9893 >= p75 0.9882 and unscheduled_24m 15 <= p50 30 and entrapments_24m 4 <= p75 8"
   },
   {
     "equipment_code": "EL336",
@@ -10668,7 +10674,7 @@
       "group_size": 413
     },
     "tier": "reliable",
-    "tier_reason": "reliable: availability_24h_mean_24m 0.9896 >= p75 0.9882 and unscheduled_24m 9 <= p50 30 and entrapments_24m 1 < p75 8"
+    "tier_reason": "reliable: availability_24h_mean_24m 0.9896 >= p75 0.9882 and unscheduled_24m 9 <= p50 30 and entrapments_24m 1 <= p75 8"
   },
   {
     "equipment_code": "EL338",
@@ -10888,7 +10894,7 @@
       "group_size": 413
     },
     "tier": "unreliable",
-    "tier_reason": "unreliable: entrapments_24m 25 >= p90 14"
+    "tier_reason": "unreliable: entrapments_24m 25 > p90 14"
   },
   {
     "equipment_code": "EL342",
@@ -11059,7 +11065,7 @@
       "group_size": 413
     },
     "tier": "unreliable",
-    "tier_reason": "unreliable: availability_24h_mean_24m 0.9678 <= p25 0.9764; unscheduled_24m 83 >= p75 47.5000; entrapments_24m 14 >= p90 14"
+    "tier_reason": "unreliable: availability_24h_mean_24m 0.9678 <= p25 0.9764; unscheduled_24m 83 >= p75 47.5000"
   },
   {
     "equipment_code": "EL345",
@@ -11334,7 +11340,7 @@
       "group_size": 413
     },
     "tier": "reliable",
-    "tier_reason": "reliable: availability_24h_mean_24m 0.9892 >= p75 0.9882 and unscheduled_24m 6 <= p50 30 and entrapments_24m 1 < p75 8"
+    "tier_reason": "reliable: availability_24h_mean_24m 0.9892 >= p75 0.9882 and unscheduled_24m 6 <= p50 30 and entrapments_24m 1 <= p75 8"
   },
   {
     "equipment_code": "EL371",
@@ -11444,7 +11450,7 @@
       "group_size": 413
     },
     "tier": "reliable",
-    "tier_reason": "reliable: availability_24h_mean_24m 0.9913 >= p75 0.9882 and unscheduled_24m 9 <= p50 30 and entrapments_24m 2 < p75 8"
+    "tier_reason": "reliable: availability_24h_mean_24m 0.9913 >= p75 0.9882 and unscheduled_24m 9 <= p50 30 and entrapments_24m 2 <= p75 8"
   },
   {
     "equipment_code": "EL373",
@@ -11826,7 +11832,7 @@
       "group_size": 413
     },
     "tier": "reliable",
-    "tier_reason": "reliable: availability_24h_mean_24m 0.9906 >= p75 0.9882 and unscheduled_24m 19 <= p50 30 and entrapments_24m 5 < p75 8"
+    "tier_reason": "reliable: availability_24h_mean_24m 0.9906 >= p75 0.9882 and unscheduled_24m 19 <= p50 30 and entrapments_24m 5 <= p75 8"
   },
   {
     "equipment_code": "EL381",
@@ -12110,7 +12116,7 @@
       "group_size": 413
     },
     "tier": "reliable",
-    "tier_reason": "reliable: availability_24h_mean_24m 0.9895 >= p75 0.9882 and unscheduled_24m 13 <= p50 30 and entrapments_24m 0 < p75 8"
+    "tier_reason": "reliable: availability_24h_mean_24m 0.9895 >= p75 0.9882 and unscheduled_24m 13 <= p50 30 and entrapments_24m 0 <= p75 8"
   },
   {
     "equipment_code": "EL389",
@@ -12220,7 +12226,7 @@
       "group_size": 413
     },
     "tier": "unreliable",
-    "tier_reason": "unreliable: unscheduled_24m 72 >= p75 47.5000; entrapments_24m 45 >= p90 14"
+    "tier_reason": "unreliable: unscheduled_24m 72 >= p75 47.5000; entrapments_24m 45 > p90 14"
   },
   {
     "equipment_code": "EL392",
@@ -12275,7 +12281,7 @@
       "group_size": 413
     },
     "tier": "unreliable",
-    "tier_reason": "unreliable: unscheduled_24m 99 >= p75 47.5000; entrapments_24m 66 >= p90 14"
+    "tier_reason": "unreliable: unscheduled_24m 99 >= p75 47.5000; entrapments_24m 66 > p90 14"
   },
   {
     "equipment_code": "EL393",
@@ -12330,7 +12336,7 @@
       "group_size": 413
     },
     "tier": "unreliable",
-    "tier_reason": "unreliable: availability_24h_mean_24m 0.9688 <= p25 0.9764; unscheduled_24m 134 >= p75 47.5000; entrapments_24m 77 >= p90 14"
+    "tier_reason": "unreliable: availability_24h_mean_24m 0.9688 <= p25 0.9764; unscheduled_24m 134 >= p75 47.5000; entrapments_24m 77 > p90 14"
   },
   {
     "equipment_code": "EL394",
@@ -12384,8 +12390,8 @@
       "group": "EL",
       "group_size": 413
     },
-    "tier": "watch",
-    "tier_reason": "watch: availability_24h_mean_24m 0.9946 between p25 0.9764 and p75 0.9882; unscheduled_24m 16 (p50 30, p75 47.5000); entrapments_24m 8 (p75 8, p90 14)"
+    "tier": "reliable",
+    "tier_reason": "reliable: availability_24h_mean_24m 0.9946 >= p75 0.9882 and unscheduled_24m 16 <= p50 30 and entrapments_24m 8 <= p75 8"
   },
   {
     "equipment_code": "EL395",
@@ -12715,7 +12721,7 @@
       "group_size": 413
     },
     "tier": "unreliable",
-    "tier_reason": "unreliable: availability_24h_mean_24m 0.9746 <= p25 0.9764; unscheduled_24m 94 >= p75 47.5000; entrapments_24m 38 >= p90 14"
+    "tier_reason": "unreliable: availability_24h_mean_24m 0.9746 <= p25 0.9764; unscheduled_24m 94 >= p75 47.5000; entrapments_24m 38 > p90 14"
   },
   {
     "equipment_code": "EL403",
@@ -12880,7 +12886,7 @@
       "group_size": 413
     },
     "tier": "unreliable",
-    "tier_reason": "unreliable: availability_24h_mean_24m 0.9563 <= p25 0.9764; unscheduled_24m 208 >= p75 47.5000; entrapments_24m 31 >= p90 14"
+    "tier_reason": "unreliable: availability_24h_mean_24m 0.9563 <= p25 0.9764; unscheduled_24m 208 >= p75 47.5000; entrapments_24m 31 > p90 14"
   },
   {
     "equipment_code": "EL406",
@@ -13100,7 +13106,7 @@
       "group_size": 413
     },
     "tier": "reliable",
-    "tier_reason": "reliable: availability_24h_mean_24m 0.9892 >= p75 0.9882 and unscheduled_24m 21 <= p50 30 and entrapments_24m 1 < p75 8"
+    "tier_reason": "reliable: availability_24h_mean_24m 0.9892 >= p75 0.9882 and unscheduled_24m 21 <= p50 30 and entrapments_24m 1 <= p75 8"
   },
   {
     "equipment_code": "EL411",
@@ -13155,7 +13161,7 @@
       "group_size": 413
     },
     "tier": "unreliable",
-    "tier_reason": "unreliable: unscheduled_24m 61 >= p75 47.5000; entrapments_24m 22 >= p90 14"
+    "tier_reason": "unreliable: unscheduled_24m 61 >= p75 47.5000; entrapments_24m 22 > p90 14"
   },
   {
     "equipment_code": "EL412",
@@ -13369,7 +13375,7 @@
       "group_size": 413
     },
     "tier": "unreliable",
-    "tier_reason": "unreliable: availability_24h_mean_24m 0.9743 <= p25 0.9764; unscheduled_24m 86 >= p75 47.5000; entrapments_24m 36 >= p90 14"
+    "tier_reason": "unreliable: availability_24h_mean_24m 0.9743 <= p25 0.9764; unscheduled_24m 86 >= p75 47.5000; entrapments_24m 36 > p90 14"
   },
   {
     "equipment_code": "EL421",
@@ -13479,7 +13485,7 @@
       "group_size": 413
     },
     "tier": "reliable",
-    "tier_reason": "reliable: availability_24h_mean_24m 0.9891 >= p75 0.9882 and unscheduled_24m 13 <= p50 30 and entrapments_24m 2 < p75 8"
+    "tier_reason": "reliable: availability_24h_mean_24m 0.9891 >= p75 0.9882 and unscheduled_24m 13 <= p50 30 and entrapments_24m 2 <= p75 8"
   },
   {
     "equipment_code": "EL423",
@@ -13638,7 +13644,7 @@
       "group_size": 413
     },
     "tier": "unreliable",
-    "tier_reason": "unreliable: availability_24h_mean_24m 0.9738 <= p25 0.9764; unscheduled_24m 80 >= p75 47.5000; entrapments_24m 37 >= p90 14"
+    "tier_reason": "unreliable: availability_24h_mean_24m 0.9738 <= p25 0.9764; unscheduled_24m 80 >= p75 47.5000; entrapments_24m 37 > p90 14"
   },
   {
     "equipment_code": "EL426",
@@ -13858,7 +13864,7 @@
       "group_size": 413
     },
     "tier": "reliable",
-    "tier_reason": "reliable: availability_24h_mean_24m 0.9899 >= p75 0.9882 and unscheduled_24m 24 <= p50 30 and entrapments_24m 6 < p75 8"
+    "tier_reason": "reliable: availability_24h_mean_24m 0.9899 >= p75 0.9882 and unscheduled_24m 24 <= p50 30 and entrapments_24m 6 <= p75 8"
   },
   {
     "equipment_code": "EL430",
@@ -13913,7 +13919,7 @@
       "group_size": 413
     },
     "tier": "reliable",
-    "tier_reason": "reliable: availability_24h_mean_24m 0.9941 >= p75 0.9882 and unscheduled_24m 11 <= p50 30 and entrapments_24m 1 < p75 8"
+    "tier_reason": "reliable: availability_24h_mean_24m 0.9941 >= p75 0.9882 and unscheduled_24m 11 <= p50 30 and entrapments_24m 1 <= p75 8"
   },
   {
     "equipment_code": "EL431",
@@ -14170,7 +14176,7 @@
       "group_size": 413
     },
     "tier": "reliable",
-    "tier_reason": "reliable: availability_24h_mean_24m 0.9884 >= p75 0.9882 and unscheduled_24m 20 <= p50 30 and entrapments_24m 5 < p75 8"
+    "tier_reason": "reliable: availability_24h_mean_24m 0.9884 >= p75 0.9882 and unscheduled_24m 20 <= p50 30 and entrapments_24m 5 <= p75 8"
   },
   {
     "equipment_code": "EL436",
@@ -14225,7 +14231,7 @@
       "group_size": 413
     },
     "tier": "reliable",
-    "tier_reason": "reliable: availability_24h_mean_24m 0.9884 >= p75 0.9882 and unscheduled_24m 23 <= p50 30 and entrapments_24m 1 < p75 8"
+    "tier_reason": "reliable: availability_24h_mean_24m 0.9884 >= p75 0.9882 and unscheduled_24m 23 <= p50 30 and entrapments_24m 1 <= p75 8"
   },
   {
     "equipment_code": "EL437",
@@ -14445,7 +14451,7 @@
       "group_size": 413
     },
     "tier": "unreliable",
-    "tier_reason": "unreliable: availability_24h_mean_24m 0.9575 <= p25 0.9764; unscheduled_24m 91 >= p75 47.5000; entrapments_24m 15 >= p90 14"
+    "tier_reason": "unreliable: availability_24h_mean_24m 0.9575 <= p25 0.9764; unscheduled_24m 91 >= p75 47.5000; entrapments_24m 15 > p90 14"
   },
   {
     "equipment_code": "EL441",
@@ -15267,7 +15273,7 @@
       "group_size": 413
     },
     "tier": "reliable",
-    "tier_reason": "reliable: availability_24h_mean_24m 0.9896 >= p75 0.9882 and unscheduled_24m 12 <= p50 30 and entrapments_24m 2 < p75 8"
+    "tier_reason": "reliable: availability_24h_mean_24m 0.9896 >= p75 0.9882 and unscheduled_24m 12 <= p50 30 and entrapments_24m 2 <= p75 8"
   },
   {
     "equipment_code": "EL467",
@@ -15426,7 +15432,7 @@
       "group_size": 413
     },
     "tier": "reliable",
-    "tier_reason": "reliable: availability_24h_mean_24m 0.9913 >= p75 0.9882 and unscheduled_24m 30 <= p50 30 and entrapments_24m 7 < p75 8"
+    "tier_reason": "reliable: availability_24h_mean_24m 0.9913 >= p75 0.9882 and unscheduled_24m 30 <= p50 30 and entrapments_24m 7 <= p75 8"
   },
   {
     "equipment_code": "EL479",
@@ -15536,7 +15542,7 @@
       "group_size": 413
     },
     "tier": "unreliable",
-    "tier_reason": "unreliable: unscheduled_24m 54 >= p75 47.5000; entrapments_24m 28 >= p90 14"
+    "tier_reason": "unreliable: unscheduled_24m 54 >= p75 47.5000; entrapments_24m 28 > p90 14"
   },
   {
     "equipment_code": "EL481",
@@ -15591,7 +15597,7 @@
       "group_size": 413
     },
     "tier": "reliable",
-    "tier_reason": "reliable: availability_24h_mean_24m 0.9904 >= p75 0.9882 and unscheduled_24m 9 <= p50 30 and entrapments_24m 2 < p75 8"
+    "tier_reason": "reliable: availability_24h_mean_24m 0.9904 >= p75 0.9882 and unscheduled_24m 9 <= p50 30 and entrapments_24m 2 <= p75 8"
   },
   {
     "equipment_code": "EL482X",
@@ -15646,7 +15652,7 @@
       "group_size": 413
     },
     "tier": "reliable",
-    "tier_reason": "reliable: availability_24h_mean_24m 0.9931 >= p75 0.9882 and unscheduled_24m 0 <= p50 30 and entrapments_24m 0 < p75 8"
+    "tier_reason": "reliable: availability_24h_mean_24m 0.9931 >= p75 0.9882 and unscheduled_24m 0 <= p50 30 and entrapments_24m 0 <= p75 8"
   },
   {
     "equipment_code": "EL483",
@@ -15817,7 +15823,7 @@
       "group_size": 413
     },
     "tier": "reliable",
-    "tier_reason": "reliable: availability_24h_mean_24m 0.9913 >= p75 0.9882 and unscheduled_24m 11 <= p50 30 and entrapments_24m 3 < p75 8"
+    "tier_reason": "reliable: availability_24h_mean_24m 0.9913 >= p75 0.9882 and unscheduled_24m 11 <= p50 30 and entrapments_24m 3 <= p75 8"
   },
   {
     "equipment_code": "EL486",
@@ -15872,7 +15878,7 @@
       "group_size": 413
     },
     "tier": "reliable",
-    "tier_reason": "reliable: availability_24h_mean_24m 0.9912 >= p75 0.9882 and unscheduled_24m 15 <= p50 30 and entrapments_24m 6 < p75 8"
+    "tier_reason": "reliable: availability_24h_mean_24m 0.9912 >= p75 0.9882 and unscheduled_24m 15 <= p50 30 and entrapments_24m 6 <= p75 8"
   },
   {
     "equipment_code": "EL487",
@@ -16104,7 +16110,7 @@
       "group_size": 413
     },
     "tier": "reliable",
-    "tier_reason": "reliable: availability_24h_mean_24m 0.9989 >= p75 0.9882 and unscheduled_24m 0 <= p50 30 and entrapments_24m 0 < p75 8"
+    "tier_reason": "reliable: availability_24h_mean_24m 0.9989 >= p75 0.9882 and unscheduled_24m 0 <= p50 30 and entrapments_24m 0 <= p75 8"
   },
   {
     "equipment_code": "EL491X",
@@ -16159,7 +16165,7 @@
       "group_size": 413
     },
     "tier": "reliable",
-    "tier_reason": "reliable: availability_24h_mean_24m 0.9948 >= p75 0.9882 and unscheduled_24m 0 <= p50 30 and entrapments_24m 0 < p75 8"
+    "tier_reason": "reliable: availability_24h_mean_24m 0.9948 >= p75 0.9882 and unscheduled_24m 0 <= p50 30 and entrapments_24m 0 <= p75 8"
   },
   {
     "equipment_code": "EL492X",
@@ -16214,7 +16220,7 @@
       "group_size": 413
     },
     "tier": "reliable",
-    "tier_reason": "reliable: availability_24h_mean_24m 0.9963 >= p75 0.9882 and unscheduled_24m 0 <= p50 30 and entrapments_24m 0 < p75 8"
+    "tier_reason": "reliable: availability_24h_mean_24m 0.9963 >= p75 0.9882 and unscheduled_24m 0 <= p50 30 and entrapments_24m 0 <= p75 8"
   },
   {
     "equipment_code": "EL493X",
@@ -16269,7 +16275,7 @@
       "group_size": 413
     },
     "tier": "reliable",
-    "tier_reason": "reliable: availability_24h_mean_24m 0.9962 >= p75 0.9882 and unscheduled_24m 0 <= p50 30 and entrapments_24m 0 < p75 8"
+    "tier_reason": "reliable: availability_24h_mean_24m 0.9962 >= p75 0.9882 and unscheduled_24m 0 <= p50 30 and entrapments_24m 0 <= p75 8"
   },
   {
     "equipment_code": "EL494X",
@@ -16324,7 +16330,7 @@
       "group_size": 413
     },
     "tier": "reliable",
-    "tier_reason": "reliable: availability_24h_mean_24m 0.9996 >= p75 0.9882 and unscheduled_24m 0 <= p50 30 and entrapments_24m 0 < p75 8"
+    "tier_reason": "reliable: availability_24h_mean_24m 0.9996 >= p75 0.9882 and unscheduled_24m 0 <= p50 30 and entrapments_24m 0 <= p75 8"
   },
   {
     "equipment_code": "EL495X",
@@ -16379,7 +16385,7 @@
       "group_size": 413
     },
     "tier": "reliable",
-    "tier_reason": "reliable: availability_24h_mean_24m 0.9991 >= p75 0.9882 and unscheduled_24m 0 <= p50 30 and entrapments_24m 0 < p75 8"
+    "tier_reason": "reliable: availability_24h_mean_24m 0.9991 >= p75 0.9882 and unscheduled_24m 0 <= p50 30 and entrapments_24m 0 <= p75 8"
   },
   {
     "equipment_code": "EL497",
@@ -16581,7 +16587,7 @@
       "group_size": 413
     },
     "tier": "reliable",
-    "tier_reason": "reliable: availability_24h_mean_24m 0.9886 >= p75 0.9882 and unscheduled_24m 21 <= p50 30 and entrapments_24m 1 < p75 8"
+    "tier_reason": "reliable: availability_24h_mean_24m 0.9886 >= p75 0.9882 and unscheduled_24m 21 <= p50 30 and entrapments_24m 1 <= p75 8"
   },
   {
     "equipment_code": "EL502",
@@ -16688,7 +16694,7 @@
       "group_size": 413
     },
     "tier": "unreliable",
-    "tier_reason": "unreliable: availability_24h_mean_24m 0.9732 <= p25 0.9764; unscheduled_24m 76 >= p75 47.5000; entrapments_24m 19 >= p90 14"
+    "tier_reason": "unreliable: availability_24h_mean_24m 0.9732 <= p25 0.9764; unscheduled_24m 76 >= p75 47.5000; entrapments_24m 19 > p90 14"
   },
   {
     "equipment_code": "EL507",
@@ -17017,8 +17023,8 @@
       "group": "EL",
       "group_size": 413
     },
-    "tier": "unreliable",
-    "tier_reason": "unreliable: entrapments_24m 14 >= p90 14"
+    "tier": "watch",
+    "tier_reason": "watch: availability_24h_mean_24m 0.9885 between p25 0.9764 and p75 0.9882; unscheduled_24m 45 (p50 30, p75 47.5000); entrapments_24m 14 (p75 8, p90 14)"
   },
   {
     "equipment_code": "EL513",
@@ -17073,7 +17079,7 @@
       "group_size": 413
     },
     "tier": "reliable",
-    "tier_reason": "reliable: availability_24h_mean_24m 0.9917 >= p75 0.9882 and unscheduled_24m 15 <= p50 30 and entrapments_24m 2 < p75 8"
+    "tier_reason": "reliable: availability_24h_mean_24m 0.9917 >= p75 0.9882 and unscheduled_24m 15 <= p50 30 and entrapments_24m 2 <= p75 8"
   },
   {
     "equipment_code": "EL514",
@@ -17128,7 +17134,7 @@
       "group_size": 413
     },
     "tier": "reliable",
-    "tier_reason": "reliable: availability_24h_mean_24m 0.9898 >= p75 0.9882 and unscheduled_24m 26 <= p50 30 and entrapments_24m 7 < p75 8"
+    "tier_reason": "reliable: availability_24h_mean_24m 0.9898 >= p75 0.9882 and unscheduled_24m 26 <= p50 30 and entrapments_24m 7 <= p75 8"
   },
   {
     "equipment_code": "EL515",
@@ -17189,7 +17195,7 @@
       "group_size": 413
     },
     "tier": "unreliable",
-    "tier_reason": "unreliable: unscheduled_24m 64 >= p75 47.5000; entrapments_24m 17 >= p90 14"
+    "tier_reason": "unreliable: unscheduled_24m 64 >= p75 47.5000; entrapments_24m 17 > p90 14"
   },
   {
     "equipment_code": "EL516",
@@ -17348,7 +17354,7 @@
       "group_size": 413
     },
     "tier": "reliable",
-    "tier_reason": "reliable: availability_24h_mean_24m 0.9926 >= p75 0.9882 and unscheduled_24m 20 <= p50 30 and entrapments_24m 1 < p75 8"
+    "tier_reason": "reliable: availability_24h_mean_24m 0.9926 >= p75 0.9882 and unscheduled_24m 20 <= p50 30 and entrapments_24m 1 <= p75 8"
   },
   {
     "equipment_code": "EL519",
@@ -17727,7 +17733,7 @@
       "group_size": 413
     },
     "tier": "unreliable",
-    "tier_reason": "unreliable: availability_24h_mean_24m 0.9508 <= p25 0.9764; unscheduled_24m 154 >= p75 47.5000; entrapments_24m 14 >= p90 14"
+    "tier_reason": "unreliable: availability_24h_mean_24m 0.9508 <= p25 0.9764; unscheduled_24m 154 >= p75 47.5000"
   },
   {
     "equipment_code": "EL602",
@@ -17941,7 +17947,7 @@
       "group_size": 413
     },
     "tier": "reliable",
-    "tier_reason": "reliable: availability_24h_mean_24m 1 >= p75 0.9882 and unscheduled_24m 0 <= p50 30 and entrapments_24m 0 < p75 8"
+    "tier_reason": "reliable: availability_24h_mean_24m 1 >= p75 0.9882 and unscheduled_24m 0 <= p50 30 and entrapments_24m 0 <= p75 8"
   },
   {
     "equipment_code": "EL607X",
@@ -17990,7 +17996,7 @@
       "group_size": 413
     },
     "tier": "reliable",
-    "tier_reason": "reliable: availability_24h_mean_24m 1 >= p75 0.9882 and unscheduled_24m 0 <= p50 30 and entrapments_24m 0 < p75 8"
+    "tier_reason": "reliable: availability_24h_mean_24m 1 >= p75 0.9882 and unscheduled_24m 0 <= p50 30 and entrapments_24m 0 <= p75 8"
   },
   {
     "equipment_code": "EL608X",
@@ -18039,7 +18045,7 @@
       "group_size": 413
     },
     "tier": "reliable",
-    "tier_reason": "reliable: availability_24h_mean_24m 1 >= p75 0.9882 and unscheduled_24m 0 <= p50 30 and entrapments_24m 0 < p75 8"
+    "tier_reason": "reliable: availability_24h_mean_24m 1 >= p75 0.9882 and unscheduled_24m 0 <= p50 30 and entrapments_24m 0 <= p75 8"
   },
   {
     "equipment_code": "EL609",
@@ -18094,7 +18100,7 @@
       "group_size": 413
     },
     "tier": "reliable",
-    "tier_reason": "reliable: availability_24h_mean_24m 0.9972 >= p75 0.9882 and unscheduled_24m 10 <= p50 30 and entrapments_24m 0 < p75 8"
+    "tier_reason": "reliable: availability_24h_mean_24m 0.9972 >= p75 0.9882 and unscheduled_24m 10 <= p50 30 and entrapments_24m 0 <= p75 8"
   },
   {
     "equipment_code": "EL610",
@@ -18149,7 +18155,7 @@
       "group_size": 413
     },
     "tier": "reliable",
-    "tier_reason": "reliable: availability_24h_mean_24m 0.9972 >= p75 0.9882 and unscheduled_24m 13 <= p50 30 and entrapments_24m 3 < p75 8"
+    "tier_reason": "reliable: availability_24h_mean_24m 0.9972 >= p75 0.9882 and unscheduled_24m 13 <= p50 30 and entrapments_24m 3 <= p75 8"
   },
   {
     "equipment_code": "EL611",
@@ -18258,8 +18264,8 @@
       "group": "EL",
       "group_size": 413
     },
-    "tier": "watch",
-    "tier_reason": "watch: availability_24h_mean_24m 0.9959 between p25 0.9764 and p75 0.9882; unscheduled_24m 23 (p50 30, p75 47.5000); entrapments_24m 8 (p75 8, p90 14)"
+    "tier": "reliable",
+    "tier_reason": "reliable: availability_24h_mean_24m 0.9959 >= p75 0.9882 and unscheduled_24m 23 <= p50 30 and entrapments_24m 8 <= p75 8"
   },
   {
     "equipment_code": "EL613",
@@ -18314,7 +18320,7 @@
       "group_size": 413
     },
     "tier": "reliable",
-    "tier_reason": "reliable: availability_24h_mean_24m 0.9946 >= p75 0.9882 and unscheduled_24m 8 <= p50 30 and entrapments_24m 3 < p75 8"
+    "tier_reason": "reliable: availability_24h_mean_24m 0.9946 >= p75 0.9882 and unscheduled_24m 8 <= p50 30 and entrapments_24m 3 <= p75 8"
   },
   {
     "equipment_code": "EL614",
@@ -18369,7 +18375,7 @@
       "group_size": 413
     },
     "tier": "reliable",
-    "tier_reason": "reliable: availability_24h_mean_24m 0.9976 >= p75 0.9882 and unscheduled_24m 9 <= p50 30 and entrapments_24m 2 < p75 8"
+    "tier_reason": "reliable: availability_24h_mean_24m 0.9976 >= p75 0.9882 and unscheduled_24m 9 <= p50 30 and entrapments_24m 2 <= p75 8"
   },
   {
     "equipment_code": "EL615",
@@ -18424,7 +18430,7 @@
       "group_size": 413
     },
     "tier": "reliable",
-    "tier_reason": "reliable: availability_24h_mean_24m 0.9946 >= p75 0.9882 and unscheduled_24m 24 <= p50 30 and entrapments_24m 3 < p75 8"
+    "tier_reason": "reliable: availability_24h_mean_24m 0.9946 >= p75 0.9882 and unscheduled_24m 24 <= p50 30 and entrapments_24m 3 <= p75 8"
   },
   {
     "equipment_code": "EL616",
@@ -18479,7 +18485,7 @@
       "group_size": 413
     },
     "tier": "reliable",
-    "tier_reason": "reliable: availability_24h_mean_24m 0.9918 >= p75 0.9882 and unscheduled_24m 21 <= p50 30 and entrapments_24m 5 < p75 8"
+    "tier_reason": "reliable: availability_24h_mean_24m 0.9918 >= p75 0.9882 and unscheduled_24m 21 <= p50 30 and entrapments_24m 5 <= p75 8"
   },
   {
     "equipment_code": "EL617",
@@ -18501,8 +18507,14 @@
     },
     "is_active": true,
     "non_nyct": false,
-    "currently_out": false,
-    "current_outage": null,
+    "currently_out": true,
+    "current_outage": {
+      "reason": "Under Investigation",
+      "outagedate": "09/03/2026 07:18:00 AM",
+      "estimatedreturntoservice": "09/03/2026 03:00:00 PM",
+      "is_upcoming": false,
+      "is_maintenance": false
+    },
     "metrics": {
       "months_observed": 20,
       "last_month_observed": "2026-07",
@@ -18644,7 +18656,7 @@
       "group_size": 413
     },
     "tier": "unreliable",
-    "tier_reason": "unreliable: unscheduled_24m 109 >= p75 47.5000; entrapments_24m 26 >= p90 14"
+    "tier_reason": "unreliable: unscheduled_24m 109 >= p75 47.5000; entrapments_24m 26 > p90 14"
   },
   {
     "equipment_code": "EL620",
@@ -18968,7 +18980,7 @@
       "group_size": 413
     },
     "tier": "reliable",
-    "tier_reason": "reliable: availability_24h_mean_24m 0.9922 >= p75 0.9882 and unscheduled_24m 7 <= p50 30 and entrapments_24m 1 < p75 8"
+    "tier_reason": "reliable: availability_24h_mean_24m 0.9922 >= p75 0.9882 and unscheduled_24m 7 <= p50 30 and entrapments_24m 1 <= p75 8"
   },
   {
     "equipment_code": "EL706",
@@ -19023,7 +19035,7 @@
       "group_size": 413
     },
     "tier": "reliable",
-    "tier_reason": "reliable: availability_24h_mean_24m 0.9886 >= p75 0.9882 and unscheduled_24m 19 <= p50 30 and entrapments_24m 7 < p75 8"
+    "tier_reason": "reliable: availability_24h_mean_24m 0.9886 >= p75 0.9882 and unscheduled_24m 19 <= p50 30 and entrapments_24m 7 <= p75 8"
   },
   {
     "equipment_code": "EL707",
@@ -19078,7 +19090,7 @@
       "group_size": 413
     },
     "tier": "reliable",
-    "tier_reason": "reliable: availability_24h_mean_24m 0.9884 >= p75 0.9882 and unscheduled_24m 19 <= p50 30 and entrapments_24m 0 < p75 8"
+    "tier_reason": "reliable: availability_24h_mean_24m 0.9884 >= p75 0.9882 and unscheduled_24m 19 <= p50 30 and entrapments_24m 0 <= p75 8"
   },
   {
     "equipment_code": "EL708",
@@ -19408,7 +19420,7 @@
       "group_size": 413
     },
     "tier": "reliable",
-    "tier_reason": "reliable: availability_24h_mean_24m 0.9892 >= p75 0.9882 and unscheduled_24m 18 <= p50 30 and entrapments_24m 2 < p75 8"
+    "tier_reason": "reliable: availability_24h_mean_24m 0.9892 >= p75 0.9882 and unscheduled_24m 18 <= p50 30 and entrapments_24m 2 <= p75 8"
   },
   {
     "equipment_code": "EL716",
@@ -19573,7 +19585,7 @@
       "group_size": 413
     },
     "tier": "reliable",
-    "tier_reason": "reliable: availability_24h_mean_24m 0.9993 >= p75 0.9882 and unscheduled_24m 0 <= p50 30 and entrapments_24m 0 < p75 8"
+    "tier_reason": "reliable: availability_24h_mean_24m 0.9993 >= p75 0.9882 and unscheduled_24m 0 <= p50 30 and entrapments_24m 0 <= p75 8"
   },
   {
     "equipment_code": "EL719",
@@ -19683,7 +19695,7 @@
       "group_size": 413
     },
     "tier": "unreliable",
-    "tier_reason": "unreliable: availability_24h_mean_24m 0.9753 <= p25 0.9764; unscheduled_24m 65 >= p75 47.5000; entrapments_24m 14 >= p90 14"
+    "tier_reason": "unreliable: availability_24h_mean_24m 0.9753 <= p25 0.9764; unscheduled_24m 65 >= p75 47.5000"
   },
   {
     "equipment_code": "EL721",
@@ -19958,7 +19970,7 @@
       "group_size": 413
     },
     "tier": "reliable",
-    "tier_reason": "reliable: availability_24h_mean_24m 0.9884 >= p75 0.9882 and unscheduled_24m 0 <= p50 30 and entrapments_24m 0 < p75 8"
+    "tier_reason": "reliable: availability_24h_mean_24m 0.9884 >= p75 0.9882 and unscheduled_24m 0 <= p50 30 and entrapments_24m 0 <= p75 8"
   },
   {
     "equipment_code": "EL728X",
@@ -20282,7 +20294,7 @@
       "group_size": 413
     },
     "tier": "reliable",
-    "tier_reason": "reliable: availability_24h_mean_24m 1 >= p75 0.9882 and unscheduled_24m 0 <= p50 30 and entrapments_24m 0 < p75 8"
+    "tier_reason": "reliable: availability_24h_mean_24m 1 >= p75 0.9882 and unscheduled_24m 0 <= p50 30 and entrapments_24m 0 <= p75 8"
   },
   {
     "equipment_code": "EL736",
@@ -20447,7 +20459,7 @@
       "group_size": 413
     },
     "tier": "reliable",
-    "tier_reason": "reliable: availability_24h_mean_24m 0.9888 >= p75 0.9882 and unscheduled_24m 10 <= p50 30 and entrapments_24m 3 < p75 8"
+    "tier_reason": "reliable: availability_24h_mean_24m 0.9888 >= p75 0.9882 and unscheduled_24m 10 <= p50 30 and entrapments_24m 3 <= p75 8"
   },
   {
     "equipment_code": "EL740",
@@ -20612,7 +20624,7 @@
       "group_size": 413
     },
     "tier": "reliable",
-    "tier_reason": "reliable: availability_24h_mean_24m 0.9884 >= p75 0.9882 and unscheduled_24m 19 <= p50 30 and entrapments_24m 4 < p75 8"
+    "tier_reason": "reliable: availability_24h_mean_24m 0.9884 >= p75 0.9882 and unscheduled_24m 19 <= p50 30 and entrapments_24m 4 <= p75 8"
   },
   {
     "equipment_code": "EL743",
@@ -20771,7 +20783,7 @@
       "group_size": 413
     },
     "tier": "reliable",
-    "tier_reason": "reliable: availability_24h_mean_24m 0.9893 >= p75 0.9882 and unscheduled_24m 23 <= p50 30 and entrapments_24m 1 < p75 8"
+    "tier_reason": "reliable: availability_24h_mean_24m 0.9893 >= p75 0.9882 and unscheduled_24m 23 <= p50 30 and entrapments_24m 1 <= p75 8"
   },
   {
     "equipment_code": "EL746",
@@ -20823,7 +20835,7 @@
       "group_size": 413
     },
     "tier": "reliable",
-    "tier_reason": "reliable: availability_24h_mean_24m 0.9899 >= p75 0.9882 and unscheduled_24m 23 <= p50 30 and entrapments_24m 1 < p75 8"
+    "tier_reason": "reliable: availability_24h_mean_24m 0.9899 >= p75 0.9882 and unscheduled_24m 23 <= p50 30 and entrapments_24m 1 <= p75 8"
   },
   {
     "equipment_code": "EL747X",
@@ -21587,7 +21599,7 @@
       "group_size": 413
     },
     "tier": "reliable",
-    "tier_reason": "reliable: availability_24h_mean_24m 0.9932 >= p75 0.9882 and unscheduled_24m 8 <= p50 30 and entrapments_24m 4 < p75 8"
+    "tier_reason": "reliable: availability_24h_mean_24m 0.9932 >= p75 0.9882 and unscheduled_24m 8 <= p50 30 and entrapments_24m 4 <= p75 8"
   },
   {
     "equipment_code": "EL774",
@@ -21642,7 +21654,7 @@
       "group_size": 413
     },
     "tier": "reliable",
-    "tier_reason": "reliable: availability_24h_mean_24m 0.9971 >= p75 0.9882 and unscheduled_24m 1 <= p50 30 and entrapments_24m 0 < p75 8"
+    "tier_reason": "reliable: availability_24h_mean_24m 0.9971 >= p75 0.9882 and unscheduled_24m 1 <= p50 30 and entrapments_24m 0 <= p75 8"
   },
   {
     "equipment_code": "EL775",
@@ -21697,7 +21709,7 @@
       "group_size": 413
     },
     "tier": "reliable",
-    "tier_reason": "reliable: availability_24h_mean_24m 0.9941 >= p75 0.9882 and unscheduled_24m 3 <= p50 30 and entrapments_24m 1 < p75 8"
+    "tier_reason": "reliable: availability_24h_mean_24m 0.9941 >= p75 0.9882 and unscheduled_24m 3 <= p50 30 and entrapments_24m 1 <= p75 8"
   },
   {
     "equipment_code": "EL776",
@@ -21807,7 +21819,7 @@
       "group_size": 413
     },
     "tier": "reliable",
-    "tier_reason": "reliable: availability_24h_mean_24m 0.9949 >= p75 0.9882 and unscheduled_24m 16 <= p50 30 and entrapments_24m 3 < p75 8"
+    "tier_reason": "reliable: availability_24h_mean_24m 0.9949 >= p75 0.9882 and unscheduled_24m 16 <= p50 30 and entrapments_24m 3 <= p75 8"
   },
   {
     "equipment_code": "EL778",
@@ -22192,7 +22204,7 @@
       "group_size": 413
     },
     "tier": "reliable",
-    "tier_reason": "reliable: availability_24h_mean_24m 0.9940 >= p75 0.9882 and unscheduled_24m 12 <= p50 30 and entrapments_24m 5 < p75 8"
+    "tier_reason": "reliable: availability_24h_mean_24m 0.9940 >= p75 0.9882 and unscheduled_24m 12 <= p50 30 and entrapments_24m 5 <= p75 8"
   },
   {
     "equipment_code": "EL785",
@@ -22247,7 +22259,7 @@
       "group_size": 413
     },
     "tier": "reliable",
-    "tier_reason": "reliable: availability_24h_mean_24m 0.9899 >= p75 0.9882 and unscheduled_24m 17 <= p50 30 and entrapments_24m 6 < p75 8"
+    "tier_reason": "reliable: availability_24h_mean_24m 0.9899 >= p75 0.9882 and unscheduled_24m 17 <= p50 30 and entrapments_24m 6 <= p75 8"
   },
   {
     "equipment_code": "EL786",
@@ -22302,7 +22314,7 @@
       "group_size": 413
     },
     "tier": "unreliable",
-    "tier_reason": "unreliable: unscheduled_24m 61 >= p75 47.5000; entrapments_24m 24 >= p90 14"
+    "tier_reason": "unreliable: unscheduled_24m 61 >= p75 47.5000; entrapments_24m 24 > p90 14"
   },
   {
     "equipment_code": "EL791",
@@ -22638,7 +22650,7 @@
       "group_size": 282
     },
     "tier": "unreliable",
-    "tier_reason": "unreliable: availability_24h_mean_24m 0.8890 <= p25 0.9531; unscheduled_24m 337 >= p75 180.7500; entrapments_24m 0 >= p90 0"
+    "tier_reason": "unreliable: availability_24h_mean_24m 0.8890 <= p25 0.9531; unscheduled_24m 337 >= p75 180.7500"
   },
   {
     "equipment_code": "ES102",
@@ -22693,7 +22705,7 @@
       "group_size": 282
     },
     "tier": "unreliable",
-    "tier_reason": "unreliable: availability_24h_mean_24m 0.9371 <= p25 0.9531; unscheduled_24m 289 >= p75 180.7500; entrapments_24m 0 >= p90 0"
+    "tier_reason": "unreliable: availability_24h_mean_24m 0.9371 <= p25 0.9531; unscheduled_24m 289 >= p75 180.7500"
   },
   {
     "equipment_code": "ES103",
@@ -22741,8 +22753,8 @@
       "group": "ES",
       "group_size": 282
     },
-    "tier": "unreliable",
-    "tier_reason": "unreliable: entrapments_24m 0 >= p90 0"
+    "tier": "watch",
+    "tier_reason": "watch: availability_24h_mean_24m 0.9701 between p25 0.9531 and p75 0.9771; unscheduled_24m 140 (p50 105.5000, p75 180.7500); entrapments_24m 0 (p75 0, p90 0)"
   },
   {
     "equipment_code": "ES104",
@@ -22791,7 +22803,7 @@
       "group_size": 282
     },
     "tier": "unreliable",
-    "tier_reason": "unreliable: availability_24h_mean_24m 0.9291 <= p25 0.9531; unscheduled_24m 207 >= p75 180.7500; entrapments_24m 0 >= p90 0"
+    "tier_reason": "unreliable: availability_24h_mean_24m 0.9291 <= p25 0.9531; unscheduled_24m 207 >= p75 180.7500"
   },
   {
     "equipment_code": "ES105",
@@ -22840,7 +22852,7 @@
       "group_size": 282
     },
     "tier": "unreliable",
-    "tier_reason": "unreliable: availability_24h_mean_24m 0.8988 <= p25 0.9531; unscheduled_24m 266 >= p75 180.7500; entrapments_24m 0 >= p90 0"
+    "tier_reason": "unreliable: availability_24h_mean_24m 0.8988 <= p25 0.9531; unscheduled_24m 266 >= p75 180.7500"
   },
   {
     "equipment_code": "ES106",
@@ -22889,7 +22901,7 @@
       "group_size": 282
     },
     "tier": "unreliable",
-    "tier_reason": "unreliable: availability_24h_mean_24m 0.9376 <= p25 0.9531; unscheduled_24m 235 >= p75 180.7500; entrapments_24m 0 >= p90 0"
+    "tier_reason": "unreliable: availability_24h_mean_24m 0.9376 <= p25 0.9531; unscheduled_24m 235 >= p75 180.7500"
   },
   {
     "equipment_code": "ES108",
@@ -22937,8 +22949,8 @@
       "group": "ES",
       "group_size": 282
     },
-    "tier": "unreliable",
-    "tier_reason": "unreliable: entrapments_24m 0 >= p90 0"
+    "tier": "reliable",
+    "tier_reason": "reliable: availability_24h_mean_24m 0.9789 >= p75 0.9771 and unscheduled_24m 49 <= p50 105.5000 and entrapments_24m 0 == 0 (p75 is 0 for this type)"
   },
   {
     "equipment_code": "ES111",
@@ -22986,8 +22998,8 @@
       "group": "ES",
       "group_size": 282
     },
-    "tier": "unreliable",
-    "tier_reason": "unreliable: entrapments_24m 0 >= p90 0"
+    "tier": "watch",
+    "tier_reason": "watch: availability_24h_mean_24m 0.9705 between p25 0.9531 and p75 0.9771; unscheduled_24m 17 (p50 105.5000, p75 180.7500); entrapments_24m 0 (p75 0, p90 0)"
   },
   {
     "equipment_code": "ES112",
@@ -23035,8 +23047,8 @@
       "group": "ES",
       "group_size": 282
     },
-    "tier": "unreliable",
-    "tier_reason": "unreliable: entrapments_24m 0 >= p90 0"
+    "tier": "watch",
+    "tier_reason": "watch: availability_24h_mean_24m 0.9728 between p25 0.9531 and p75 0.9771; unscheduled_24m 78 (p50 105.5000, p75 180.7500); entrapments_24m 0 (p75 0, p90 0)"
   },
   {
     "equipment_code": "ES113",
@@ -23084,8 +23096,8 @@
       "group": "ES",
       "group_size": 282
     },
-    "tier": "unreliable",
-    "tier_reason": "unreliable: entrapments_24m 0 >= p90 0"
+    "tier": "reliable",
+    "tier_reason": "reliable: availability_24h_mean_24m 0.9805 >= p75 0.9771 and unscheduled_24m 53 <= p50 105.5000 and entrapments_24m 0 == 0 (p75 is 0 for this type)"
   },
   {
     "equipment_code": "ES114",
@@ -23133,8 +23145,8 @@
       "group": "ES",
       "group_size": 282
     },
-    "tier": "unreliable",
-    "tier_reason": "unreliable: entrapments_24m 0 >= p90 0"
+    "tier": "watch",
+    "tier_reason": "watch: availability_24h_mean_24m 0.9655 between p25 0.9531 and p75 0.9771; unscheduled_24m 120 (p50 105.5000, p75 180.7500); entrapments_24m 0 (p75 0, p90 0)"
   },
   {
     "equipment_code": "ES115",
@@ -23182,8 +23194,8 @@
       "group": "ES",
       "group_size": 282
     },
-    "tier": "unreliable",
-    "tier_reason": "unreliable: entrapments_24m 0 >= p90 0"
+    "tier": "watch",
+    "tier_reason": "watch: availability_24h_mean_24m 0.9740 between p25 0.9531 and p75 0.9771; unscheduled_24m 54 (p50 105.5000, p75 180.7500); entrapments_24m 0 (p75 0, p90 0)"
   },
   {
     "equipment_code": "ES116",
@@ -23232,7 +23244,7 @@
       "group_size": 282
     },
     "tier": "unreliable",
-    "tier_reason": "unreliable: availability_24h_mean_24m 0.9443 <= p25 0.9531; entrapments_24m 0 >= p90 0"
+    "tier_reason": "unreliable: availability_24h_mean_24m 0.9443 <= p25 0.9531"
   },
   {
     "equipment_code": "ES117",
@@ -23287,7 +23299,7 @@
       "group_size": 282
     },
     "tier": "unreliable",
-    "tier_reason": "unreliable: availability_24h_mean_24m 0.9517 <= p25 0.9531; entrapments_24m 0 >= p90 0"
+    "tier_reason": "unreliable: availability_24h_mean_24m 0.9517 <= p25 0.9531"
   },
   {
     "equipment_code": "ES118",
@@ -23335,8 +23347,8 @@
       "group": "ES",
       "group_size": 282
     },
-    "tier": "unreliable",
-    "tier_reason": "unreliable: entrapments_24m 0 >= p90 0"
+    "tier": "watch",
+    "tier_reason": "watch: availability_24h_mean_24m 0.9670 between p25 0.9531 and p75 0.9771; unscheduled_24m 108 (p50 105.5000, p75 180.7500); entrapments_24m 0 (p75 0, p90 0)"
   },
   {
     "equipment_code": "ES119",
@@ -23384,8 +23396,8 @@
       "group": "ES",
       "group_size": 282
     },
-    "tier": "unreliable",
-    "tier_reason": "unreliable: entrapments_24m 0 >= p90 0"
+    "tier": "watch",
+    "tier_reason": "watch: availability_24h_mean_24m 0.9758 between p25 0.9531 and p75 0.9771; unscheduled_24m 49 (p50 105.5000, p75 180.7500); entrapments_24m 0 (p75 0, p90 0)"
   },
   {
     "equipment_code": "ES120",
@@ -23433,8 +23445,8 @@
       "group": "ES",
       "group_size": 282
     },
-    "tier": "unreliable",
-    "tier_reason": "unreliable: entrapments_24m 0 >= p90 0"
+    "tier": "watch",
+    "tier_reason": "watch: availability_24h_mean_24m 0.9632 between p25 0.9531 and p75 0.9771; unscheduled_24m 105 (p50 105.5000, p75 180.7500); entrapments_24m 0 (p75 0, p90 0)"
   },
   {
     "equipment_code": "ES121",
@@ -23482,8 +23494,8 @@
       "group": "ES",
       "group_size": 282
     },
-    "tier": "unreliable",
-    "tier_reason": "unreliable: entrapments_24m 0 >= p90 0"
+    "tier": "watch",
+    "tier_reason": "watch: availability_24h_mean_24m 0.9695 between p25 0.9531 and p75 0.9771; unscheduled_24m 98 (p50 105.5000, p75 180.7500); entrapments_24m 0 (p75 0, p90 0)"
   },
   {
     "equipment_code": "ES122",
@@ -23531,8 +23543,8 @@
       "group": "ES",
       "group_size": 282
     },
-    "tier": "unreliable",
-    "tier_reason": "unreliable: entrapments_24m 0 >= p90 0"
+    "tier": "watch",
+    "tier_reason": "watch: availability_24h_mean_24m 0.9590 between p25 0.9531 and p75 0.9771; unscheduled_24m 92 (p50 105.5000, p75 180.7500); entrapments_24m 0 (p75 0, p90 0)"
   },
   {
     "equipment_code": "ES123",
@@ -23580,8 +23592,8 @@
       "group": "ES",
       "group_size": 282
     },
-    "tier": "unreliable",
-    "tier_reason": "unreliable: entrapments_24m 0 >= p90 0"
+    "tier": "watch",
+    "tier_reason": "watch: availability_24h_mean_24m 0.9622 between p25 0.9531 and p75 0.9771; unscheduled_24m 97 (p50 105.5000, p75 180.7500); entrapments_24m 0 (p75 0, p90 0)"
   },
   {
     "equipment_code": "ES200",
@@ -23629,8 +23641,8 @@
       "group": "ES",
       "group_size": 282
     },
-    "tier": "unreliable",
-    "tier_reason": "unreliable: entrapments_24m 0 >= p90 0"
+    "tier": "watch",
+    "tier_reason": "watch: availability_24h_mean_24m 0.9693 between p25 0.9531 and p75 0.9771; unscheduled_24m 58 (p50 105.5000, p75 180.7500); entrapments_24m 0 (p75 0, p90 0)"
   },
   {
     "equipment_code": "ES202",
@@ -23678,8 +23690,8 @@
       "group": "ES",
       "group_size": 282
     },
-    "tier": "unreliable",
-    "tier_reason": "unreliable: entrapments_24m 0 >= p90 0"
+    "tier": "reliable",
+    "tier_reason": "reliable: availability_24h_mean_24m 0.9807 >= p75 0.9771 and unscheduled_24m 82 <= p50 105.5000 and entrapments_24m 0 == 0 (p75 is 0 for this type)"
   },
   {
     "equipment_code": "ES203",
@@ -23727,8 +23739,8 @@
       "group": "ES",
       "group_size": 282
     },
-    "tier": "unreliable",
-    "tier_reason": "unreliable: entrapments_24m 0 >= p90 0"
+    "tier": "watch",
+    "tier_reason": "watch: availability_24h_mean_24m 0.9649 between p25 0.9531 and p75 0.9771; unscheduled_24m 150 (p50 105.5000, p75 180.7500); entrapments_24m 0 (p75 0, p90 0)"
   },
   {
     "equipment_code": "ES204",
@@ -23776,8 +23788,8 @@
       "group": "ES",
       "group_size": 282
     },
-    "tier": "unreliable",
-    "tier_reason": "unreliable: entrapments_24m 0 >= p90 0"
+    "tier": "watch",
+    "tier_reason": "watch: availability_24h_mean_24m 0.9612 between p25 0.9531 and p75 0.9771; unscheduled_24m 174 (p50 105.5000, p75 180.7500); entrapments_24m 0 (p75 0, p90 0)"
   },
   {
     "equipment_code": "ES205",
@@ -23826,7 +23838,7 @@
       "group_size": 282
     },
     "tier": "unreliable",
-    "tier_reason": "unreliable: unscheduled_24m 252 >= p75 180.7500; entrapments_24m 0 >= p90 0"
+    "tier_reason": "unreliable: unscheduled_24m 252 >= p75 180.7500"
   },
   {
     "equipment_code": "ES206",
@@ -23875,7 +23887,7 @@
       "group_size": 282
     },
     "tier": "unreliable",
-    "tier_reason": "unreliable: unscheduled_24m 264 >= p75 180.7500; entrapments_24m 0 >= p90 0"
+    "tier_reason": "unreliable: unscheduled_24m 264 >= p75 180.7500"
   },
   {
     "equipment_code": "ES207",
@@ -23930,7 +23942,7 @@
       "group_size": 282
     },
     "tier": "unreliable",
-    "tier_reason": "unreliable: availability_24h_mean_24m 0.9493 <= p25 0.9531; unscheduled_24m 237 >= p75 180.7500; entrapments_24m 0 >= p90 0"
+    "tier_reason": "unreliable: availability_24h_mean_24m 0.9493 <= p25 0.9531; unscheduled_24m 237 >= p75 180.7500"
   },
   {
     "equipment_code": "ES208",
@@ -23979,7 +23991,7 @@
       "group_size": 282
     },
     "tier": "unreliable",
-    "tier_reason": "unreliable: availability_24h_mean_24m 0.9497 <= p25 0.9531; unscheduled_24m 246 >= p75 180.7500; entrapments_24m 0 >= p90 0"
+    "tier_reason": "unreliable: availability_24h_mean_24m 0.9497 <= p25 0.9531; unscheduled_24m 246 >= p75 180.7500"
   },
   {
     "equipment_code": "ES209",
@@ -24028,7 +24040,7 @@
       "group_size": 282
     },
     "tier": "unreliable",
-    "tier_reason": "unreliable: availability_24h_mean_24m 0.9470 <= p25 0.9531; unscheduled_24m 197 >= p75 180.7500; entrapments_24m 0 >= p90 0"
+    "tier_reason": "unreliable: availability_24h_mean_24m 0.9470 <= p25 0.9531; unscheduled_24m 197 >= p75 180.7500"
   },
   {
     "equipment_code": "ES210",
@@ -24076,8 +24088,8 @@
       "group": "ES",
       "group_size": 282
     },
-    "tier": "unreliable",
-    "tier_reason": "unreliable: entrapments_24m 0 >= p90 0"
+    "tier": "watch",
+    "tier_reason": "watch: availability_24h_mean_24m 0.9723 between p25 0.9531 and p75 0.9771; unscheduled_24m 69 (p50 105.5000, p75 180.7500); entrapments_24m 0 (p75 0, p90 0)"
   },
   {
     "equipment_code": "ES211",
@@ -24125,8 +24137,8 @@
       "group": "ES",
       "group_size": 282
     },
-    "tier": "unreliable",
-    "tier_reason": "unreliable: entrapments_24m 0 >= p90 0"
+    "tier": "watch",
+    "tier_reason": "watch: availability_24h_mean_24m 0.9771 between p25 0.9531 and p75 0.9771; unscheduled_24m 110 (p50 105.5000, p75 180.7500); entrapments_24m 0 (p75 0, p90 0)"
   },
   {
     "equipment_code": "ES212",
@@ -24174,8 +24186,8 @@
       "group": "ES",
       "group_size": 282
     },
-    "tier": "unreliable",
-    "tier_reason": "unreliable: entrapments_24m 0 >= p90 0"
+    "tier": "watch",
+    "tier_reason": "watch: availability_24h_mean_24m 0.9748 between p25 0.9531 and p75 0.9771; unscheduled_24m 108 (p50 105.5000, p75 180.7500); entrapments_24m 0 (p75 0, p90 0)"
   },
   {
     "equipment_code": "ES213",
@@ -24223,8 +24235,8 @@
       "group": "ES",
       "group_size": 282
     },
-    "tier": "unreliable",
-    "tier_reason": "unreliable: entrapments_24m 0 >= p90 0"
+    "tier": "watch",
+    "tier_reason": "watch: availability_24h_mean_24m 0.9762 between p25 0.9531 and p75 0.9771; unscheduled_24m 62 (p50 105.5000, p75 180.7500); entrapments_24m 0 (p75 0, p90 0)"
   },
   {
     "equipment_code": "ES214",
@@ -24273,7 +24285,7 @@
       "group_size": 282
     },
     "tier": "unreliable",
-    "tier_reason": "unreliable: availability_24h_mean_24m 0.9485 <= p25 0.9531; unscheduled_24m 191 >= p75 180.7500; entrapments_24m 0 >= p90 0"
+    "tier_reason": "unreliable: availability_24h_mean_24m 0.9485 <= p25 0.9531; unscheduled_24m 191 >= p75 180.7500"
   },
   {
     "equipment_code": "ES215",
@@ -24321,8 +24333,8 @@
       "group": "ES",
       "group_size": 282
     },
-    "tier": "unreliable",
-    "tier_reason": "unreliable: entrapments_24m 0 >= p90 0"
+    "tier": "watch",
+    "tier_reason": "watch: availability_24h_mean_24m 0.9770 between p25 0.9531 and p75 0.9771; unscheduled_24m 107 (p50 105.5000, p75 180.7500); entrapments_24m 0 (p75 0, p90 0)"
   },
   {
     "equipment_code": "ES216",
@@ -24371,7 +24383,7 @@
       "group_size": 282
     },
     "tier": "unreliable",
-    "tier_reason": "unreliable: availability_24h_mean_24m 0.9398 <= p25 0.9531; unscheduled_24m 260 >= p75 180.7500; entrapments_24m 0 >= p90 0"
+    "tier_reason": "unreliable: availability_24h_mean_24m 0.9398 <= p25 0.9531; unscheduled_24m 260 >= p75 180.7500"
   },
   {
     "equipment_code": "ES217",
@@ -24420,7 +24432,7 @@
       "group_size": 282
     },
     "tier": "unreliable",
-    "tier_reason": "unreliable: unscheduled_24m 262 >= p75 180.7500; entrapments_24m 0 >= p90 0"
+    "tier_reason": "unreliable: unscheduled_24m 262 >= p75 180.7500"
   },
   {
     "equipment_code": "ES218",
@@ -24469,7 +24481,7 @@
       "group_size": 282
     },
     "tier": "unreliable",
-    "tier_reason": "unreliable: availability_24h_mean_24m 0.9465 <= p25 0.9531; unscheduled_24m 272 >= p75 180.7500; entrapments_24m 0 >= p90 0"
+    "tier_reason": "unreliable: availability_24h_mean_24m 0.9465 <= p25 0.9531; unscheduled_24m 272 >= p75 180.7500"
   },
   {
     "equipment_code": "ES219",
@@ -24517,8 +24529,8 @@
       "group": "ES",
       "group_size": 282
     },
-    "tier": "unreliable",
-    "tier_reason": "unreliable: entrapments_24m 0 >= p90 0"
+    "tier": "watch",
+    "tier_reason": "watch: availability_24h_mean_24m 0.9584 between p25 0.9531 and p75 0.9771; unscheduled_24m 174 (p50 105.5000, p75 180.7500); entrapments_24m 0 (p75 0, p90 0)"
   },
   {
     "equipment_code": "ES220",
@@ -24566,8 +24578,8 @@
       "group": "ES",
       "group_size": 282
     },
-    "tier": "unreliable",
-    "tier_reason": "unreliable: entrapments_24m 0 >= p90 0"
+    "tier": "reliable",
+    "tier_reason": "reliable: availability_24h_mean_24m 0.9809 >= p75 0.9771 and unscheduled_24m 79 <= p50 105.5000 and entrapments_24m 0 == 0 (p75 is 0 for this type)"
   },
   {
     "equipment_code": "ES221",
@@ -24616,7 +24628,7 @@
       "group_size": 282
     },
     "tier": "unreliable",
-    "tier_reason": "unreliable: unscheduled_24m 210 >= p75 180.7500; entrapments_24m 0 >= p90 0"
+    "tier_reason": "unreliable: unscheduled_24m 210 >= p75 180.7500"
   },
   {
     "equipment_code": "ES222",
@@ -24665,7 +24677,7 @@
       "group_size": 282
     },
     "tier": "unreliable",
-    "tier_reason": "unreliable: unscheduled_24m 191 >= p75 180.7500; entrapments_24m 0 >= p90 0"
+    "tier_reason": "unreliable: unscheduled_24m 191 >= p75 180.7500"
   },
   {
     "equipment_code": "ES223",
@@ -24714,7 +24726,7 @@
       "group_size": 282
     },
     "tier": "unreliable",
-    "tier_reason": "unreliable: availability_24h_mean_24m 0.9521 <= p25 0.9531; unscheduled_24m 222 >= p75 180.7500; entrapments_24m 0 >= p90 0"
+    "tier_reason": "unreliable: availability_24h_mean_24m 0.9521 <= p25 0.9531; unscheduled_24m 222 >= p75 180.7500"
   },
   {
     "equipment_code": "ES224",
@@ -24763,7 +24775,7 @@
       "group_size": 282
     },
     "tier": "unreliable",
-    "tier_reason": "unreliable: unscheduled_24m 283 >= p75 180.7500; entrapments_24m 0 >= p90 0"
+    "tier_reason": "unreliable: unscheduled_24m 283 >= p75 180.7500"
   },
   {
     "equipment_code": "ES229",
@@ -24812,7 +24824,7 @@
       "group_size": 282
     },
     "tier": "unreliable",
-    "tier_reason": "unreliable: unscheduled_24m 182 >= p75 180.7500; entrapments_24m 0 >= p90 0"
+    "tier_reason": "unreliable: unscheduled_24m 182 >= p75 180.7500"
   },
   {
     "equipment_code": "ES230",
@@ -24861,7 +24873,7 @@
       "group_size": 282
     },
     "tier": "unreliable",
-    "tier_reason": "unreliable: availability_24h_mean_24m 0.9433 <= p25 0.9531; unscheduled_24m 271 >= p75 180.7500; entrapments_24m 0 >= p90 0"
+    "tier_reason": "unreliable: availability_24h_mean_24m 0.9433 <= p25 0.9531; unscheduled_24m 271 >= p75 180.7500"
   },
   {
     "equipment_code": "ES231",
@@ -24910,7 +24922,7 @@
       "group_size": 282
     },
     "tier": "unreliable",
-    "tier_reason": "unreliable: availability_24h_mean_24m 0.9530 <= p25 0.9531; unscheduled_24m 217 >= p75 180.7500; entrapments_24m 0 >= p90 0"
+    "tier_reason": "unreliable: availability_24h_mean_24m 0.9530 <= p25 0.9531; unscheduled_24m 217 >= p75 180.7500"
   },
   {
     "equipment_code": "ES232",
@@ -24959,7 +24971,7 @@
       "group_size": 282
     },
     "tier": "unreliable",
-    "tier_reason": "unreliable: availability_24h_mean_24m 0.9453 <= p25 0.9531; unscheduled_24m 188 >= p75 180.7500; entrapments_24m 0 >= p90 0"
+    "tier_reason": "unreliable: availability_24h_mean_24m 0.9453 <= p25 0.9531; unscheduled_24m 188 >= p75 180.7500"
   },
   {
     "equipment_code": "ES233",
@@ -25008,7 +25020,7 @@
       "group_size": 282
     },
     "tier": "unreliable",
-    "tier_reason": "unreliable: unscheduled_24m 226 >= p75 180.7500; entrapments_24m 0 >= p90 0"
+    "tier_reason": "unreliable: unscheduled_24m 226 >= p75 180.7500"
   },
   {
     "equipment_code": "ES234",
@@ -25056,8 +25068,8 @@
       "group": "ES",
       "group_size": 282
     },
-    "tier": "unreliable",
-    "tier_reason": "unreliable: entrapments_24m 0 >= p90 0"
+    "tier": "watch",
+    "tier_reason": "watch: availability_24h_mean_24m 0.9572 between p25 0.9531 and p75 0.9771; unscheduled_24m 179 (p50 105.5000, p75 180.7500); entrapments_24m 0 (p75 0, p90 0)"
   },
   {
     "equipment_code": "ES235",
@@ -25106,7 +25118,7 @@
       "group_size": 282
     },
     "tier": "unreliable",
-    "tier_reason": "unreliable: availability_24h_mean_24m 0.9444 <= p25 0.9531; unscheduled_24m 246 >= p75 180.7500; entrapments_24m 0 >= p90 0"
+    "tier_reason": "unreliable: availability_24h_mean_24m 0.9444 <= p25 0.9531; unscheduled_24m 246 >= p75 180.7500"
   },
   {
     "equipment_code": "ES236",
@@ -25154,8 +25166,8 @@
       "group": "ES",
       "group_size": 282
     },
-    "tier": "unreliable",
-    "tier_reason": "unreliable: entrapments_24m 0 >= p90 0"
+    "tier": "watch",
+    "tier_reason": "watch: availability_24h_mean_24m 0.9532 between p25 0.9531 and p75 0.9771; unscheduled_24m 161 (p50 105.5000, p75 180.7500); entrapments_24m 0 (p75 0, p90 0)"
   },
   {
     "equipment_code": "ES237",
@@ -25203,8 +25215,8 @@
       "group": "ES",
       "group_size": 282
     },
-    "tier": "unreliable",
-    "tier_reason": "unreliable: entrapments_24m 0 >= p90 0"
+    "tier": "watch",
+    "tier_reason": "watch: availability_24h_mean_24m 0.9685 between p25 0.9531 and p75 0.9771; unscheduled_24m 87 (p50 105.5000, p75 180.7500); entrapments_24m 0 (p75 0, p90 0)"
   },
   {
     "equipment_code": "ES238",
@@ -25252,8 +25264,8 @@
       "group": "ES",
       "group_size": 282
     },
-    "tier": "unreliable",
-    "tier_reason": "unreliable: entrapments_24m 0 >= p90 0"
+    "tier": "watch",
+    "tier_reason": "watch: availability_24h_mean_24m 0.9729 between p25 0.9531 and p75 0.9771; unscheduled_24m 63 (p50 105.5000, p75 180.7500); entrapments_24m 0 (p75 0, p90 0)"
   },
   {
     "equipment_code": "ES239",
@@ -25302,7 +25314,7 @@
       "group_size": 282
     },
     "tier": "unreliable",
-    "tier_reason": "unreliable: availability_24h_mean_24m 0.9467 <= p25 0.9531; unscheduled_24m 240 >= p75 180.7500; entrapments_24m 0 >= p90 0"
+    "tier_reason": "unreliable: availability_24h_mean_24m 0.9467 <= p25 0.9531; unscheduled_24m 240 >= p75 180.7500"
   },
   {
     "equipment_code": "ES240",
@@ -25350,8 +25362,8 @@
       "group": "ES",
       "group_size": 282
     },
-    "tier": "unreliable",
-    "tier_reason": "unreliable: entrapments_24m 0 >= p90 0"
+    "tier": "watch",
+    "tier_reason": "watch: availability_24h_mean_24m 0.9626 between p25 0.9531 and p75 0.9771; unscheduled_24m 103 (p50 105.5000, p75 180.7500); entrapments_24m 0 (p75 0, p90 0)"
   },
   {
     "equipment_code": "ES241",
@@ -25405,8 +25417,8 @@
       "group": "ES",
       "group_size": 282
     },
-    "tier": "unreliable",
-    "tier_reason": "unreliable: entrapments_24m 0 >= p90 0"
+    "tier": "watch",
+    "tier_reason": "watch: availability_24h_mean_24m 0.9627 between p25 0.9531 and p75 0.9771; unscheduled_24m 176 (p50 105.5000, p75 180.7500); entrapments_24m 0 (p75 0, p90 0)"
   },
   {
     "equipment_code": "ES242",
@@ -25455,7 +25467,7 @@
       "group_size": 282
     },
     "tier": "unreliable",
-    "tier_reason": "unreliable: unscheduled_24m 221 >= p75 180.7500; entrapments_24m 0 >= p90 0"
+    "tier_reason": "unreliable: unscheduled_24m 221 >= p75 180.7500"
   },
   {
     "equipment_code": "ES243",
@@ -25503,8 +25515,8 @@
       "group": "ES",
       "group_size": 282
     },
-    "tier": "unreliable",
-    "tier_reason": "unreliable: entrapments_24m 0 >= p90 0"
+    "tier": "reliable",
+    "tier_reason": "reliable: availability_24h_mean_24m 0.9787 >= p75 0.9771 and unscheduled_24m 15 <= p50 105.5000 and entrapments_24m 0 == 0 (p75 is 0 for this type)"
   },
   {
     "equipment_code": "ES244",
@@ -25552,8 +25564,8 @@
       "group": "ES",
       "group_size": 282
     },
-    "tier": "unreliable",
-    "tier_reason": "unreliable: entrapments_24m 0 >= p90 0"
+    "tier": "watch",
+    "tier_reason": "watch: availability_24h_mean_24m 0.9658 between p25 0.9531 and p75 0.9771; unscheduled_24m 106 (p50 105.5000, p75 180.7500); entrapments_24m 0 (p75 0, p90 0)"
   },
   {
     "equipment_code": "ES245",
@@ -25601,8 +25613,8 @@
       "group": "ES",
       "group_size": 282
     },
-    "tier": "unreliable",
-    "tier_reason": "unreliable: entrapments_24m 0 >= p90 0"
+    "tier": "watch",
+    "tier_reason": "watch: availability_24h_mean_24m 0.9665 between p25 0.9531 and p75 0.9771; unscheduled_24m 91 (p50 105.5000, p75 180.7500); entrapments_24m 0 (p75 0, p90 0)"
   },
   {
     "equipment_code": "ES246",
@@ -25651,7 +25663,7 @@
       "group_size": 282
     },
     "tier": "unreliable",
-    "tier_reason": "unreliable: unscheduled_24m 330 >= p75 180.7500; entrapments_24m 0 >= p90 0"
+    "tier_reason": "unreliable: unscheduled_24m 330 >= p75 180.7500"
   },
   {
     "equipment_code": "ES247",
@@ -25699,8 +25711,8 @@
       "group": "ES",
       "group_size": 282
     },
-    "tier": "unreliable",
-    "tier_reason": "unreliable: entrapments_24m 0 >= p90 0"
+    "tier": "watch",
+    "tier_reason": "watch: availability_24h_mean_24m 0.9700 between p25 0.9531 and p75 0.9771; unscheduled_24m 94 (p50 105.5000, p75 180.7500); entrapments_24m 0 (p75 0, p90 0)"
   },
   {
     "equipment_code": "ES248",
@@ -25749,7 +25761,7 @@
       "group_size": 282
     },
     "tier": "unreliable",
-    "tier_reason": "unreliable: unscheduled_24m 204 >= p75 180.7500; entrapments_24m 0 >= p90 0"
+    "tier_reason": "unreliable: unscheduled_24m 204 >= p75 180.7500"
   },
   {
     "equipment_code": "ES249",
@@ -25798,7 +25810,7 @@
       "group_size": 282
     },
     "tier": "unreliable",
-    "tier_reason": "unreliable: availability_24h_mean_24m 0.5378 <= p25 0.9531; unscheduled_24m 224 >= p75 180.7500; entrapments_24m 0 >= p90 0"
+    "tier_reason": "unreliable: availability_24h_mean_24m 0.5378 <= p25 0.9531; unscheduled_24m 224 >= p75 180.7500"
   },
   {
     "equipment_code": "ES250X",
@@ -25853,7 +25865,7 @@
       "group_size": 282
     },
     "tier": "unreliable",
-    "tier_reason": "unreliable: availability_24h_mean_24m 0.3047 <= p25 0.9531; entrapments_24m 0 >= p90 0"
+    "tier_reason": "unreliable: availability_24h_mean_24m 0.3047 <= p25 0.9531"
   },
   {
     "equipment_code": "ES251X",
@@ -25902,7 +25914,7 @@
       "group_size": 282
     },
     "tier": "unreliable",
-    "tier_reason": "unreliable: availability_24h_mean_24m 0.2858 <= p25 0.9531; entrapments_24m 0 >= p90 0"
+    "tier_reason": "unreliable: availability_24h_mean_24m 0.2858 <= p25 0.9531"
   },
   {
     "equipment_code": "ES252",
@@ -25951,7 +25963,7 @@
       "group_size": 282
     },
     "tier": "unreliable",
-    "tier_reason": "unreliable: availability_24h_mean_24m 0.9491 <= p25 0.9531; unscheduled_24m 227 >= p75 180.7500; entrapments_24m 0 >= p90 0"
+    "tier_reason": "unreliable: availability_24h_mean_24m 0.9491 <= p25 0.9531; unscheduled_24m 227 >= p75 180.7500"
   },
   {
     "equipment_code": "ES253X",
@@ -25999,8 +26011,8 @@
       "group": "ES",
       "group_size": 282
     },
-    "tier": "unreliable",
-    "tier_reason": "unreliable: entrapments_24m 0 >= p90 0"
+    "tier": "watch",
+    "tier_reason": "watch: availability_24h_mean_24m 0.9648 between p25 0.9531 and p75 0.9771; unscheduled_24m 0 (p50 105.5000, p75 180.7500); entrapments_24m 0 (p75 0, p90 0)"
   },
   {
     "equipment_code": "ES254X",
@@ -26049,7 +26061,7 @@
       "group_size": 282
     },
     "tier": "unreliable",
-    "tier_reason": "unreliable: availability_24h_mean_24m 0.4592 <= p25 0.9531; entrapments_24m 0 >= p90 0"
+    "tier_reason": "unreliable: availability_24h_mean_24m 0.4592 <= p25 0.9531"
   },
   {
     "equipment_code": "ES255",
@@ -26098,7 +26110,7 @@
       "group_size": 282
     },
     "tier": "unreliable",
-    "tier_reason": "unreliable: unscheduled_24m 226 >= p75 180.7500; entrapments_24m 0 >= p90 0"
+    "tier_reason": "unreliable: unscheduled_24m 226 >= p75 180.7500"
   },
   {
     "equipment_code": "ES256",
@@ -26147,7 +26159,7 @@
       "group_size": 282
     },
     "tier": "unreliable",
-    "tier_reason": "unreliable: availability_24h_mean_24m 0.9507 <= p25 0.9531; unscheduled_24m 367 >= p75 180.7500; entrapments_24m 0 >= p90 0"
+    "tier_reason": "unreliable: availability_24h_mean_24m 0.9507 <= p25 0.9531; unscheduled_24m 367 >= p75 180.7500"
   },
   {
     "equipment_code": "ES257X",
@@ -26202,7 +26214,7 @@
       "group_size": 282
     },
     "tier": "unreliable",
-    "tier_reason": "unreliable: availability_24h_mean_24m 0.8702 <= p25 0.9531; entrapments_24m 0 >= p90 0"
+    "tier_reason": "unreliable: availability_24h_mean_24m 0.8702 <= p25 0.9531"
   },
   {
     "equipment_code": "ES258X",
@@ -26257,7 +26269,7 @@
       "group_size": 282
     },
     "tier": "unreliable",
-    "tier_reason": "unreliable: availability_24h_mean_24m 0.7092 <= p25 0.9531; entrapments_24m 0 >= p90 0"
+    "tier_reason": "unreliable: availability_24h_mean_24m 0.7092 <= p25 0.9531"
   },
   {
     "equipment_code": "ES259",
@@ -26306,7 +26318,7 @@
       "group_size": 282
     },
     "tier": "unreliable",
-    "tier_reason": "unreliable: unscheduled_24m 292 >= p75 180.7500; entrapments_24m 0 >= p90 0"
+    "tier_reason": "unreliable: unscheduled_24m 292 >= p75 180.7500"
   },
   {
     "equipment_code": "ES260",
@@ -26355,7 +26367,7 @@
       "group_size": 282
     },
     "tier": "unreliable",
-    "tier_reason": "unreliable: availability_24h_mean_24m 0.8904 <= p25 0.9531; entrapments_24m 0 >= p90 0"
+    "tier_reason": "unreliable: availability_24h_mean_24m 0.8904 <= p25 0.9531"
   },
   {
     "equipment_code": "ES261X",
@@ -26404,7 +26416,7 @@
       "group_size": 282
     },
     "tier": "unreliable",
-    "tier_reason": "unreliable: availability_24h_mean_24m 0.8490 <= p25 0.9531; entrapments_24m 0 >= p90 0"
+    "tier_reason": "unreliable: availability_24h_mean_24m 0.8490 <= p25 0.9531"
   },
   {
     "equipment_code": "ES262X",
@@ -26452,8 +26464,8 @@
       "group": "ES",
       "group_size": 282
     },
-    "tier": "unreliable",
-    "tier_reason": "unreliable: entrapments_24m 0 >= p90 0"
+    "tier": "watch",
+    "tier_reason": "watch: availability_24h_mean_24m 0.9570 between p25 0.9531 and p75 0.9771; unscheduled_24m 0 (p50 105.5000, p75 180.7500); entrapments_24m 0 (p75 0, p90 0)"
   },
   {
     "equipment_code": "ES263X",
@@ -26502,7 +26514,7 @@
       "group_size": 282
     },
     "tier": "unreliable",
-    "tier_reason": "unreliable: availability_24h_mean_24m 0.9491 <= p25 0.9531; entrapments_24m 0 >= p90 0"
+    "tier_reason": "unreliable: availability_24h_mean_24m 0.9491 <= p25 0.9531"
   },
   {
     "equipment_code": "ES264X",
@@ -26551,7 +26563,7 @@
       "group_size": 282
     },
     "tier": "unreliable",
-    "tier_reason": "unreliable: availability_24h_mean_24m 0.8877 <= p25 0.9531; entrapments_24m 0 >= p90 0"
+    "tier_reason": "unreliable: availability_24h_mean_24m 0.8877 <= p25 0.9531"
   },
   {
     "equipment_code": "ES265X",
@@ -26599,8 +26611,8 @@
       "group": "ES",
       "group_size": 282
     },
-    "tier": "unreliable",
-    "tier_reason": "unreliable: entrapments_24m 0 >= p90 0"
+    "tier": "watch",
+    "tier_reason": "watch: availability_24h_mean_24m 0.9683 between p25 0.9531 and p75 0.9771; unscheduled_24m 0 (p50 105.5000, p75 180.7500); entrapments_24m 0 (p75 0, p90 0)"
   },
   {
     "equipment_code": "ES266X",
@@ -26648,8 +26660,8 @@
       "group": "ES",
       "group_size": 282
     },
-    "tier": "unreliable",
-    "tier_reason": "unreliable: entrapments_24m 0 >= p90 0"
+    "tier": "reliable",
+    "tier_reason": "reliable: availability_24h_mean_24m 0.9848 >= p75 0.9771 and unscheduled_24m 0 <= p50 105.5000 and entrapments_24m 0 == 0 (p75 is 0 for this type)"
   },
   {
     "equipment_code": "ES267X",
@@ -26697,8 +26709,8 @@
       "group": "ES",
       "group_size": 282
     },
-    "tier": "unreliable",
-    "tier_reason": "unreliable: entrapments_24m 0 >= p90 0"
+    "tier": "watch",
+    "tier_reason": "watch: availability_24h_mean_24m 0.9558 between p25 0.9531 and p75 0.9771; unscheduled_24m 0 (p50 105.5000, p75 180.7500); entrapments_24m 0 (p75 0, p90 0)"
   },
   {
     "equipment_code": "ES268X",
@@ -26746,8 +26758,8 @@
       "group": "ES",
       "group_size": 282
     },
-    "tier": "unreliable",
-    "tier_reason": "unreliable: entrapments_24m 0 >= p90 0"
+    "tier": "reliable",
+    "tier_reason": "reliable: availability_24h_mean_24m 0.9795 >= p75 0.9771 and unscheduled_24m 0 <= p50 105.5000 and entrapments_24m 0 == 0 (p75 is 0 for this type)"
   },
   {
     "equipment_code": "ES269",
@@ -26796,7 +26808,7 @@
       "group_size": 282
     },
     "tier": "unreliable",
-    "tier_reason": "unreliable: availability_24h_mean_24m 0.8591 <= p25 0.9531; unscheduled_24m 368 >= p75 180.7500; entrapments_24m 0 >= p90 0"
+    "tier_reason": "unreliable: availability_24h_mean_24m 0.8591 <= p25 0.9531; unscheduled_24m 368 >= p75 180.7500"
   },
   {
     "equipment_code": "ES270",
@@ -26845,7 +26857,7 @@
       "group_size": 282
     },
     "tier": "unreliable",
-    "tier_reason": "unreliable: availability_24h_mean_24m 0.9484 <= p25 0.9531; unscheduled_24m 183 >= p75 180.7500; entrapments_24m 0 >= p90 0"
+    "tier_reason": "unreliable: availability_24h_mean_24m 0.9484 <= p25 0.9531; unscheduled_24m 183 >= p75 180.7500"
   },
   {
     "equipment_code": "ES271",
@@ -26893,8 +26905,8 @@
       "group": "ES",
       "group_size": 282
     },
-    "tier": "unreliable",
-    "tier_reason": "unreliable: entrapments_24m 0 >= p90 0"
+    "tier": "reliable",
+    "tier_reason": "reliable: availability_24h_mean_24m 0.9789 >= p75 0.9771 and unscheduled_24m 53 <= p50 105.5000 and entrapments_24m 0 == 0 (p75 is 0 for this type)"
   },
   {
     "equipment_code": "ES272",
@@ -26942,8 +26954,8 @@
       "group": "ES",
       "group_size": 282
     },
-    "tier": "unreliable",
-    "tier_reason": "unreliable: entrapments_24m 0 >= p90 0"
+    "tier": "watch",
+    "tier_reason": "watch: availability_24h_mean_24m 0.9677 between p25 0.9531 and p75 0.9771; unscheduled_24m 70 (p50 105.5000, p75 180.7500); entrapments_24m 0 (p75 0, p90 0)"
   },
   {
     "equipment_code": "ES273",
@@ -26991,8 +27003,8 @@
       "group": "ES",
       "group_size": 282
     },
-    "tier": "unreliable",
-    "tier_reason": "unreliable: entrapments_24m 0 >= p90 0"
+    "tier": "reliable",
+    "tier_reason": "reliable: availability_24h_mean_24m 0.9830 >= p75 0.9771 and unscheduled_24m 29 <= p50 105.5000 and entrapments_24m 0 == 0 (p75 is 0 for this type)"
   },
   {
     "equipment_code": "ES274",
@@ -27040,8 +27052,8 @@
       "group": "ES",
       "group_size": 282
     },
-    "tier": "unreliable",
-    "tier_reason": "unreliable: entrapments_24m 0 >= p90 0"
+    "tier": "watch",
+    "tier_reason": "watch: availability_24h_mean_24m 0.9686 between p25 0.9531 and p75 0.9771; unscheduled_24m 175 (p50 105.5000, p75 180.7500); entrapments_24m 0 (p75 0, p90 0)"
   },
   {
     "equipment_code": "ES275",
@@ -27089,8 +27101,8 @@
       "group": "ES",
       "group_size": 282
     },
-    "tier": "unreliable",
-    "tier_reason": "unreliable: entrapments_24m 0 >= p90 0"
+    "tier": "watch",
+    "tier_reason": "watch: availability_24h_mean_24m 0.9771 between p25 0.9531 and p75 0.9771; unscheduled_24m 43 (p50 105.5000, p75 180.7500); entrapments_24m 0 (p75 0, p90 0)"
   },
   {
     "equipment_code": "ES276",
@@ -27138,8 +27150,8 @@
       "group": "ES",
       "group_size": 282
     },
-    "tier": "unreliable",
-    "tier_reason": "unreliable: entrapments_24m 0 >= p90 0"
+    "tier": "watch",
+    "tier_reason": "watch: availability_24h_mean_24m 0.9683 between p25 0.9531 and p75 0.9771; unscheduled_24m 166 (p50 105.5000, p75 180.7500); entrapments_24m 0 (p75 0, p90 0)"
   },
   {
     "equipment_code": "ES276X",
@@ -27187,8 +27199,8 @@
       "group": "ES",
       "group_size": 282
     },
-    "tier": "unreliable",
-    "tier_reason": "unreliable: entrapments_24m 0 >= p90 0"
+    "tier": "reliable",
+    "tier_reason": "reliable: availability_24h_mean_24m 0.9999 >= p75 0.9771 and unscheduled_24m 0 <= p50 105.5000 and entrapments_24m 0 == 0 (p75 is 0 for this type)"
   },
   {
     "equipment_code": "ES277",
@@ -27236,8 +27248,8 @@
       "group": "ES",
       "group_size": 282
     },
-    "tier": "unreliable",
-    "tier_reason": "unreliable: entrapments_24m 0 >= p90 0"
+    "tier": "watch",
+    "tier_reason": "watch: availability_24h_mean_24m 0.9764 between p25 0.9531 and p75 0.9771; unscheduled_24m 73 (p50 105.5000, p75 180.7500); entrapments_24m 0 (p75 0, p90 0)"
   },
   {
     "equipment_code": "ES278",
@@ -27286,7 +27298,7 @@
       "group_size": 282
     },
     "tier": "unreliable",
-    "tier_reason": "unreliable: availability_24h_mean_24m 0.9492 <= p25 0.9531; unscheduled_24m 236 >= p75 180.7500; entrapments_24m 0 >= p90 0"
+    "tier_reason": "unreliable: availability_24h_mean_24m 0.9492 <= p25 0.9531; unscheduled_24m 236 >= p75 180.7500"
   },
   {
     "equipment_code": "ES279",
@@ -27334,8 +27346,8 @@
       "group": "ES",
       "group_size": 282
     },
-    "tier": "unreliable",
-    "tier_reason": "unreliable: entrapments_24m 0 >= p90 0"
+    "tier": "reliable",
+    "tier_reason": "reliable: availability_24h_mean_24m 0.9771 >= p75 0.9771 and unscheduled_24m 66 <= p50 105.5000 and entrapments_24m 0 == 0 (p75 is 0 for this type)"
   },
   {
     "equipment_code": "ES280",
@@ -27384,7 +27396,7 @@
       "group_size": 282
     },
     "tier": "unreliable",
-    "tier_reason": "unreliable: availability_24h_mean_24m 0.9440 <= p25 0.9531; entrapments_24m 0 >= p90 0"
+    "tier_reason": "unreliable: availability_24h_mean_24m 0.9440 <= p25 0.9531"
   },
   {
     "equipment_code": "ES281",
@@ -27432,8 +27444,8 @@
       "group": "ES",
       "group_size": 282
     },
-    "tier": "unreliable",
-    "tier_reason": "unreliable: entrapments_24m 0 >= p90 0"
+    "tier": "watch",
+    "tier_reason": "watch: availability_24h_mean_24m 0.9702 between p25 0.9531 and p75 0.9771; unscheduled_24m 117 (p50 105.5000, p75 180.7500); entrapments_24m 0 (p75 0, p90 0)"
   },
   {
     "equipment_code": "ES282",
@@ -27481,8 +27493,8 @@
       "group": "ES",
       "group_size": 282
     },
-    "tier": "unreliable",
-    "tier_reason": "unreliable: entrapments_24m 0 >= p90 0"
+    "tier": "watch",
+    "tier_reason": "watch: availability_24h_mean_24m 0.9737 between p25 0.9531 and p75 0.9771; unscheduled_24m 108 (p50 105.5000, p75 180.7500); entrapments_24m 0 (p75 0, p90 0)"
   },
   {
     "equipment_code": "ES283",
@@ -27530,8 +27542,8 @@
       "group": "ES",
       "group_size": 282
     },
-    "tier": "unreliable",
-    "tier_reason": "unreliable: entrapments_24m 0 >= p90 0"
+    "tier": "reliable",
+    "tier_reason": "reliable: availability_24h_mean_24m 0.9791 >= p75 0.9771 and unscheduled_24m 43 <= p50 105.5000 and entrapments_24m 0 == 0 (p75 is 0 for this type)"
   },
   {
     "equipment_code": "ES284",
@@ -27579,8 +27591,8 @@
       "group": "ES",
       "group_size": 282
     },
-    "tier": "unreliable",
-    "tier_reason": "unreliable: entrapments_24m 0 >= p90 0"
+    "tier": "watch",
+    "tier_reason": "watch: availability_24h_mean_24m 0.9621 between p25 0.9531 and p75 0.9771; unscheduled_24m 96 (p50 105.5000, p75 180.7500); entrapments_24m 0 (p75 0, p90 0)"
   },
   {
     "equipment_code": "ES285",
@@ -27628,8 +27640,8 @@
       "group": "ES",
       "group_size": 282
     },
-    "tier": "unreliable",
-    "tier_reason": "unreliable: entrapments_24m 0 >= p90 0"
+    "tier": "reliable",
+    "tier_reason": "reliable: availability_24h_mean_24m 0.9834 >= p75 0.9771 and unscheduled_24m 50 <= p50 105.5000 and entrapments_24m 0 == 0 (p75 is 0 for this type)"
   },
   {
     "equipment_code": "ES286",
@@ -27677,8 +27689,8 @@
       "group": "ES",
       "group_size": 282
     },
-    "tier": "unreliable",
-    "tier_reason": "unreliable: entrapments_24m 0 >= p90 0"
+    "tier": "watch",
+    "tier_reason": "watch: availability_24h_mean_24m 0.9719 between p25 0.9531 and p75 0.9771; unscheduled_24m 135 (p50 105.5000, p75 180.7500); entrapments_24m 0 (p75 0, p90 0)"
   },
   {
     "equipment_code": "ES287",
@@ -27726,8 +27738,8 @@
       "group": "ES",
       "group_size": 282
     },
-    "tier": "unreliable",
-    "tier_reason": "unreliable: entrapments_24m 0 >= p90 0"
+    "tier": "reliable",
+    "tier_reason": "reliable: availability_24h_mean_24m 0.9842 >= p75 0.9771 and unscheduled_24m 89 <= p50 105.5000 and entrapments_24m 0 == 0 (p75 is 0 for this type)"
   },
   {
     "equipment_code": "ES288",
@@ -27775,8 +27787,8 @@
       "group": "ES",
       "group_size": 282
     },
-    "tier": "unreliable",
-    "tier_reason": "unreliable: entrapments_24m 0 >= p90 0"
+    "tier": "watch",
+    "tier_reason": "watch: availability_24h_mean_24m 0.9747 between p25 0.9531 and p75 0.9771; unscheduled_24m 104 (p50 105.5000, p75 180.7500); entrapments_24m 0 (p75 0, p90 0)"
   },
   {
     "equipment_code": "ES289",
@@ -27824,8 +27836,8 @@
       "group": "ES",
       "group_size": 282
     },
-    "tier": "unreliable",
-    "tier_reason": "unreliable: entrapments_24m 0 >= p90 0"
+    "tier": "watch",
+    "tier_reason": "watch: availability_24h_mean_24m 0.9707 between p25 0.9531 and p75 0.9771; unscheduled_24m 135 (p50 105.5000, p75 180.7500); entrapments_24m 0 (p75 0, p90 0)"
   },
   {
     "equipment_code": "ES290",
@@ -27874,7 +27886,7 @@
       "group_size": 282
     },
     "tier": "unreliable",
-    "tier_reason": "unreliable: availability_24h_mean_24m 0.9505 <= p25 0.9531; unscheduled_24m 243 >= p75 180.7500; entrapments_24m 0 >= p90 0"
+    "tier_reason": "unreliable: availability_24h_mean_24m 0.9505 <= p25 0.9531; unscheduled_24m 243 >= p75 180.7500"
   },
   {
     "equipment_code": "ES291",
@@ -27922,8 +27934,8 @@
       "group": "ES",
       "group_size": 282
     },
-    "tier": "unreliable",
-    "tier_reason": "unreliable: entrapments_24m 0 >= p90 0"
+    "tier": "reliable",
+    "tier_reason": "reliable: availability_24h_mean_24m 0.9806 >= p75 0.9771 and unscheduled_24m 75 <= p50 105.5000 and entrapments_24m 0 == 0 (p75 is 0 for this type)"
   },
   {
     "equipment_code": "ES294",
@@ -27971,8 +27983,8 @@
       "group": "ES",
       "group_size": 282
     },
-    "tier": "unreliable",
-    "tier_reason": "unreliable: entrapments_24m 0 >= p90 0"
+    "tier": "watch",
+    "tier_reason": "watch: availability_24h_mean_24m 0.9680 between p25 0.9531 and p75 0.9771; unscheduled_24m 147 (p50 105.5000, p75 180.7500); entrapments_24m 0 (p75 0, p90 0)"
   },
   {
     "equipment_code": "ES295",
@@ -28021,7 +28033,7 @@
       "group_size": 282
     },
     "tier": "unreliable",
-    "tier_reason": "unreliable: availability_24h_mean_24m 0.9513 <= p25 0.9531; entrapments_24m 0 >= p90 0"
+    "tier_reason": "unreliable: availability_24h_mean_24m 0.9513 <= p25 0.9531"
   },
   {
     "equipment_code": "ES296",
@@ -28070,7 +28082,7 @@
       "group_size": 282
     },
     "tier": "unreliable",
-    "tier_reason": "unreliable: availability_24h_mean_24m 0.9242 <= p25 0.9531; unscheduled_24m 333 >= p75 180.7500; entrapments_24m 0 >= p90 0"
+    "tier_reason": "unreliable: availability_24h_mean_24m 0.9242 <= p25 0.9531; unscheduled_24m 333 >= p75 180.7500"
   },
   {
     "equipment_code": "ES297",
@@ -28118,8 +28130,8 @@
       "group": "ES",
       "group_size": 282
     },
-    "tier": "unreliable",
-    "tier_reason": "unreliable: entrapments_24m 0 >= p90 0"
+    "tier": "watch",
+    "tier_reason": "watch: availability_24h_mean_24m 0.9689 between p25 0.9531 and p75 0.9771; unscheduled_24m 124 (p50 105.5000, p75 180.7500); entrapments_24m 0 (p75 0, p90 0)"
   },
   {
     "equipment_code": "ES300",
@@ -28167,8 +28179,8 @@
       "group": "ES",
       "group_size": 282
     },
-    "tier": "unreliable",
-    "tier_reason": "unreliable: entrapments_24m 0 >= p90 0"
+    "tier": "watch",
+    "tier_reason": "watch: availability_24h_mean_24m 0.9710 between p25 0.9531 and p75 0.9771; unscheduled_24m 155 (p50 105.5000, p75 180.7500); entrapments_24m 0 (p75 0, p90 0)"
   },
   {
     "equipment_code": "ES301",
@@ -28216,8 +28228,8 @@
       "group": "ES",
       "group_size": 282
     },
-    "tier": "unreliable",
-    "tier_reason": "unreliable: entrapments_24m 0 >= p90 0"
+    "tier": "watch",
+    "tier_reason": "watch: availability_24h_mean_24m 0.9705 between p25 0.9531 and p75 0.9771; unscheduled_24m 79 (p50 105.5000, p75 180.7500); entrapments_24m 0 (p75 0, p90 0)"
   },
   {
     "equipment_code": "ES302",
@@ -28266,7 +28278,7 @@
       "group_size": 282
     },
     "tier": "unreliable",
-    "tier_reason": "unreliable: availability_24h_mean_24m 0.9410 <= p25 0.9531; entrapments_24m 0 >= p90 0"
+    "tier_reason": "unreliable: availability_24h_mean_24m 0.9410 <= p25 0.9531"
   },
   {
     "equipment_code": "ES303",
@@ -28314,8 +28326,8 @@
       "group": "ES",
       "group_size": 282
     },
-    "tier": "unreliable",
-    "tier_reason": "unreliable: entrapments_24m 0 >= p90 0"
+    "tier": "watch",
+    "tier_reason": "watch: availability_24h_mean_24m 0.9686 between p25 0.9531 and p75 0.9771; unscheduled_24m 119 (p50 105.5000, p75 180.7500); entrapments_24m 0 (p75 0, p90 0)"
   },
   {
     "equipment_code": "ES304",
@@ -28364,7 +28376,7 @@
       "group_size": 282
     },
     "tier": "unreliable",
-    "tier_reason": "unreliable: availability_24h_mean_24m 0.9403 <= p25 0.9531; entrapments_24m 0 >= p90 0"
+    "tier_reason": "unreliable: availability_24h_mean_24m 0.9403 <= p25 0.9531"
   },
   {
     "equipment_code": "ES305",
@@ -28413,7 +28425,7 @@
       "group_size": 282
     },
     "tier": "unreliable",
-    "tier_reason": "unreliable: availability_24h_mean_24m 0.9498 <= p25 0.9531; entrapments_24m 0 >= p90 0"
+    "tier_reason": "unreliable: availability_24h_mean_24m 0.9498 <= p25 0.9531"
   },
   {
     "equipment_code": "ES306",
@@ -28461,8 +28473,8 @@
       "group": "ES",
       "group_size": 282
     },
-    "tier": "unreliable",
-    "tier_reason": "unreliable: entrapments_24m 0 >= p90 0"
+    "tier": "watch",
+    "tier_reason": "watch: availability_24h_mean_24m 0.9561 between p25 0.9531 and p75 0.9771; unscheduled_24m 161 (p50 105.5000, p75 180.7500); entrapments_24m 0 (p75 0, p90 0)"
   },
   {
     "equipment_code": "ES307",
@@ -28511,7 +28523,7 @@
       "group_size": 282
     },
     "tier": "unreliable",
-    "tier_reason": "unreliable: availability_24h_mean_24m 0.9019 <= p25 0.9531; unscheduled_24m 575 >= p75 180.7500; entrapments_24m 0 >= p90 0"
+    "tier_reason": "unreliable: availability_24h_mean_24m 0.9019 <= p25 0.9531; unscheduled_24m 575 >= p75 180.7500"
   },
   {
     "equipment_code": "ES308",
@@ -28559,8 +28571,8 @@
       "group": "ES",
       "group_size": 282
     },
-    "tier": "unreliable",
-    "tier_reason": "unreliable: entrapments_24m 0 >= p90 0"
+    "tier": "reliable",
+    "tier_reason": "reliable: availability_24h_mean_24m 0.9788 >= p75 0.9771 and unscheduled_24m 90 <= p50 105.5000 and entrapments_24m 0 == 0 (p75 is 0 for this type)"
   },
   {
     "equipment_code": "ES309",
@@ -28608,8 +28620,8 @@
       "group": "ES",
       "group_size": 282
     },
-    "tier": "unreliable",
-    "tier_reason": "unreliable: entrapments_24m 0 >= p90 0"
+    "tier": "reliable",
+    "tier_reason": "reliable: availability_24h_mean_24m 0.9844 >= p75 0.9771 and unscheduled_24m 71 <= p50 105.5000 and entrapments_24m 0 == 0 (p75 is 0 for this type)"
   },
   {
     "equipment_code": "ES310",
@@ -28657,8 +28669,8 @@
       "group": "ES",
       "group_size": 282
     },
-    "tier": "unreliable",
-    "tier_reason": "unreliable: entrapments_24m 0 >= p90 0"
+    "tier": "watch",
+    "tier_reason": "watch: availability_24h_mean_24m 0.9719 between p25 0.9531 and p75 0.9771; unscheduled_24m 171 (p50 105.5000, p75 180.7500); entrapments_24m 0 (p75 0, p90 0)"
   },
   {
     "equipment_code": "ES311",
@@ -28707,7 +28719,7 @@
       "group_size": 282
     },
     "tier": "unreliable",
-    "tier_reason": "unreliable: unscheduled_24m 197 >= p75 180.7500; entrapments_24m 0 >= p90 0"
+    "tier_reason": "unreliable: unscheduled_24m 197 >= p75 180.7500"
   },
   {
     "equipment_code": "ES312",
@@ -28755,8 +28767,8 @@
       "group": "ES",
       "group_size": 282
     },
-    "tier": "unreliable",
-    "tier_reason": "unreliable: entrapments_24m 0 >= p90 0"
+    "tier": "watch",
+    "tier_reason": "watch: availability_24h_mean_24m 0.9701 between p25 0.9531 and p75 0.9771; unscheduled_24m 84 (p50 105.5000, p75 180.7500); entrapments_24m 0 (p75 0, p90 0)"
   },
   {
     "equipment_code": "ES313",
@@ -28811,7 +28823,7 @@
       "group_size": 282
     },
     "tier": "unreliable",
-    "tier_reason": "unreliable: unscheduled_24m 194 >= p75 180.7500; entrapments_24m 0 >= p90 0"
+    "tier_reason": "unreliable: unscheduled_24m 194 >= p75 180.7500"
   },
   {
     "equipment_code": "ES314",
@@ -28865,8 +28877,8 @@
       "group": "ES",
       "group_size": 282
     },
-    "tier": "unreliable",
-    "tier_reason": "unreliable: entrapments_24m 0 >= p90 0"
+    "tier": "reliable",
+    "tier_reason": "reliable: availability_24h_mean_24m 0.9777 >= p75 0.9771 and unscheduled_24m 101 <= p50 105.5000 and entrapments_24m 0 == 0 (p75 is 0 for this type)"
   },
   {
     "equipment_code": "ES315",
@@ -28920,8 +28932,8 @@
       "group": "ES",
       "group_size": 282
     },
-    "tier": "unreliable",
-    "tier_reason": "unreliable: entrapments_24m 0 >= p90 0"
+    "tier": "watch",
+    "tier_reason": "watch: availability_24h_mean_24m 0.9641 between p25 0.9531 and p75 0.9771; unscheduled_24m 137 (p50 105.5000, p75 180.7500); entrapments_24m 0 (p75 0, p90 0)"
   },
   {
     "equipment_code": "ES316",
@@ -28975,8 +28987,8 @@
       "group": "ES",
       "group_size": 282
     },
-    "tier": "unreliable",
-    "tier_reason": "unreliable: entrapments_24m 0 >= p90 0"
+    "tier": "watch",
+    "tier_reason": "watch: availability_24h_mean_24m 0.9625 between p25 0.9531 and p75 0.9771; unscheduled_24m 167 (p50 105.5000, p75 180.7500); entrapments_24m 0 (p75 0, p90 0)"
   },
   {
     "equipment_code": "ES317",
@@ -29024,8 +29036,8 @@
       "group": "ES",
       "group_size": 282
     },
-    "tier": "unreliable",
-    "tier_reason": "unreliable: entrapments_24m 0 >= p90 0"
+    "tier": "watch",
+    "tier_reason": "watch: availability_24h_mean_24m 0.9820 between p25 0.9531 and p75 0.9771; unscheduled_24m 125 (p50 105.5000, p75 180.7500); entrapments_24m 0 (p75 0, p90 0)"
   },
   {
     "equipment_code": "ES318",
@@ -29073,8 +29085,8 @@
       "group": "ES",
       "group_size": 282
     },
-    "tier": "unreliable",
-    "tier_reason": "unreliable: entrapments_24m 0 >= p90 0"
+    "tier": "reliable",
+    "tier_reason": "reliable: availability_24h_mean_24m 0.9798 >= p75 0.9771 and unscheduled_24m 83 <= p50 105.5000 and entrapments_24m 0 == 0 (p75 is 0 for this type)"
   },
   {
     "equipment_code": "ES319",
@@ -29122,8 +29134,8 @@
       "group": "ES",
       "group_size": 282
     },
-    "tier": "unreliable",
-    "tier_reason": "unreliable: entrapments_24m 0 >= p90 0"
+    "tier": "watch",
+    "tier_reason": "watch: availability_24h_mean_24m 0.9709 between p25 0.9531 and p75 0.9771; unscheduled_24m 68 (p50 105.5000, p75 180.7500); entrapments_24m 0 (p75 0, p90 0)"
   },
   {
     "equipment_code": "ES320",
@@ -29172,7 +29184,7 @@
       "group_size": 282
     },
     "tier": "unreliable",
-    "tier_reason": "unreliable: availability_24h_mean_24m 0.9214 <= p25 0.9531; unscheduled_24m 181 >= p75 180.7500; entrapments_24m 0 >= p90 0"
+    "tier_reason": "unreliable: availability_24h_mean_24m 0.9214 <= p25 0.9531; unscheduled_24m 181 >= p75 180.7500"
   },
   {
     "equipment_code": "ES321",
@@ -29220,8 +29232,8 @@
       "group": "ES",
       "group_size": 282
     },
-    "tier": "unreliable",
-    "tier_reason": "unreliable: entrapments_24m 0 >= p90 0"
+    "tier": "watch",
+    "tier_reason": "watch: availability_24h_mean_24m 0.9639 between p25 0.9531 and p75 0.9771; unscheduled_24m 121 (p50 105.5000, p75 180.7500); entrapments_24m 0 (p75 0, p90 0)"
   },
   {
     "equipment_code": "ES322",
@@ -29269,8 +29281,8 @@
       "group": "ES",
       "group_size": 282
     },
-    "tier": "unreliable",
-    "tier_reason": "unreliable: entrapments_24m 0 >= p90 0"
+    "tier": "watch",
+    "tier_reason": "watch: availability_24h_mean_24m 0.9762 between p25 0.9531 and p75 0.9771; unscheduled_24m 41 (p50 105.5000, p75 180.7500); entrapments_24m 0 (p75 0, p90 0)"
   },
   {
     "equipment_code": "ES323",
@@ -29318,8 +29330,8 @@
       "group": "ES",
       "group_size": 282
     },
-    "tier": "unreliable",
-    "tier_reason": "unreliable: entrapments_24m 0 >= p90 0"
+    "tier": "watch",
+    "tier_reason": "watch: availability_24h_mean_24m 0.9714 between p25 0.9531 and p75 0.9771; unscheduled_24m 134 (p50 105.5000, p75 180.7500); entrapments_24m 0 (p75 0, p90 0)"
   },
   {
     "equipment_code": "ES324",
@@ -29368,7 +29380,7 @@
       "group_size": 282
     },
     "tier": "unreliable",
-    "tier_reason": "unreliable: unscheduled_24m 281 >= p75 180.7500; entrapments_24m 0 >= p90 0"
+    "tier_reason": "unreliable: unscheduled_24m 281 >= p75 180.7500"
   },
   {
     "equipment_code": "ES325",
@@ -29417,7 +29429,7 @@
       "group_size": 282
     },
     "tier": "unreliable",
-    "tier_reason": "unreliable: unscheduled_24m 215 >= p75 180.7500; entrapments_24m 0 >= p90 0"
+    "tier_reason": "unreliable: unscheduled_24m 215 >= p75 180.7500"
   },
   {
     "equipment_code": "ES326",
@@ -29465,8 +29477,8 @@
       "group": "ES",
       "group_size": 282
     },
-    "tier": "unreliable",
-    "tier_reason": "unreliable: entrapments_24m 0 >= p90 0"
+    "tier": "watch",
+    "tier_reason": "watch: availability_24h_mean_24m 0.9692 between p25 0.9531 and p75 0.9771; unscheduled_24m 85 (p50 105.5000, p75 180.7500); entrapments_24m 0 (p75 0, p90 0)"
   },
   {
     "equipment_code": "ES327",
@@ -29515,7 +29527,7 @@
       "group_size": 282
     },
     "tier": "unreliable",
-    "tier_reason": "unreliable: unscheduled_24m 252 >= p75 180.7500; entrapments_24m 0 >= p90 0"
+    "tier_reason": "unreliable: unscheduled_24m 252 >= p75 180.7500"
   },
   {
     "equipment_code": "ES328",
@@ -29564,7 +29576,7 @@
       "group_size": 282
     },
     "tier": "unreliable",
-    "tier_reason": "unreliable: availability_24h_mean_24m 0.9394 <= p25 0.9531; entrapments_24m 0 >= p90 0"
+    "tier_reason": "unreliable: availability_24h_mean_24m 0.9394 <= p25 0.9531"
   },
   {
     "equipment_code": "ES329",
@@ -29612,8 +29624,8 @@
       "group": "ES",
       "group_size": 282
     },
-    "tier": "unreliable",
-    "tier_reason": "unreliable: entrapments_24m 0 >= p90 0"
+    "tier": "watch",
+    "tier_reason": "watch: availability_24h_mean_24m 0.9610 between p25 0.9531 and p75 0.9771; unscheduled_24m 111 (p50 105.5000, p75 180.7500); entrapments_24m 0 (p75 0, p90 0)"
   },
   {
     "equipment_code": "ES330",
@@ -29662,7 +29674,7 @@
       "group_size": 282
     },
     "tier": "unreliable",
-    "tier_reason": "unreliable: availability_24h_mean_24m 0.9459 <= p25 0.9531; unscheduled_24m 237 >= p75 180.7500; entrapments_24m 0 >= p90 0"
+    "tier_reason": "unreliable: availability_24h_mean_24m 0.9459 <= p25 0.9531; unscheduled_24m 237 >= p75 180.7500"
   },
   {
     "equipment_code": "ES331",
@@ -29711,7 +29723,7 @@
       "group_size": 282
     },
     "tier": "unreliable",
-    "tier_reason": "unreliable: availability_24h_mean_24m 0.9226 <= p25 0.9531; unscheduled_24m 241 >= p75 180.7500; entrapments_24m 0 >= p90 0"
+    "tier_reason": "unreliable: availability_24h_mean_24m 0.9226 <= p25 0.9531; unscheduled_24m 241 >= p75 180.7500"
   },
   {
     "equipment_code": "ES332",
@@ -29760,7 +29772,7 @@
       "group_size": 282
     },
     "tier": "unreliable",
-    "tier_reason": "unreliable: availability_24h_mean_24m 0.9444 <= p25 0.9531; unscheduled_24m 271 >= p75 180.7500; entrapments_24m 0 >= p90 0"
+    "tier_reason": "unreliable: availability_24h_mean_24m 0.9444 <= p25 0.9531; unscheduled_24m 271 >= p75 180.7500"
   },
   {
     "equipment_code": "ES333",
@@ -29809,7 +29821,7 @@
       "group_size": 282
     },
     "tier": "unreliable",
-    "tier_reason": "unreliable: unscheduled_24m 224 >= p75 180.7500; entrapments_24m 0 >= p90 0"
+    "tier_reason": "unreliable: unscheduled_24m 224 >= p75 180.7500"
   },
   {
     "equipment_code": "ES334",
@@ -29858,7 +29870,7 @@
       "group_size": 282
     },
     "tier": "unreliable",
-    "tier_reason": "unreliable: unscheduled_24m 255 >= p75 180.7500; entrapments_24m 0 >= p90 0"
+    "tier_reason": "unreliable: unscheduled_24m 255 >= p75 180.7500"
   },
   {
     "equipment_code": "ES335",
@@ -29907,7 +29919,7 @@
       "group_size": 282
     },
     "tier": "unreliable",
-    "tier_reason": "unreliable: availability_24h_mean_24m 0.9200 <= p25 0.9531; unscheduled_24m 458 >= p75 180.7500; entrapments_24m 0 >= p90 0"
+    "tier_reason": "unreliable: availability_24h_mean_24m 0.9200 <= p25 0.9531; unscheduled_24m 458 >= p75 180.7500"
   },
   {
     "equipment_code": "ES336",
@@ -29956,7 +29968,7 @@
       "group_size": 282
     },
     "tier": "unreliable",
-    "tier_reason": "unreliable: unscheduled_24m 195 >= p75 180.7500; entrapments_24m 0 >= p90 0"
+    "tier_reason": "unreliable: unscheduled_24m 195 >= p75 180.7500"
   },
   {
     "equipment_code": "ES337",
@@ -30004,8 +30016,8 @@
       "group": "ES",
       "group_size": 282
     },
-    "tier": "unreliable",
-    "tier_reason": "unreliable: entrapments_24m 0 >= p90 0"
+    "tier": "watch",
+    "tier_reason": "watch: availability_24h_mean_24m 0.9765 between p25 0.9531 and p75 0.9771; unscheduled_24m 117 (p50 105.5000, p75 180.7500); entrapments_24m 0 (p75 0, p90 0)"
   },
   {
     "equipment_code": "ES338",
@@ -30054,7 +30066,7 @@
       "group_size": 282
     },
     "tier": "unreliable",
-    "tier_reason": "unreliable: availability_24h_mean_24m 0.9255 <= p25 0.9531; unscheduled_24m 280 >= p75 180.7500; entrapments_24m 0 >= p90 0"
+    "tier_reason": "unreliable: availability_24h_mean_24m 0.9255 <= p25 0.9531; unscheduled_24m 280 >= p75 180.7500"
   },
   {
     "equipment_code": "ES339",
@@ -30102,8 +30114,8 @@
       "group": "ES",
       "group_size": 282
     },
-    "tier": "unreliable",
-    "tier_reason": "unreliable: entrapments_24m 0 >= p90 0"
+    "tier": "watch",
+    "tier_reason": "watch: availability_24h_mean_24m 0.9755 between p25 0.9531 and p75 0.9771; unscheduled_24m 125 (p50 105.5000, p75 180.7500); entrapments_24m 0 (p75 0, p90 0)"
   },
   {
     "equipment_code": "ES340",
@@ -30151,8 +30163,8 @@
       "group": "ES",
       "group_size": 282
     },
-    "tier": "unreliable",
-    "tier_reason": "unreliable: entrapments_24m 0 >= p90 0"
+    "tier": "watch",
+    "tier_reason": "watch: availability_24h_mean_24m 0.9679 between p25 0.9531 and p75 0.9771; unscheduled_24m 109 (p50 105.5000, p75 180.7500); entrapments_24m 0 (p75 0, p90 0)"
   },
   {
     "equipment_code": "ES341",
@@ -30200,8 +30212,8 @@
       "group": "ES",
       "group_size": 282
     },
-    "tier": "unreliable",
-    "tier_reason": "unreliable: entrapments_24m 0 >= p90 0"
+    "tier": "watch",
+    "tier_reason": "watch: availability_24h_mean_24m 0.9694 between p25 0.9531 and p75 0.9771; unscheduled_24m 177 (p50 105.5000, p75 180.7500); entrapments_24m 0 (p75 0, p90 0)"
   },
   {
     "equipment_code": "ES342",
@@ -30250,7 +30262,7 @@
       "group_size": 282
     },
     "tier": "unreliable",
-    "tier_reason": "unreliable: availability_24h_mean_24m 0.9516 <= p25 0.9531; unscheduled_24m 193 >= p75 180.7500; entrapments_24m 0 >= p90 0"
+    "tier_reason": "unreliable: availability_24h_mean_24m 0.9516 <= p25 0.9531; unscheduled_24m 193 >= p75 180.7500"
   },
   {
     "equipment_code": "ES343",
@@ -30298,8 +30310,8 @@
       "group": "ES",
       "group_size": 282
     },
-    "tier": "unreliable",
-    "tier_reason": "unreliable: entrapments_24m 0 >= p90 0"
+    "tier": "watch",
+    "tier_reason": "watch: availability_24h_mean_24m 0.9765 between p25 0.9531 and p75 0.9771; unscheduled_24m 142 (p50 105.5000, p75 180.7500); entrapments_24m 0 (p75 0, p90 0)"
   },
   {
     "equipment_code": "ES345",
@@ -30347,8 +30359,8 @@
       "group": "ES",
       "group_size": 282
     },
-    "tier": "unreliable",
-    "tier_reason": "unreliable: entrapments_24m 0 >= p90 0"
+    "tier": "reliable",
+    "tier_reason": "reliable: availability_24h_mean_24m 0.9794 >= p75 0.9771 and unscheduled_24m 98 <= p50 105.5000 and entrapments_24m 0 == 0 (p75 is 0 for this type)"
   },
   {
     "equipment_code": "ES346",
@@ -30397,7 +30409,7 @@
       "group_size": 282
     },
     "tier": "unreliable",
-    "tier_reason": "unreliable: availability_24h_mean_24m 0.9069 <= p25 0.9531; unscheduled_24m 511 >= p75 180.7500; entrapments_24m 0 >= p90 0"
+    "tier_reason": "unreliable: availability_24h_mean_24m 0.9069 <= p25 0.9531; unscheduled_24m 511 >= p75 180.7500"
   },
   {
     "equipment_code": "ES347",
@@ -30446,7 +30458,7 @@
       "group_size": 282
     },
     "tier": "unreliable",
-    "tier_reason": "unreliable: unscheduled_24m 248 >= p75 180.7500; entrapments_24m 0 >= p90 0"
+    "tier_reason": "unreliable: unscheduled_24m 248 >= p75 180.7500"
   },
   {
     "equipment_code": "ES348",
@@ -30494,8 +30506,8 @@
       "group": "ES",
       "group_size": 282
     },
-    "tier": "unreliable",
-    "tier_reason": "unreliable: entrapments_24m 0 >= p90 0"
+    "tier": "reliable",
+    "tier_reason": "reliable: availability_24h_mean_24m 0.9837 >= p75 0.9771 and unscheduled_24m 36 <= p50 105.5000 and entrapments_24m 0 == 0 (p75 is 0 for this type)"
   },
   {
     "equipment_code": "ES349",
@@ -30543,8 +30555,8 @@
       "group": "ES",
       "group_size": 282
     },
-    "tier": "unreliable",
-    "tier_reason": "unreliable: entrapments_24m 0 >= p90 0"
+    "tier": "watch",
+    "tier_reason": "watch: availability_24h_mean_24m 0.9660 between p25 0.9531 and p75 0.9771; unscheduled_24m 85 (p50 105.5000, p75 180.7500); entrapments_24m 0 (p75 0, p90 0)"
   },
   {
     "equipment_code": "ES350",
@@ -30592,8 +30604,8 @@
       "group": "ES",
       "group_size": 282
     },
-    "tier": "unreliable",
-    "tier_reason": "unreliable: entrapments_24m 0 >= p90 0"
+    "tier": "watch",
+    "tier_reason": "watch: availability_24h_mean_24m 0.9728 between p25 0.9531 and p75 0.9771; unscheduled_24m 87 (p50 105.5000, p75 180.7500); entrapments_24m 0 (p75 0, p90 0)"
   },
   {
     "equipment_code": "ES351",
@@ -30641,8 +30653,8 @@
       "group": "ES",
       "group_size": 282
     },
-    "tier": "unreliable",
-    "tier_reason": "unreliable: entrapments_24m 0 >= p90 0"
+    "tier": "reliable",
+    "tier_reason": "reliable: availability_24h_mean_24m 0.9781 >= p75 0.9771 and unscheduled_24m 56 <= p50 105.5000 and entrapments_24m 0 == 0 (p75 is 0 for this type)"
   },
   {
     "equipment_code": "ES352",
@@ -30691,7 +30703,7 @@
       "group_size": 282
     },
     "tier": "unreliable",
-    "tier_reason": "unreliable: availability_24h_mean_24m 0.9427 <= p25 0.9531; entrapments_24m 0 >= p90 0"
+    "tier_reason": "unreliable: availability_24h_mean_24m 0.9427 <= p25 0.9531"
   },
   {
     "equipment_code": "ES353",
@@ -30739,8 +30751,8 @@
       "group": "ES",
       "group_size": 282
     },
-    "tier": "unreliable",
-    "tier_reason": "unreliable: entrapments_24m 0 >= p90 0"
+    "tier": "reliable",
+    "tier_reason": "reliable: availability_24h_mean_24m 0.9798 >= p75 0.9771 and unscheduled_24m 78 <= p50 105.5000 and entrapments_24m 0 == 0 (p75 is 0 for this type)"
   },
   {
     "equipment_code": "ES356",
@@ -30789,7 +30801,7 @@
       "group_size": 282
     },
     "tier": "unreliable",
-    "tier_reason": "unreliable: unscheduled_24m 243 >= p75 180.7500; entrapments_24m 0 >= p90 0"
+    "tier_reason": "unreliable: unscheduled_24m 243 >= p75 180.7500"
   },
   {
     "equipment_code": "ES357",
@@ -30838,7 +30850,7 @@
       "group_size": 282
     },
     "tier": "unreliable",
-    "tier_reason": "unreliable: unscheduled_24m 216 >= p75 180.7500; entrapments_24m 0 >= p90 0"
+    "tier_reason": "unreliable: unscheduled_24m 216 >= p75 180.7500"
   },
   {
     "equipment_code": "ES358X",
@@ -30887,7 +30899,7 @@
       "group_size": 282
     },
     "tier": "unreliable",
-    "tier_reason": "unreliable: availability_24h_mean_24m 0.9190 <= p25 0.9531; entrapments_24m 0 >= p90 0"
+    "tier_reason": "unreliable: availability_24h_mean_24m 0.9190 <= p25 0.9531"
   },
   {
     "equipment_code": "ES359X",
@@ -30936,7 +30948,7 @@
       "group_size": 282
     },
     "tier": "unreliable",
-    "tier_reason": "unreliable: availability_24h_mean_24m 0.8714 <= p25 0.9531; entrapments_24m 0 >= p90 0"
+    "tier_reason": "unreliable: availability_24h_mean_24m 0.8714 <= p25 0.9531"
   },
   {
     "equipment_code": "ES360X",
@@ -30984,8 +30996,8 @@
       "group": "ES",
       "group_size": 282
     },
-    "tier": "unreliable",
-    "tier_reason": "unreliable: entrapments_24m 0 >= p90 0"
+    "tier": "reliable",
+    "tier_reason": "reliable: availability_24h_mean_24m 0.9922 >= p75 0.9771 and unscheduled_24m 0 <= p50 105.5000 and entrapments_24m 0 == 0 (p75 is 0 for this type)"
   },
   {
     "equipment_code": "ES361X",
@@ -31033,8 +31045,8 @@
       "group": "ES",
       "group_size": 282
     },
-    "tier": "unreliable",
-    "tier_reason": "unreliable: entrapments_24m 0 >= p90 0"
+    "tier": "reliable",
+    "tier_reason": "reliable: availability_24h_mean_24m 0.9957 >= p75 0.9771 and unscheduled_24m 0 <= p50 105.5000 and entrapments_24m 0 == 0 (p75 is 0 for this type)"
   },
   {
     "equipment_code": "ES362X",
@@ -31082,8 +31094,8 @@
       "group": "ES",
       "group_size": 282
     },
-    "tier": "unreliable",
-    "tier_reason": "unreliable: entrapments_24m 0 >= p90 0"
+    "tier": "watch",
+    "tier_reason": "watch: availability_24h_mean_24m 0.9685 between p25 0.9531 and p75 0.9771; unscheduled_24m 0 (p50 105.5000, p75 180.7500); entrapments_24m 0 (p75 0, p90 0)"
   },
   {
     "equipment_code": "ES363X",
@@ -31131,8 +31143,8 @@
       "group": "ES",
       "group_size": 282
     },
-    "tier": "unreliable",
-    "tier_reason": "unreliable: entrapments_24m 0 >= p90 0"
+    "tier": "reliable",
+    "tier_reason": "reliable: availability_24h_mean_24m 0.9862 >= p75 0.9771 and unscheduled_24m 0 <= p50 105.5000 and entrapments_24m 0 == 0 (p75 is 0 for this type)"
   },
   {
     "equipment_code": "ES364",
@@ -31180,8 +31192,8 @@
       "group": "ES",
       "group_size": 282
     },
-    "tier": "unreliable",
-    "tier_reason": "unreliable: entrapments_24m 0 >= p90 0"
+    "tier": "watch",
+    "tier_reason": "watch: availability_24h_mean_24m 0.9594 between p25 0.9531 and p75 0.9771; unscheduled_24m 173 (p50 105.5000, p75 180.7500); entrapments_24m 0 (p75 0, p90 0)"
   },
   {
     "equipment_code": "ES365X",
@@ -31230,7 +31242,7 @@
       "group_size": 282
     },
     "tier": "unreliable",
-    "tier_reason": "unreliable: availability_24h_mean_24m 0.9125 <= p25 0.9531; entrapments_24m 0 >= p90 0"
+    "tier_reason": "unreliable: availability_24h_mean_24m 0.9125 <= p25 0.9531"
   },
   {
     "equipment_code": "ES366X",
@@ -31278,8 +31290,8 @@
       "group": "ES",
       "group_size": 282
     },
-    "tier": "unreliable",
-    "tier_reason": "unreliable: entrapments_24m 0 >= p90 0"
+    "tier": "watch",
+    "tier_reason": "watch: availability_24h_mean_24m 0.9608 between p25 0.9531 and p75 0.9771; unscheduled_24m 0 (p50 105.5000, p75 180.7500); entrapments_24m 0 (p75 0, p90 0)"
   },
   {
     "equipment_code": "ES367",
@@ -31328,7 +31340,7 @@
       "group_size": 282
     },
     "tier": "unreliable",
-    "tier_reason": "unreliable: unscheduled_24m 204 >= p75 180.7500; entrapments_24m 0 >= p90 0"
+    "tier_reason": "unreliable: unscheduled_24m 204 >= p75 180.7500"
   },
   {
     "equipment_code": "ES368",
@@ -31376,8 +31388,8 @@
       "group": "ES",
       "group_size": 282
     },
-    "tier": "unreliable",
-    "tier_reason": "unreliable: entrapments_24m 0 >= p90 0"
+    "tier": "watch",
+    "tier_reason": "watch: availability_24h_mean_24m 0.9736 between p25 0.9531 and p75 0.9771; unscheduled_24m 95 (p50 105.5000, p75 180.7500); entrapments_24m 0 (p75 0, p90 0)"
   },
   {
     "equipment_code": "ES369",
@@ -31426,7 +31438,7 @@
       "group_size": 282
     },
     "tier": "unreliable",
-    "tier_reason": "unreliable: availability_24h_mean_24m 0.9358 <= p25 0.9531; unscheduled_24m 321 >= p75 180.7500; entrapments_24m 0 >= p90 0"
+    "tier_reason": "unreliable: availability_24h_mean_24m 0.9358 <= p25 0.9531; unscheduled_24m 321 >= p75 180.7500"
   },
   {
     "equipment_code": "ES370",
@@ -31474,8 +31486,8 @@
       "group": "ES",
       "group_size": 282
     },
-    "tier": "unreliable",
-    "tier_reason": "unreliable: entrapments_24m 0 >= p90 0"
+    "tier": "watch",
+    "tier_reason": "watch: availability_24h_mean_24m 0.9605 between p25 0.9531 and p75 0.9771; unscheduled_24m 132 (p50 105.5000, p75 180.7500); entrapments_24m 0 (p75 0, p90 0)"
   },
   {
     "equipment_code": "ES371",
@@ -31523,8 +31535,8 @@
       "group": "ES",
       "group_size": 282
     },
-    "tier": "unreliable",
-    "tier_reason": "unreliable: entrapments_24m 0 >= p90 0"
+    "tier": "watch",
+    "tier_reason": "watch: availability_24h_mean_24m 0.9760 between p25 0.9531 and p75 0.9771; unscheduled_24m 102 (p50 105.5000, p75 180.7500); entrapments_24m 0 (p75 0, p90 0)"
   },
   {
     "equipment_code": "ES372",
@@ -31573,7 +31585,7 @@
       "group_size": 282
     },
     "tier": "unreliable",
-    "tier_reason": "unreliable: unscheduled_24m 204 >= p75 180.7500; entrapments_24m 0 >= p90 0"
+    "tier_reason": "unreliable: unscheduled_24m 204 >= p75 180.7500"
   },
   {
     "equipment_code": "ES373",
@@ -31621,8 +31633,8 @@
       "group": "ES",
       "group_size": 282
     },
-    "tier": "unreliable",
-    "tier_reason": "unreliable: entrapments_24m 0 >= p90 0"
+    "tier": "watch",
+    "tier_reason": "watch: availability_24h_mean_24m 0.9715 between p25 0.9531 and p75 0.9771; unscheduled_24m 134 (p50 105.5000, p75 180.7500); entrapments_24m 0 (p75 0, p90 0)"
   },
   {
     "equipment_code": "ES374",
@@ -31670,8 +31682,8 @@
       "group": "ES",
       "group_size": 282
     },
-    "tier": "unreliable",
-    "tier_reason": "unreliable: entrapments_24m 0 >= p90 0"
+    "tier": "reliable",
+    "tier_reason": "reliable: availability_24h_mean_24m 0.9791 >= p75 0.9771 and unscheduled_24m 66 <= p50 105.5000 and entrapments_24m 0 == 0 (p75 is 0 for this type)"
   },
   {
     "equipment_code": "ES375",
@@ -31719,8 +31731,8 @@
       "group": "ES",
       "group_size": 282
     },
-    "tier": "unreliable",
-    "tier_reason": "unreliable: entrapments_24m 0 >= p90 0"
+    "tier": "watch",
+    "tier_reason": "watch: availability_24h_mean_24m 0.9678 between p25 0.9531 and p75 0.9771; unscheduled_24m 86 (p50 105.5000, p75 180.7500); entrapments_24m 0 (p75 0, p90 0)"
   },
   {
     "equipment_code": "ES376X",
@@ -31768,8 +31780,8 @@
       "group": "ES",
       "group_size": 282
     },
-    "tier": "unreliable",
-    "tier_reason": "unreliable: entrapments_24m 0 >= p90 0"
+    "tier": "reliable",
+    "tier_reason": "reliable: availability_24h_mean_24m 1 >= p75 0.9771 and unscheduled_24m 0 <= p50 105.5000 and entrapments_24m 0 == 0 (p75 is 0 for this type)"
   },
   {
     "equipment_code": "ES377X",
@@ -31817,8 +31829,8 @@
       "group": "ES",
       "group_size": 282
     },
-    "tier": "unreliable",
-    "tier_reason": "unreliable: entrapments_24m 0 >= p90 0"
+    "tier": "reliable",
+    "tier_reason": "reliable: availability_24h_mean_24m 0.9878 >= p75 0.9771 and unscheduled_24m 0 <= p50 105.5000 and entrapments_24m 0 == 0 (p75 is 0 for this type)"
   },
   {
     "equipment_code": "ES378X",
@@ -31866,8 +31878,8 @@
       "group": "ES",
       "group_size": 282
     },
-    "tier": "unreliable",
-    "tier_reason": "unreliable: entrapments_24m 0 >= p90 0"
+    "tier": "reliable",
+    "tier_reason": "reliable: availability_24h_mean_24m 1 >= p75 0.9771 and unscheduled_24m 0 <= p50 105.5000 and entrapments_24m 0 == 0 (p75 is 0 for this type)"
   },
   {
     "equipment_code": "ES379X",
@@ -31915,8 +31927,8 @@
       "group": "ES",
       "group_size": 282
     },
-    "tier": "unreliable",
-    "tier_reason": "unreliable: entrapments_24m 0 >= p90 0"
+    "tier": "reliable",
+    "tier_reason": "reliable: availability_24h_mean_24m 1 >= p75 0.9771 and unscheduled_24m 0 <= p50 105.5000 and entrapments_24m 0 == 0 (p75 is 0 for this type)"
   },
   {
     "equipment_code": "ES380X",
@@ -31964,8 +31976,8 @@
       "group": "ES",
       "group_size": 282
     },
-    "tier": "unreliable",
-    "tier_reason": "unreliable: entrapments_24m 0 >= p90 0"
+    "tier": "reliable",
+    "tier_reason": "reliable: availability_24h_mean_24m 0.9989 >= p75 0.9771 and unscheduled_24m 0 <= p50 105.5000 and entrapments_24m 0 == 0 (p75 is 0 for this type)"
   },
   {
     "equipment_code": "ES383X",
@@ -32014,7 +32026,7 @@
       "group_size": 282
     },
     "tier": "unreliable",
-    "tier_reason": "unreliable: availability_24h_mean_24m 0.9036 <= p25 0.9531; entrapments_24m 0 >= p90 0"
+    "tier_reason": "unreliable: availability_24h_mean_24m 0.9036 <= p25 0.9531"
   },
   {
     "equipment_code": "ES401",
@@ -32068,8 +32080,8 @@
       "group": "ES",
       "group_size": 282
     },
-    "tier": "unreliable",
-    "tier_reason": "unreliable: entrapments_24m 0 >= p90 0"
+    "tier": "reliable",
+    "tier_reason": "reliable: availability_24h_mean_24m 0.9841 >= p75 0.9771 and unscheduled_24m 14 <= p50 105.5000 and entrapments_24m 0 == 0 (p75 is 0 for this type)"
   },
   {
     "equipment_code": "ES402",
@@ -32117,8 +32129,8 @@
       "group": "ES",
       "group_size": 282
     },
-    "tier": "unreliable",
-    "tier_reason": "unreliable: entrapments_24m 0 >= p90 0"
+    "tier": "watch",
+    "tier_reason": "watch: availability_24h_mean_24m 0.9657 between p25 0.9531 and p75 0.9771; unscheduled_24m 81 (p50 105.5000, p75 180.7500); entrapments_24m 0 (p75 0, p90 0)"
   },
   {
     "equipment_code": "ES403",
@@ -32167,7 +32179,7 @@
       "group_size": 282
     },
     "tier": "unreliable",
-    "tier_reason": "unreliable: availability_24h_mean_24m 0.9485 <= p25 0.9531; entrapments_24m 0 >= p90 0"
+    "tier_reason": "unreliable: availability_24h_mean_24m 0.9485 <= p25 0.9531"
   },
   {
     "equipment_code": "ES404",
@@ -32221,8 +32233,8 @@
       "group": "ES",
       "group_size": 282
     },
-    "tier": "unreliable",
-    "tier_reason": "unreliable: entrapments_24m 0 >= p90 0"
+    "tier": "watch",
+    "tier_reason": "watch: availability_24h_mean_24m 0.9708 between p25 0.9531 and p75 0.9771; unscheduled_24m 109 (p50 105.5000, p75 180.7500); entrapments_24m 0 (p75 0, p90 0)"
   },
   {
     "equipment_code": "ES405",
@@ -32270,8 +32282,8 @@
       "group": "ES",
       "group_size": 282
     },
-    "tier": "unreliable",
-    "tier_reason": "unreliable: entrapments_24m 0 >= p90 0"
+    "tier": "watch",
+    "tier_reason": "watch: availability_24h_mean_24m 0.9677 between p25 0.9531 and p75 0.9771; unscheduled_24m 45 (p50 105.5000, p75 180.7500); entrapments_24m 0 (p75 0, p90 0)"
   },
   {
     "equipment_code": "ES406",
@@ -32325,8 +32337,8 @@
       "group": "ES",
       "group_size": 282
     },
-    "tier": "unreliable",
-    "tier_reason": "unreliable: entrapments_24m 0 >= p90 0"
+    "tier": "watch",
+    "tier_reason": "watch: availability_24h_mean_24m 0.9678 between p25 0.9531 and p75 0.9771; unscheduled_24m 133 (p50 105.5000, p75 180.7500); entrapments_24m 0 (p75 0, p90 0)"
   },
   {
     "equipment_code": "ES407",
@@ -32374,8 +32386,8 @@
       "group": "ES",
       "group_size": 282
     },
-    "tier": "unreliable",
-    "tier_reason": "unreliable: entrapments_24m 0 >= p90 0"
+    "tier": "watch",
+    "tier_reason": "watch: availability_24h_mean_24m 0.9713 between p25 0.9531 and p75 0.9771; unscheduled_24m 47 (p50 105.5000, p75 180.7500); entrapments_24m 0 (p75 0, p90 0)"
   },
   {
     "equipment_code": "ES408",
@@ -32429,8 +32441,8 @@
       "group": "ES",
       "group_size": 282
     },
-    "tier": "unreliable",
-    "tier_reason": "unreliable: entrapments_24m 0 >= p90 0"
+    "tier": "watch",
+    "tier_reason": "watch: availability_24h_mean_24m 0.9680 between p25 0.9531 and p75 0.9771; unscheduled_24m 91 (p50 105.5000, p75 180.7500); entrapments_24m 0 (p75 0, p90 0)"
   },
   {
     "equipment_code": "ES409",
@@ -32484,8 +32496,8 @@
       "group": "ES",
       "group_size": 282
     },
-    "tier": "unreliable",
-    "tier_reason": "unreliable: entrapments_24m 0 >= p90 0"
+    "tier": "reliable",
+    "tier_reason": "reliable: availability_24h_mean_24m 0.9806 >= p75 0.9771 and unscheduled_24m 64 <= p50 105.5000 and entrapments_24m 0 == 0 (p75 is 0 for this type)"
   },
   {
     "equipment_code": "ES410",
@@ -32539,8 +32551,8 @@
       "group": "ES",
       "group_size": 282
     },
-    "tier": "unreliable",
-    "tier_reason": "unreliable: entrapments_24m 0 >= p90 0"
+    "tier": "reliable",
+    "tier_reason": "reliable: availability_24h_mean_24m 0.9780 >= p75 0.9771 and unscheduled_24m 52 <= p50 105.5000 and entrapments_24m 0 == 0 (p75 is 0 for this type)"
   },
   {
     "equipment_code": "ES411",
@@ -32588,8 +32600,8 @@
       "group": "ES",
       "group_size": 282
     },
-    "tier": "unreliable",
-    "tier_reason": "unreliable: entrapments_24m 0 >= p90 0"
+    "tier": "watch",
+    "tier_reason": "watch: availability_24h_mean_24m 0.9730 between p25 0.9531 and p75 0.9771; unscheduled_24m 142 (p50 105.5000, p75 180.7500); entrapments_24m 0 (p75 0, p90 0)"
   },
   {
     "equipment_code": "ES412",
@@ -32638,7 +32650,7 @@
       "group_size": 282
     },
     "tier": "unreliable",
-    "tier_reason": "unreliable: availability_24h_mean_24m 0.9166 <= p25 0.9531; entrapments_24m 0 >= p90 0"
+    "tier_reason": "unreliable: availability_24h_mean_24m 0.9166 <= p25 0.9531"
   },
   {
     "equipment_code": "ES413",
@@ -32686,8 +32698,8 @@
       "group": "ES",
       "group_size": 282
     },
-    "tier": "unreliable",
-    "tier_reason": "unreliable: entrapments_24m 0 >= p90 0"
+    "tier": "reliable",
+    "tier_reason": "reliable: availability_24h_mean_24m 0.9843 >= p75 0.9771 and unscheduled_24m 44 <= p50 105.5000 and entrapments_24m 0 == 0 (p75 is 0 for this type)"
   },
   {
     "equipment_code": "ES414",
@@ -32736,7 +32748,7 @@
       "group_size": 282
     },
     "tier": "unreliable",
-    "tier_reason": "unreliable: availability_24h_mean_24m 0.9451 <= p25 0.9531; unscheduled_24m 210 >= p75 180.7500; entrapments_24m 0 >= p90 0"
+    "tier_reason": "unreliable: availability_24h_mean_24m 0.9451 <= p25 0.9531; unscheduled_24m 210 >= p75 180.7500"
   },
   {
     "equipment_code": "ES415",
@@ -32784,8 +32796,8 @@
       "group": "ES",
       "group_size": 282
     },
-    "tier": "unreliable",
-    "tier_reason": "unreliable: entrapments_24m 0 >= p90 0"
+    "tier": "watch",
+    "tier_reason": "watch: availability_24h_mean_24m 0.9595 between p25 0.9531 and p75 0.9771; unscheduled_24m 82 (p50 105.5000, p75 180.7500); entrapments_24m 0 (p75 0, p90 0)"
   },
   {
     "equipment_code": "ES416",
@@ -32833,8 +32845,8 @@
       "group": "ES",
       "group_size": 282
     },
-    "tier": "unreliable",
-    "tier_reason": "unreliable: entrapments_24m 0 >= p90 0"
+    "tier": "reliable",
+    "tier_reason": "reliable: availability_24h_mean_24m 0.9810 >= p75 0.9771 and unscheduled_24m 41 <= p50 105.5000 and entrapments_24m 0 == 0 (p75 is 0 for this type)"
   },
   {
     "equipment_code": "ES417",
@@ -32883,7 +32895,7 @@
       "group_size": 282
     },
     "tier": "unreliable",
-    "tier_reason": "unreliable: unscheduled_24m 189 >= p75 180.7500; entrapments_24m 0 >= p90 0"
+    "tier_reason": "unreliable: unscheduled_24m 189 >= p75 180.7500"
   },
   {
     "equipment_code": "ES418",
@@ -32931,8 +32943,8 @@
       "group": "ES",
       "group_size": 282
     },
-    "tier": "unreliable",
-    "tier_reason": "unreliable: entrapments_24m 0 >= p90 0"
+    "tier": "watch",
+    "tier_reason": "watch: availability_24h_mean_24m 0.9751 between p25 0.9531 and p75 0.9771; unscheduled_24m 126 (p50 105.5000, p75 180.7500); entrapments_24m 0 (p75 0, p90 0)"
   },
   {
     "equipment_code": "ES419",
@@ -32980,8 +32992,8 @@
       "group": "ES",
       "group_size": 282
     },
-    "tier": "unreliable",
-    "tier_reason": "unreliable: entrapments_24m 0 >= p90 0"
+    "tier": "reliable",
+    "tier_reason": "reliable: availability_24h_mean_24m 0.9782 >= p75 0.9771 and unscheduled_24m 93 <= p50 105.5000 and entrapments_24m 0 == 0 (p75 is 0 for this type)"
   },
   {
     "equipment_code": "ES420",
@@ -33029,8 +33041,8 @@
       "group": "ES",
       "group_size": 282
     },
-    "tier": "unreliable",
-    "tier_reason": "unreliable: entrapments_24m 0 >= p90 0"
+    "tier": "reliable",
+    "tier_reason": "reliable: availability_24h_mean_24m 0.9843 >= p75 0.9771 and unscheduled_24m 78 <= p50 105.5000 and entrapments_24m 0 == 0 (p75 is 0 for this type)"
   },
   {
     "equipment_code": "ES421",
@@ -33085,7 +33097,7 @@
       "group_size": 282
     },
     "tier": "unreliable",
-    "tier_reason": "unreliable: availability_24h_mean_24m 0.9268 <= p25 0.9531; unscheduled_24m 183 >= p75 180.7500; entrapments_24m 0 >= p90 0"
+    "tier_reason": "unreliable: availability_24h_mean_24m 0.9268 <= p25 0.9531; unscheduled_24m 183 >= p75 180.7500"
   },
   {
     "equipment_code": "ES422",
@@ -33139,8 +33151,8 @@
       "group": "ES",
       "group_size": 282
     },
-    "tier": "unreliable",
-    "tier_reason": "unreliable: entrapments_24m 0 >= p90 0"
+    "tier": "watch",
+    "tier_reason": "watch: availability_24h_mean_24m 0.9659 between p25 0.9531 and p75 0.9771; unscheduled_24m 112 (p50 105.5000, p75 180.7500); entrapments_24m 0 (p75 0, p90 0)"
   },
   {
     "equipment_code": "ES423",
@@ -33188,8 +33200,8 @@
       "group": "ES",
       "group_size": 282
     },
-    "tier": "unreliable",
-    "tier_reason": "unreliable: entrapments_24m 0 >= p90 0"
+    "tier": "watch",
+    "tier_reason": "watch: availability_24h_mean_24m 0.9673 between p25 0.9531 and p75 0.9771; unscheduled_24m 68 (p50 105.5000, p75 180.7500); entrapments_24m 0 (p75 0, p90 0)"
   },
   {
     "equipment_code": "ES424",
@@ -33237,8 +33249,8 @@
       "group": "ES",
       "group_size": 282
     },
-    "tier": "unreliable",
-    "tier_reason": "unreliable: entrapments_24m 0 >= p90 0"
+    "tier": "reliable",
+    "tier_reason": "reliable: availability_24h_mean_24m 0.9827 >= p75 0.9771 and unscheduled_24m 38 <= p50 105.5000 and entrapments_24m 0 == 0 (p75 is 0 for this type)"
   },
   {
     "equipment_code": "ES425",
@@ -33286,8 +33298,8 @@
       "group": "ES",
       "group_size": 282
     },
-    "tier": "unreliable",
-    "tier_reason": "unreliable: entrapments_24m 0 >= p90 0"
+    "tier": "reliable",
+    "tier_reason": "reliable: availability_24h_mean_24m 0.9781 >= p75 0.9771 and unscheduled_24m 79 <= p50 105.5000 and entrapments_24m 0 == 0 (p75 is 0 for this type)"
   },
   {
     "equipment_code": "ES426",
@@ -33335,8 +33347,8 @@
       "group": "ES",
       "group_size": 282
     },
-    "tier": "unreliable",
-    "tier_reason": "unreliable: entrapments_24m 0 >= p90 0"
+    "tier": "reliable",
+    "tier_reason": "reliable: availability_24h_mean_24m 0.9780 >= p75 0.9771 and unscheduled_24m 74 <= p50 105.5000 and entrapments_24m 0 == 0 (p75 is 0 for this type)"
   },
   {
     "equipment_code": "ES427",
@@ -33384,8 +33396,8 @@
       "group": "ES",
       "group_size": 282
     },
-    "tier": "unreliable",
-    "tier_reason": "unreliable: entrapments_24m 0 >= p90 0"
+    "tier": "watch",
+    "tier_reason": "watch: availability_24h_mean_24m 0.9679 between p25 0.9531 and p75 0.9771; unscheduled_24m 103 (p50 105.5000, p75 180.7500); entrapments_24m 0 (p75 0, p90 0)"
   },
   {
     "equipment_code": "ES428",
@@ -33433,8 +33445,8 @@
       "group": "ES",
       "group_size": 282
     },
-    "tier": "unreliable",
-    "tier_reason": "unreliable: entrapments_24m 0 >= p90 0"
+    "tier": "reliable",
+    "tier_reason": "reliable: availability_24h_mean_24m 0.9832 >= p75 0.9771 and unscheduled_24m 86 <= p50 105.5000 and entrapments_24m 0 == 0 (p75 is 0 for this type)"
   },
   {
     "equipment_code": "ES429",
@@ -33482,8 +33494,8 @@
       "group": "ES",
       "group_size": 282
     },
-    "tier": "unreliable",
-    "tier_reason": "unreliable: entrapments_24m 0 >= p90 0"
+    "tier": "reliable",
+    "tier_reason": "reliable: availability_24h_mean_24m 0.9870 >= p75 0.9771 and unscheduled_24m 39 <= p50 105.5000 and entrapments_24m 0 == 0 (p75 is 0 for this type)"
   },
   {
     "equipment_code": "ES430",
@@ -33531,8 +33543,8 @@
       "group": "ES",
       "group_size": 282
     },
-    "tier": "unreliable",
-    "tier_reason": "unreliable: entrapments_24m 0 >= p90 0"
+    "tier": "reliable",
+    "tier_reason": "reliable: availability_24h_mean_24m 0.9834 >= p75 0.9771 and unscheduled_24m 57 <= p50 105.5000 and entrapments_24m 0 == 0 (p75 is 0 for this type)"
   },
   {
     "equipment_code": "ES431",
@@ -33580,8 +33592,8 @@
       "group": "ES",
       "group_size": 282
     },
-    "tier": "unreliable",
-    "tier_reason": "unreliable: entrapments_24m 0 >= p90 0"
+    "tier": "watch",
+    "tier_reason": "watch: availability_24h_mean_24m 0.9670 between p25 0.9531 and p75 0.9771; unscheduled_24m 142 (p50 105.5000, p75 180.7500); entrapments_24m 0 (p75 0, p90 0)"
   },
   {
     "equipment_code": "ES432X",
@@ -33630,7 +33642,7 @@
       "group_size": 282
     },
     "tier": "unreliable",
-    "tier_reason": "unreliable: availability_24h_mean_24m 0.9024 <= p25 0.9531; entrapments_24m 0 >= p90 0"
+    "tier_reason": "unreliable: availability_24h_mean_24m 0.9024 <= p25 0.9531"
   },
   {
     "equipment_code": "ES433X",
@@ -33679,7 +33691,7 @@
       "group_size": 282
     },
     "tier": "unreliable",
-    "tier_reason": "unreliable: availability_24h_mean_24m 0.9251 <= p25 0.9531; entrapments_24m 0 >= p90 0"
+    "tier_reason": "unreliable: availability_24h_mean_24m 0.9251 <= p25 0.9531"
   },
   {
     "equipment_code": "ES434",
@@ -33727,8 +33739,8 @@
       "group": "ES",
       "group_size": 282
     },
-    "tier": "unreliable",
-    "tier_reason": "unreliable: entrapments_24m 0 >= p90 0"
+    "tier": "watch",
+    "tier_reason": "watch: availability_24h_mean_24m 0.9817 between p25 0.9531 and p75 0.9771; unscheduled_24m 114 (p50 105.5000, p75 180.7500); entrapments_24m 0 (p75 0, p90 0)"
   },
   {
     "equipment_code": "ES435",
@@ -33776,8 +33788,8 @@
       "group": "ES",
       "group_size": 282
     },
-    "tier": "unreliable",
-    "tier_reason": "unreliable: entrapments_24m 0 >= p90 0"
+    "tier": "watch",
+    "tier_reason": "watch: availability_24h_mean_24m 0.9788 between p25 0.9531 and p75 0.9771; unscheduled_24m 153 (p50 105.5000, p75 180.7500); entrapments_24m 0 (p75 0, p90 0)"
   },
   {
     "equipment_code": "ES436",
@@ -33825,8 +33837,8 @@
       "group": "ES",
       "group_size": 282
     },
-    "tier": "unreliable",
-    "tier_reason": "unreliable: entrapments_24m 0 >= p90 0"
+    "tier": "reliable",
+    "tier_reason": "reliable: availability_24h_mean_24m 0.9859 >= p75 0.9771 and unscheduled_24m 55 <= p50 105.5000 and entrapments_24m 0 == 0 (p75 is 0 for this type)"
   },
   {
     "equipment_code": "ES437",
@@ -33874,8 +33886,8 @@
       "group": "ES",
       "group_size": 282
     },
-    "tier": "unreliable",
-    "tier_reason": "unreliable: entrapments_24m 0 >= p90 0"
+    "tier": "reliable",
+    "tier_reason": "reliable: availability_24h_mean_24m 0.9810 >= p75 0.9771 and unscheduled_24m 89 <= p50 105.5000 and entrapments_24m 0 == 0 (p75 is 0 for this type)"
   },
   {
     "equipment_code": "ES438",
@@ -33930,7 +33942,7 @@
       "group_size": 282
     },
     "tier": "unreliable",
-    "tier_reason": "unreliable: availability_24h_mean_24m 0.9227 <= p25 0.9531; entrapments_24m 0 >= p90 0"
+    "tier_reason": "unreliable: availability_24h_mean_24m 0.9227 <= p25 0.9531"
   },
   {
     "equipment_code": "ES439",
@@ -33978,8 +33990,8 @@
       "group": "ES",
       "group_size": 282
     },
-    "tier": "unreliable",
-    "tier_reason": "unreliable: entrapments_24m 0 >= p90 0"
+    "tier": "reliable",
+    "tier_reason": "reliable: availability_24h_mean_24m 0.9781 >= p75 0.9771 and unscheduled_24m 77 <= p50 105.5000 and entrapments_24m 0 == 0 (p75 is 0 for this type)"
   },
   {
     "equipment_code": "ES440",
@@ -34027,8 +34039,8 @@
       "group": "ES",
       "group_size": 282
     },
-    "tier": "unreliable",
-    "tier_reason": "unreliable: entrapments_24m 0 >= p90 0"
+    "tier": "watch",
+    "tier_reason": "watch: availability_24h_mean_24m 0.9807 between p25 0.9531 and p75 0.9771; unscheduled_24m 114 (p50 105.5000, p75 180.7500); entrapments_24m 0 (p75 0, p90 0)"
   },
   {
     "equipment_code": "ES441",
@@ -34076,8 +34088,8 @@
       "group": "ES",
       "group_size": 282
     },
-    "tier": "unreliable",
-    "tier_reason": "unreliable: entrapments_24m 0 >= p90 0"
+    "tier": "watch",
+    "tier_reason": "watch: availability_24h_mean_24m 0.9772 between p25 0.9531 and p75 0.9771; unscheduled_24m 125 (p50 105.5000, p75 180.7500); entrapments_24m 0 (p75 0, p90 0)"
   },
   {
     "equipment_code": "ES442",
@@ -34125,8 +34137,8 @@
       "group": "ES",
       "group_size": 282
     },
-    "tier": "unreliable",
-    "tier_reason": "unreliable: entrapments_24m 0 >= p90 0"
+    "tier": "reliable",
+    "tier_reason": "reliable: availability_24h_mean_24m 0.9827 >= p75 0.9771 and unscheduled_24m 84 <= p50 105.5000 and entrapments_24m 0 == 0 (p75 is 0 for this type)"
   },
   {
     "equipment_code": "ES443",
@@ -34180,8 +34192,8 @@
       "group": "ES",
       "group_size": 282
     },
-    "tier": "unreliable",
-    "tier_reason": "unreliable: entrapments_24m 0 >= p90 0"
+    "tier": "watch",
+    "tier_reason": "watch: availability_24h_mean_24m 0.9742 between p25 0.9531 and p75 0.9771; unscheduled_24m 120 (p50 105.5000, p75 180.7500); entrapments_24m 0 (p75 0, p90 0)"
   },
   {
     "equipment_code": "ES444",
@@ -34230,7 +34242,7 @@
       "group_size": 282
     },
     "tier": "unreliable",
-    "tier_reason": "unreliable: unscheduled_24m 227 >= p75 180.7500; entrapments_24m 0 >= p90 0"
+    "tier_reason": "unreliable: unscheduled_24m 227 >= p75 180.7500"
   },
   {
     "equipment_code": "ES445",
@@ -34278,8 +34290,8 @@
       "group": "ES",
       "group_size": 282
     },
-    "tier": "unreliable",
-    "tier_reason": "unreliable: entrapments_24m 0 >= p90 0"
+    "tier": "reliable",
+    "tier_reason": "reliable: availability_24h_mean_24m 0.9836 >= p75 0.9771 and unscheduled_24m 78 <= p50 105.5000 and entrapments_24m 0 == 0 (p75 is 0 for this type)"
   },
   {
     "equipment_code": "ES446",
@@ -34328,7 +34340,7 @@
       "group_size": 282
     },
     "tier": "unreliable",
-    "tier_reason": "unreliable: unscheduled_24m 217 >= p75 180.7500; entrapments_24m 0 >= p90 0"
+    "tier_reason": "unreliable: unscheduled_24m 217 >= p75 180.7500"
   },
   {
     "equipment_code": "ES447",
@@ -34376,8 +34388,8 @@
       "group": "ES",
       "group_size": 282
     },
-    "tier": "unreliable",
-    "tier_reason": "unreliable: entrapments_24m 0 >= p90 0"
+    "tier": "watch",
+    "tier_reason": "watch: availability_24h_mean_24m 0.9674 between p25 0.9531 and p75 0.9771; unscheduled_24m 131 (p50 105.5000, p75 180.7500); entrapments_24m 0 (p75 0, p90 0)"
   },
   {
     "equipment_code": "ES448",
@@ -34431,8 +34443,8 @@
       "group": "ES",
       "group_size": 282
     },
-    "tier": "unreliable",
-    "tier_reason": "unreliable: entrapments_24m 0 >= p90 0"
+    "tier": "watch",
+    "tier_reason": "watch: availability_24h_mean_24m 0.9702 between p25 0.9531 and p75 0.9771; unscheduled_24m 3 (p50 105.5000, p75 180.7500); entrapments_24m 0 (p75 0, p90 0)"
   },
   {
     "equipment_code": "ES449",
@@ -34480,8 +34492,8 @@
       "group": "ES",
       "group_size": 282
     },
-    "tier": "unreliable",
-    "tier_reason": "unreliable: entrapments_24m 0 >= p90 0"
+    "tier": "watch",
+    "tier_reason": "watch: availability_24h_mean_24m 0.9734 between p25 0.9531 and p75 0.9771; unscheduled_24m 135 (p50 105.5000, p75 180.7500); entrapments_24m 0 (p75 0, p90 0)"
   },
   {
     "equipment_code": "ES450",
@@ -34529,8 +34541,8 @@
       "group": "ES",
       "group_size": 282
     },
-    "tier": "unreliable",
-    "tier_reason": "unreliable: entrapments_24m 0 >= p90 0"
+    "tier": "reliable",
+    "tier_reason": "reliable: availability_24h_mean_24m 0.9813 >= p75 0.9771 and unscheduled_24m 77 <= p50 105.5000 and entrapments_24m 0 == 0 (p75 is 0 for this type)"
   },
   {
     "equipment_code": "ES451",
@@ -34578,8 +34590,8 @@
       "group": "ES",
       "group_size": 282
     },
-    "tier": "unreliable",
-    "tier_reason": "unreliable: entrapments_24m 0 >= p90 0"
+    "tier": "reliable",
+    "tier_reason": "reliable: availability_24h_mean_24m 0.9811 >= p75 0.9771 and unscheduled_24m 92 <= p50 105.5000 and entrapments_24m 0 == 0 (p75 is 0 for this type)"
   },
   {
     "equipment_code": "ES452",
@@ -34627,8 +34639,8 @@
       "group": "ES",
       "group_size": 282
     },
-    "tier": "unreliable",
-    "tier_reason": "unreliable: entrapments_24m 0 >= p90 0"
+    "tier": "watch",
+    "tier_reason": "watch: availability_24h_mean_24m 0.9677 between p25 0.9531 and p75 0.9771; unscheduled_24m 175 (p50 105.5000, p75 180.7500); entrapments_24m 0 (p75 0, p90 0)"
   },
   {
     "equipment_code": "ES453",
@@ -34676,8 +34688,8 @@
       "group": "ES",
       "group_size": 282
     },
-    "tier": "unreliable",
-    "tier_reason": "unreliable: entrapments_24m 0 >= p90 0"
+    "tier": "watch",
+    "tier_reason": "watch: availability_24h_mean_24m 0.9708 between p25 0.9531 and p75 0.9771; unscheduled_24m 180 (p50 105.5000, p75 180.7500); entrapments_24m 0 (p75 0, p90 0)"
   },
   {
     "equipment_code": "ES455",
@@ -34725,8 +34737,8 @@
       "group": "ES",
       "group_size": 282
     },
-    "tier": "unreliable",
-    "tier_reason": "unreliable: entrapments_24m 0 >= p90 0"
+    "tier": "watch",
+    "tier_reason": "watch: availability_24h_mean_24m 0.9750 between p25 0.9531 and p75 0.9771; unscheduled_24m 98 (p50 105.5000, p75 180.7500); entrapments_24m 0 (p75 0, p90 0)"
   },
   {
     "equipment_code": "ES456",
@@ -34775,7 +34787,7 @@
       "group_size": 282
     },
     "tier": "unreliable",
-    "tier_reason": "unreliable: unscheduled_24m 189 >= p75 180.7500; entrapments_24m 0 >= p90 0"
+    "tier_reason": "unreliable: unscheduled_24m 189 >= p75 180.7500"
   },
   {
     "equipment_code": "ES457",
@@ -34823,8 +34835,8 @@
       "group": "ES",
       "group_size": 282
     },
-    "tier": "unreliable",
-    "tier_reason": "unreliable: entrapments_24m 0 >= p90 0"
+    "tier": "watch",
+    "tier_reason": "watch: availability_24h_mean_24m 0.9724 between p25 0.9531 and p75 0.9771; unscheduled_24m 115 (p50 105.5000, p75 180.7500); entrapments_24m 0 (p75 0, p90 0)"
   },
   {
     "equipment_code": "ES458",
@@ -34872,8 +34884,8 @@
       "group": "ES",
       "group_size": 282
     },
-    "tier": "unreliable",
-    "tier_reason": "unreliable: entrapments_24m 0 >= p90 0"
+    "tier": "watch",
+    "tier_reason": "watch: availability_24h_mean_24m 0.9646 between p25 0.9531 and p75 0.9771; unscheduled_24m 168 (p50 105.5000, p75 180.7500); entrapments_24m 0 (p75 0, p90 0)"
   },
   {
     "equipment_code": "ES459",
@@ -34921,8 +34933,8 @@
       "group": "ES",
       "group_size": 282
     },
-    "tier": "unreliable",
-    "tier_reason": "unreliable: entrapments_24m 0 >= p90 0"
+    "tier": "watch",
+    "tier_reason": "watch: availability_24h_mean_24m 0.9735 between p25 0.9531 and p75 0.9771; unscheduled_24m 106 (p50 105.5000, p75 180.7500); entrapments_24m 0 (p75 0, p90 0)"
   },
   {
     "equipment_code": "ES461X",
@@ -34977,7 +34989,7 @@
       "group_size": 282
     },
     "tier": "unreliable",
-    "tier_reason": "unreliable: availability_24h_mean_24m 0.7889 <= p25 0.9531; entrapments_24m 0 >= p90 0"
+    "tier_reason": "unreliable: availability_24h_mean_24m 0.7889 <= p25 0.9531"
   },
   {
     "equipment_code": "ES462X",
@@ -35032,7 +35044,7 @@
       "group_size": 282
     },
     "tier": "unreliable",
-    "tier_reason": "unreliable: availability_24h_mean_24m 0.8181 <= p25 0.9531; entrapments_24m 0 >= p90 0"
+    "tier_reason": "unreliable: availability_24h_mean_24m 0.8181 <= p25 0.9531"
   },
   {
     "equipment_code": "ES496X",
@@ -35080,8 +35092,8 @@
       "group": "ES",
       "group_size": 282
     },
-    "tier": "unreliable",
-    "tier_reason": "unreliable: entrapments_24m 0 >= p90 0"
+    "tier": "reliable",
+    "tier_reason": "reliable: availability_24h_mean_24m 0.9794 >= p75 0.9771 and unscheduled_24m 0 <= p50 105.5000 and entrapments_24m 0 == 0 (p75 is 0 for this type)"
   },
   {
     "equipment_code": "ES497X",
@@ -35129,8 +35141,8 @@
       "group": "ES",
       "group_size": 282
     },
-    "tier": "unreliable",
-    "tier_reason": "unreliable: entrapments_24m 0 >= p90 0"
+    "tier": "reliable",
+    "tier_reason": "reliable: availability_24h_mean_24m 0.9795 >= p75 0.9771 and unscheduled_24m 0 <= p50 105.5000 and entrapments_24m 0 == 0 (p75 is 0 for this type)"
   },
   {
     "equipment_code": "ES498X",
@@ -35178,8 +35190,8 @@
       "group": "ES",
       "group_size": 282
     },
-    "tier": "unreliable",
-    "tier_reason": "unreliable: entrapments_24m 0 >= p90 0"
+    "tier": "reliable",
+    "tier_reason": "reliable: availability_24h_mean_24m 0.9860 >= p75 0.9771 and unscheduled_24m 0 <= p50 105.5000 and entrapments_24m 0 == 0 (p75 is 0 for this type)"
   },
   {
     "equipment_code": "ES499X",
@@ -35227,8 +35239,8 @@
       "group": "ES",
       "group_size": 282
     },
-    "tier": "unreliable",
-    "tier_reason": "unreliable: entrapments_24m 0 >= p90 0"
+    "tier": "reliable",
+    "tier_reason": "reliable: availability_24h_mean_24m 0.9850 >= p75 0.9771 and unscheduled_24m 0 <= p50 105.5000 and entrapments_24m 0 == 0 (p75 is 0 for this type)"
   },
   {
     "equipment_code": "ES600X",
@@ -35276,8 +35288,8 @@
       "group": "ES",
       "group_size": 282
     },
-    "tier": "unreliable",
-    "tier_reason": "unreliable: entrapments_24m 0 >= p90 0"
+    "tier": "reliable",
+    "tier_reason": "reliable: availability_24h_mean_24m 0.9961 >= p75 0.9771 and unscheduled_24m 0 <= p50 105.5000 and entrapments_24m 0 == 0 (p75 is 0 for this type)"
   },
   {
     "equipment_code": "ES606X",
@@ -35326,7 +35338,7 @@
       "group_size": 282
     },
     "tier": "unreliable",
-    "tier_reason": "unreliable: availability_24h_mean_24m 0.9363 <= p25 0.9531; entrapments_24m 0 >= p90 0"
+    "tier_reason": "unreliable: availability_24h_mean_24m 0.9363 <= p25 0.9531"
   },
   {
     "equipment_code": "ES607X",
@@ -35380,8 +35392,8 @@
       "group": "ES",
       "group_size": 282
     },
-    "tier": "unreliable",
-    "tier_reason": "unreliable: entrapments_24m 0 >= p90 0"
+    "tier": "reliable",
+    "tier_reason": "reliable: availability_24h_mean_24m 0.9834 >= p75 0.9771 and unscheduled_24m 0 <= p50 105.5000 and entrapments_24m 0 == 0 (p75 is 0 for this type)"
   },
   {
     "equipment_code": "ES608X",
@@ -35429,8 +35441,8 @@
       "group": "ES",
       "group_size": 282
     },
-    "tier": "unreliable",
-    "tier_reason": "unreliable: entrapments_24m 0 >= p90 0"
+    "tier": "reliable",
+    "tier_reason": "reliable: availability_24h_mean_24m 1 >= p75 0.9771 and unscheduled_24m 0 <= p50 105.5000 and entrapments_24m 0 == 0 (p75 is 0 for this type)"
   },
   {
     "equipment_code": "ES609X",
@@ -35478,8 +35490,8 @@
       "group": "ES",
       "group_size": 282
     },
-    "tier": "unreliable",
-    "tier_reason": "unreliable: entrapments_24m 0 >= p90 0"
+    "tier": "reliable",
+    "tier_reason": "reliable: availability_24h_mean_24m 1 >= p75 0.9771 and unscheduled_24m 0 <= p50 105.5000 and entrapments_24m 0 == 0 (p75 is 0 for this type)"
   },
   {
     "equipment_code": "ES610X",
@@ -35527,8 +35539,8 @@
       "group": "ES",
       "group_size": 282
     },
-    "tier": "unreliable",
-    "tier_reason": "unreliable: entrapments_24m 0 >= p90 0"
+    "tier": "reliable",
+    "tier_reason": "reliable: availability_24h_mean_24m 1 >= p75 0.9771 and unscheduled_24m 0 <= p50 105.5000 and entrapments_24m 0 == 0 (p75 is 0 for this type)"
   },
   {
     "equipment_code": "ES621",
@@ -35577,7 +35589,7 @@
       "group_size": 282
     },
     "tier": "unreliable",
-    "tier_reason": "unreliable: availability_24h_mean_24m 0.9454 <= p25 0.9531; entrapments_24m 0 >= p90 0"
+    "tier_reason": "unreliable: availability_24h_mean_24m 0.9454 <= p25 0.9531"
   },
   {
     "equipment_code": "ES622",
@@ -35626,7 +35638,7 @@
       "group_size": 282
     },
     "tier": "unreliable",
-    "tier_reason": "unreliable: availability_24h_mean_24m 0.9529 <= p25 0.9531; unscheduled_24m 186 >= p75 180.7500; entrapments_24m 0 >= p90 0"
+    "tier_reason": "unreliable: availability_24h_mean_24m 0.9529 <= p25 0.9531; unscheduled_24m 186 >= p75 180.7500"
   },
   {
     "equipment_code": "ES623",
@@ -35674,8 +35686,8 @@
       "group": "ES",
       "group_size": 282
     },
-    "tier": "unreliable",
-    "tier_reason": "unreliable: entrapments_24m 0 >= p90 0"
+    "tier": "watch",
+    "tier_reason": "watch: availability_24h_mean_24m 0.9636 between p25 0.9531 and p75 0.9771; unscheduled_24m 104 (p50 105.5000, p75 180.7500); entrapments_24m 0 (p75 0, p90 0)"
   },
   {
     "equipment_code": "ES624",
@@ -35723,8 +35735,8 @@
       "group": "ES",
       "group_size": 282
     },
-    "tier": "unreliable",
-    "tier_reason": "unreliable: entrapments_24m 0 >= p90 0"
+    "tier": "watch",
+    "tier_reason": "watch: availability_24h_mean_24m 0.9582 between p25 0.9531 and p75 0.9771; unscheduled_24m 114 (p50 105.5000, p75 180.7500); entrapments_24m 0 (p75 0, p90 0)"
   },
   {
     "equipment_code": "ES625",
@@ -35772,8 +35784,8 @@
       "group": "ES",
       "group_size": 282
     },
-    "tier": "unreliable",
-    "tier_reason": "unreliable: entrapments_24m 0 >= p90 0"
+    "tier": "watch",
+    "tier_reason": "watch: availability_24h_mean_24m 0.9648 between p25 0.9531 and p75 0.9771; unscheduled_24m 89 (p50 105.5000, p75 180.7500); entrapments_24m 0 (p75 0, p90 0)"
   },
   {
     "equipment_code": "ES626",
@@ -35822,7 +35834,7 @@
       "group_size": 282
     },
     "tier": "unreliable",
-    "tier_reason": "unreliable: availability_24h_mean_24m 0.9422 <= p25 0.9531; unscheduled_24m 345 >= p75 180.7500; entrapments_24m 0 >= p90 0"
+    "tier_reason": "unreliable: availability_24h_mean_24m 0.9422 <= p25 0.9531; unscheduled_24m 345 >= p75 180.7500"
   },
   {
     "equipment_code": "ES627",
@@ -35871,7 +35883,7 @@
       "group_size": 282
     },
     "tier": "unreliable",
-    "tier_reason": "unreliable: availability_24h_mean_24m 0.9211 <= p25 0.9531; unscheduled_24m 456 >= p75 180.7500; entrapments_24m 0 >= p90 0"
+    "tier_reason": "unreliable: availability_24h_mean_24m 0.9211 <= p25 0.9531; unscheduled_24m 456 >= p75 180.7500"
   },
   {
     "equipment_code": "ES628",
@@ -35919,8 +35931,8 @@
       "group": "ES",
       "group_size": 282
     },
-    "tier": "unreliable",
-    "tier_reason": "unreliable: entrapments_24m 0 >= p90 0"
+    "tier": "watch",
+    "tier_reason": "watch: availability_24h_mean_24m 0.9665 between p25 0.9531 and p75 0.9771; unscheduled_24m 120 (p50 105.5000, p75 180.7500); entrapments_24m 0 (p75 0, p90 0)"
   },
   {
     "equipment_code": "ES629",
@@ -35968,8 +35980,8 @@
       "group": "ES",
       "group_size": 282
     },
-    "tier": "unreliable",
-    "tier_reason": "unreliable: entrapments_24m 0 >= p90 0"
+    "tier": "watch",
+    "tier_reason": "watch: availability_24h_mean_24m 0.9703 between p25 0.9531 and p75 0.9771; unscheduled_24m 82 (p50 105.5000, p75 180.7500); entrapments_24m 0 (p75 0, p90 0)"
   },
   {
     "equipment_code": "ES630",
@@ -36017,8 +36029,8 @@
       "group": "ES",
       "group_size": 282
     },
-    "tier": "unreliable",
-    "tier_reason": "unreliable: entrapments_24m 0 >= p90 0"
+    "tier": "watch",
+    "tier_reason": "watch: availability_24h_mean_24m 0.9733 between p25 0.9531 and p75 0.9771; unscheduled_24m 58 (p50 105.5000, p75 180.7500); entrapments_24m 0 (p75 0, p90 0)"
   },
   {
     "equipment_code": "ES631",
@@ -36066,8 +36078,8 @@
       "group": "ES",
       "group_size": 282
     },
-    "tier": "unreliable",
-    "tier_reason": "unreliable: entrapments_24m 0 >= p90 0"
+    "tier": "watch",
+    "tier_reason": "watch: availability_24h_mean_24m 0.9667 between p25 0.9531 and p75 0.9771; unscheduled_24m 76 (p50 105.5000, p75 180.7500); entrapments_24m 0 (p75 0, p90 0)"
   },
   {
     "equipment_code": "ES632",
@@ -36116,7 +36128,7 @@
       "group_size": 282
     },
     "tier": "unreliable",
-    "tier_reason": "unreliable: unscheduled_24m 198 >= p75 180.7500; entrapments_24m 0 >= p90 0"
+    "tier_reason": "unreliable: unscheduled_24m 198 >= p75 180.7500"
   },
   {
     "equipment_code": "ES633",
@@ -36164,8 +36176,8 @@
       "group": "ES",
       "group_size": 282
     },
-    "tier": "unreliable",
-    "tier_reason": "unreliable: entrapments_24m 0 >= p90 0"
+    "tier": "watch",
+    "tier_reason": "watch: availability_24h_mean_24m 0.9729 between p25 0.9531 and p75 0.9771; unscheduled_24m 104 (p50 105.5000, p75 180.7500); entrapments_24m 0 (p75 0, p90 0)"
   },
   {
     "equipment_code": "ES634",
@@ -36213,8 +36225,8 @@
       "group": "ES",
       "group_size": 282
     },
-    "tier": "unreliable",
-    "tier_reason": "unreliable: entrapments_24m 0 >= p90 0"
+    "tier": "watch",
+    "tier_reason": "watch: availability_24h_mean_24m 0.9746 between p25 0.9531 and p75 0.9771; unscheduled_24m 121 (p50 105.5000, p75 180.7500); entrapments_24m 0 (p75 0, p90 0)"
   },
   {
     "equipment_code": "ES635",
@@ -36262,8 +36274,8 @@
       "group": "ES",
       "group_size": 282
     },
-    "tier": "unreliable",
-    "tier_reason": "unreliable: entrapments_24m 0 >= p90 0"
+    "tier": "watch",
+    "tier_reason": "watch: availability_24h_mean_24m 0.9734 between p25 0.9531 and p75 0.9771; unscheduled_24m 72 (p50 105.5000, p75 180.7500); entrapments_24m 0 (p75 0, p90 0)"
   },
   {
     "equipment_code": "ES636",
@@ -36311,8 +36323,8 @@
       "group": "ES",
       "group_size": 282
     },
-    "tier": "unreliable",
-    "tier_reason": "unreliable: entrapments_24m 0 >= p90 0"
+    "tier": "watch",
+    "tier_reason": "watch: availability_24h_mean_24m 0.9743 between p25 0.9531 and p75 0.9771; unscheduled_24m 86 (p50 105.5000, p75 180.7500); entrapments_24m 0 (p75 0, p90 0)"
   },
   {
     "equipment_code": "ES637X",
@@ -36360,8 +36372,8 @@
       "group": "ES",
       "group_size": 282
     },
-    "tier": "unreliable",
-    "tier_reason": "unreliable: entrapments_24m 0 >= p90 0"
+    "tier": "reliable",
+    "tier_reason": "reliable: availability_24h_mean_24m 1 >= p75 0.9771 and unscheduled_24m 0 <= p50 105.5000 and entrapments_24m 0 == 0 (p75 is 0 for this type)"
   },
   {
     "equipment_code": "ES638X",
@@ -36409,8 +36421,8 @@
       "group": "ES",
       "group_size": 282
     },
-    "tier": "unreliable",
-    "tier_reason": "unreliable: entrapments_24m 0 >= p90 0"
+    "tier": "reliable",
+    "tier_reason": "reliable: availability_24h_mean_24m 1 >= p75 0.9771 and unscheduled_24m 0 <= p50 105.5000 and entrapments_24m 0 == 0 (p75 is 0 for this type)"
   },
   {
     "equipment_code": "ES639X",
@@ -36458,8 +36470,8 @@
       "group": "ES",
       "group_size": 282
     },
-    "tier": "unreliable",
-    "tier_reason": "unreliable: entrapments_24m 0 >= p90 0"
+    "tier": "reliable",
+    "tier_reason": "reliable: availability_24h_mean_24m 0.9994 >= p75 0.9771 and unscheduled_24m 0 <= p50 105.5000 and entrapments_24m 0 == 0 (p75 is 0 for this type)"
   },
   {
     "equipment_code": "ES640X",
@@ -36507,8 +36519,8 @@
       "group": "ES",
       "group_size": 282
     },
-    "tier": "unreliable",
-    "tier_reason": "unreliable: entrapments_24m 0 >= p90 0"
+    "tier": "reliable",
+    "tier_reason": "reliable: availability_24h_mean_24m 1 >= p75 0.9771 and unscheduled_24m 0 <= p50 105.5000 and entrapments_24m 0 == 0 (p75 is 0 for this type)"
   },
   {
     "equipment_code": "ES641X",
@@ -36556,7 +36568,7 @@
       "group": "ES",
       "group_size": 282
     },
-    "tier": "unreliable",
-    "tier_reason": "unreliable: entrapments_24m 0 >= p90 0"
+    "tier": "reliable",
+    "tier_reason": "reliable: availability_24h_mean_24m 1 >= p75 0.9771 and unscheduled_24m 0 <= p50 105.5000 and entrapments_24m 0 == 0 (p75 is 0 for this type)"
   }
 ]

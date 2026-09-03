@@ -1,5 +1,5 @@
 {
-  "build_timestamp": "2026-09-03T11:21:50.267Z",
+  "build_timestamp": "2026-09-03T11:27:12.335Z",
   "total_rows_pulled": 82385,
   "distinct_equipment_code": 695,
   "date_range": {
@@ -12,11 +12,11 @@
     "live_outages": "https://api-endpoint.mta.info/Dataservice/mtagtfsfeeds/nyct%2Fnyct_ene.json"
   },
   "equipment_master_rows": 704,
-  "live_outage_rows": 83,
+  "live_outage_rows": 85,
   "join_coverage": {
     "live_outage_ids_present_in_index": {
-      "matched": 75,
-      "total": 75,
+      "matched": 77,
+      "total": 77,
       "share": 1
     },
     "equipment_master_ids_present_in_index": {
@@ -49,16 +49,16 @@
   "tier_histogram": {
     "EL": {
       "reliable": {
-        "count": 81,
-        "share": 0.19612590799031476
+        "count": 83,
+        "share": 0.2009685230024213
       },
       "watch": {
         "count": 172,
         "share": 0.41646489104116224
       },
       "unreliable": {
-        "count": 154,
-        "share": 0.3728813559322034
+        "count": 152,
+        "share": 0.36803874092009686
       },
       "unknown": {
         "count": 6,
@@ -67,16 +67,16 @@
     },
     "ES": {
       "reliable": {
-        "count": 0,
-        "share": 0
+        "count": 66,
+        "share": 0.23404255319148937
       },
       "watch": {
-        "count": 0,
-        "share": 0
+        "count": 114,
+        "share": 0.40425531914893614
       },
       "unreliable": {
-        "count": 282,
-        "share": 1
+        "count": 102,
+        "share": 0.3617021276595745
       },
       "unknown": {
         "count": 0,
