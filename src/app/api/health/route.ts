@@ -1,6 +1,6 @@
 import { indexMeta } from "@/lib/adapters/stations";
 import { liveSnapshotOrEmpty } from "@/lib/adapters/live";
-import { routingAvailable } from "@/lib/adapters/routes";
+import { getGraph } from "@/lib/route";
 import { storeBackendDetail, storeBackendName } from "@/lib/store";
 
 export const dynamic = "force-dynamic";
@@ -22,7 +22,7 @@ export async function GET() {
     buildTime: BUILD_TIME,
     store: { backend: storeBackendName(), detail: storeBackendDetail() },
     index,
-    routing: { available: await routingAvailable() },
+    routing: { graph: getGraph().stats },
     live: {
       outages: live.outages.length,
       current: live.counts.current,

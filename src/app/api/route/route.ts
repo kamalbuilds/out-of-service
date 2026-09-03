@@ -38,13 +38,15 @@ export async function POST(request: Request) {
 
     const constraints = parseConstraints(body.constraints);
     const live = await liveSnapshotOrEmpty();
-    const routes = await findRoutes(fromStation.id, toStation.id, constraints, live);
+    const { routes, notes, source } = findRoutes(fromStation.id, toStation.id, constraints, live);
 
     return Response.json({
       from: fromStation,
       to: toStation,
       constraints,
       routes,
+      notes,
+      source,
       fetchedAt: live.fetchedAt,
       sourceUrl: live.sourceUrl,
     });

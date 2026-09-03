@@ -42,7 +42,7 @@ export async function POST(request: Request) {
 
     const constraints = parseConstraints(body.constraints);
     const live = await liveSnapshotOrEmpty();
-    const candidates = await findRoutes(fromStation.id, toStation.id, constraints, live);
+    const { routes: candidates, notes, source } = findRoutes(fromStation.id, toStation.id, constraints, live);
 
     const trip = await createTrip({
       from: fromStation.id,
@@ -53,7 +53,10 @@ export async function POST(request: Request) {
       candidates,
     });
 
-    return Response.json({ trip, companionUrl: `/t/${trip.id}?role=companion` }, { status: 201 });
+    return Response.json(
+      { trip, companionUrl: `/t/${trip.id}?role=companion`, notes, source },
+      { status: 201 },
+    );
   } catch (err) {
     return Response.json({ error: (err as Error).message }, { status: 503 });
   }
