@@ -36,3 +36,9 @@ two-session asymmetry (jude-gao 16/20, andrew-galloni 15/20) — role becomes a 
 token instead of a self-declared string, and the `?demo=1` simulated outage becomes trip state
 shared over the existing SSE stream instead of one tab's local React state. No new track, no new
 entry, no new asset.
+
+## Diagram-agent note (two-sessions re-render, key-based links)
+Diagram agent confirms this gate is answered and unchanged from the entry above. This pass only
+re-renders video/diagrams/two-sessions.png to reflect the role-as-capability fix already recorded
+above (?k=<role> key replacing ?role=, corrected registered-tool counts, the added capability
+caption). No product code, no new track, no new entry, no new asset.
