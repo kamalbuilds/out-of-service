@@ -9,6 +9,16 @@ const TRANSFER_COST = 4;
 /** How many times one (station, line) state may be settled. Higher = more alternatives, slower. */
 const K_PER_STATE = 6;
 const MAX_CANDIDATES = 24;
+/**
+ * A candidate may not be an arbitrary joyride. ADA stations are sparse in Brooklyn
+ * and Queens, so a detour that is geographically absurd can still be only a few ADA
+ * hops: Atlantic Av to Jay St is 2 hops on the R, but "D to Coney Island, F back to
+ * Jay St" is 6 and can score lower on elevator tiers alone. Anything longer than
+ * this cap is dropped before scoring.
+ */
+function detourCap(minStops: number): number {
+  return Math.max(minStops + 2, minStops * 2);
+}
 
 /**
  * `index` defaults to `src/lib/index` (the reliability index). `live` accepts the
@@ -110,7 +120,17 @@ export function findRoutes(
     return { route, stops: s.stops, dependencies, rawScore: result.rawScore };
   });
 
-  scored.sort(
+  const minStops = Math.min(...scored.map((s) => s.stops));
+  const cap = detourCap(minStops);
+  const kept = scored.filter((s) => s.stops <= cap);
+  const dropped = scored.length - kept.length;
+  if (dropped > 0) {
+    notes.push(
+      `${dropped} longer path${dropped === 1 ? "" : "s"} discarded: more than ${cap} accessible stops against a shortest of ${minStops}.`,
+    );
+  }
+
+  kept.sort(
     (a, b) =>
       a.rawScore - b.rawScore ||
       a.stops - b.stops ||
@@ -120,7 +140,7 @@ export function findRoutes(
 
   const picked: Route[] = [];
   const seenShape = new Set<string>();
-  for (const s of scored) {
+  for (const s of kept) {
     const shape = s.route.legs.map((l) => `${l.line}:${l.toStop}`).join(">");
     if (seenShape.has(shape)) continue;
     seenShape.add(shape);
@@ -147,14 +167,21 @@ export function explainRoute(route: Route, graph: StationGraph = getGraph()): El
  */
 export function legDirection(graph: StationGraph, leg: { line: string; fromStop: string; toStop: string }): Direction {
   for (const want of ["north", "south"] as Direction[]) {
+    // a line can branch (the A at Rockaway Blvd, the 5 at East 180 St), so this is a
+    // breadth-first walk over every branch, not a walk down the first edge found
     const seen = new Set([leg.fromStop]);
-    let at = leg.fromStop;
-    for (let hop = 0; hop < 60; hop++) {
-      const next = (graph.adjacency.get(at)?.get(leg.line) ?? []).find((e) => e.direction === want && !seen.has(e.to));
-      if (!next) break;
-      if (next.to === leg.toStop) return want;
-      seen.add(next.to);
-      at = next.to;
+    let frontier = [leg.fromStop];
+    for (let hop = 0; hop < 60 && frontier.length > 0; hop++) {
+      const next: string[] = [];
+      for (const at of frontier) {
+        for (const e of graph.adjacency.get(at)?.get(leg.line) ?? []) {
+          if (e.direction !== want || seen.has(e.to)) continue;
+          if (e.to === leg.toStop) return want;
+          seen.add(e.to);
+          next.push(e.to);
+        }
+      }
+      frontier = next;
     }
   }
   throw new Error(

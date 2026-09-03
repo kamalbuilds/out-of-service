@@ -153,13 +153,19 @@ because in both cases another elevator makes the same move.
 lowest availability) with its actual 24-month numbers, and the outage and its estimated return
 when the route is broken.
 
-**One honest caveat about ranking.** 307 of the 384 ADA elevators in the current
-`data/index.json` carry tier `unreliable (entrapment history)`. At 25 points each, any route
-with more than four dependencies hits the 100 clamp, and three clamped routes no longer rank
-against each other. `scoreRoute` therefore also returns `rawScore`, the same number before the
-clamp, and `findRoutes` orders candidates by `rawScore` then by fewer stops. `riskScore` and
-`riskLabel` remain exactly as specified. The real fix is in the index's tier thresholds, not
-here; until they widen, expect many routes to read "avoid".
+**Ranking uses `rawScore`, the same number before the clamp.** The first build of
+`data/index.json` put 307 of 384 ADA elevators in one tier, so every route with more than four
+dependencies hit the 100 clamp and three clamped routes stopped ranking against each other.
+The index has since been re-tiered on per-type relative thresholds (elevator histogram
+81 reliable / 172 watch / 154 unreliable / 6 unknown) and scores now spread properly, but
+`scoreRoute` still returns `rawScore` and `findRoutes` still orders on it, so a future
+re-tiering cannot silently collapse the ranking again. `riskScore` and `riskLabel` are exactly
+as specified.
+
+`scoreRoute` and its constants are tier-agnostic: the numbers below move when the index is
+rebuilt from newer MTA history, which is correct. The tests therefore pin structure (legs
+chain, each leg's line is served at both ends, no detours, an outage flips `broken` and adds
+exactly 60) rather than pinning risk scores.
 
 ## 4. Finding routes
 
@@ -168,8 +174,17 @@ an MRN, a GTFS stop id, or a station name. Search is over `(station, line)` stat
 `stops + 4 * transfers`, each state settleable 6 times, which is what produces genuinely
 different candidates instead of one path and two near-copies. A route may not revisit a
 complex, and may not reverse direction on the same line without a transfer. `maxTransfers`
-(default 3) prunes during search. Candidates are scored, sorted by `rawScore` then stops then
-transfers then id, deduplicated by leg shape, and the first three are returned.
+(default 3) prunes during search.
+
+Before scoring, candidates longer than `max(shortest + 2, shortest * 2)` accessible stops are
+discarded and the count is reported in `result.notes`. ADA stations are sparse outside
+Manhattan, so a geographically absurd path can still be only a few ADA hops: Atlantic Av to
+Jay St is 2 hops on the R, but "D to Coney Island, F back to Jay St" is 6 and scored *below*
+the direct R on elevator tiers alone. Without the cap that joyride was being offered as the
+second-best accessible route.
+
+What survives is scored, sorted by `rawScore` then stops then transfers then id, deduplicated
+by leg shape, and the first three are returned.
 
 `avoidEscalators` changes nothing, and says so: the graph is elevators only, so no route ever
 uses an escalator. The note is added to `result.notes` and to each route's explanation.
@@ -188,25 +203,27 @@ Live feed read 2026-09-03, 21 current ADA elevator outages.
 
 Three one-seat rides, A, C and E, one ADA hop each. All three share the Port Authority entrance
 elevators EL288X, EL289X, EL291X (all `reliable`, all `redundant`). They differ at Penn Station:
-the E lands on EL228, the A on EL227, the C on EL228.
+the A lands on EL227 (`watch`), the E and the C both land on EL228 (`unreliable`).
 
-With an empty live feed all three score 28 ("moderate") and are separated only by leg shape.
 **EL228 is out right now** (Planned Work, estimated return 09/04/2026 22:00). It is
-`mezzanine to platform` at 34 St-Penn Station, non-redundant, `role: "required"`, tier
-`unreliable`, 94.1% available over 24 months, 35 unscheduled outages, 7 entrapments in 24 months.
+`mezzanine to platform` at 34 St-Penn Station, non-redundant, `role: "required"`, 94.1%
+available over 24 months, 35 unscheduled outages, 7 entrapments in 24 months.
 
 ```
-without outage: E=28  C=28  A=28
-with EL228 out: A=28  E=88*  C=88*     (* broken)
+empty live feed:   A=13 low risk   E=28 moderate   C=28 moderate
+live feed, now:    A=13 low risk   E=88 avoid *    C=88 avoid *      (* broken)
 ```
 
-The E and C jump 28 to 88 and flip to `broken`, the label moves `moderate` to `avoid`, and the
-A route becomes the recommendation. This is the demo pair.
+The E and C jump 28 to 88, flip to `broken`, and move `moderate` to `avoid` while the A stays
+green at 13. All four tiers and all three labels are on screen at once, which is what makes
+this the demo pair. For the reroute beat the rider accepts the **E** first: it is a legitimate
+"moderate" choice until the feed says EL228 is out, and then the companion has a concrete
+`low risk` alternative to propose.
 
 ### 161 St-Yankee Stadium to Grand Central-42 St: no route survives
 
-The 4 runs it in two ADA hops (risk 75, "avoid"), with a B/D to 125 St plus a 5 or 6 as the two
-alternatives (risk 100). The dependencies at the origin are EL131 (`street to mezzanine`,
+The 4 runs it in two ADA hops (risk 60, "high"), with a B/D to 125 St plus a 5 or 6 as the two
+alternatives (risk 100, "avoid"). The dependencies at the origin are EL131 (`street to mezzanine`,
 `both`) and EL134 (`mezzanine to Manhattan-bound B/D`), plus EL135. **All of them are out
 right now**: EL131, EL134 and EL135 for a Con Edison power issue with an estimated return of
 31 January 2027, EL132 and EL133 for capital replacement. Every route out of this complex comes
@@ -215,9 +232,9 @@ Yankee Stadium station today.
 
 ### Atlantic Av-Barclays Ctr to Jay St-MetroTech: redundancy doing its job
 
-The R is a two-hop one-seat ride, risk 52 ("high"), depending on EL301 (`street to D/N/R &
-Brooklyn-bound 2/3`, tier `unreliable`, 98.6% available, 45 unscheduled outages, 7 entrapments).
-The alternatives are Q or B to DeKalb Av then the R, risk 72 each.
+The R is a two-hop one-seat ride, risk 18 ("low risk"), depending on EL301 (`street to D/N/R &
+Brooklyn-bound 2/3`, 98.6% available, 45 unscheduled outages, 7 entrapments). The alternatives
+are the N to 14 St-Union Sq then the R (risk 45) and the D to W 4 St then the C (risk 48).
 
 Atlantic Av has two elevators out right now, EL306 and EL307, both under capital replacement
 until 30 September. **EL306 is `redundant: 1`, so it does not break anything.** EL307 is not

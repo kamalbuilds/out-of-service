@@ -78,14 +78,32 @@ function legsAreChained(route: Route) {
   expect(route.transfers).toBe(Math.max(0, route.legs.length - 1));
 }
 
-const PAIRS: Array<{ from: string; to: string; lines: string[] }> = [
-  // E/F/M/R/7 out of Jackson Hts, into the Times Sq complex
-  { from: "Jackson Hts-Roosevelt Av", to: "Times Sq-42 St", lines: ["E", "R", "7"] },
-  // 4 down the Jerome Av line from Yankee Stadium, or B/D to 125 St and across
-  { from: "161 St-Yankee Stadium", to: "Grand Central-42 St", lines: ["4", "5", "6", "B", "D"] },
-  // the R is the one seat; B/Q/D via DeKalb Av is the alternative
-  { from: "Atlantic Av-Barclays Ctr", to: "Jay St-MetroTech", lines: ["R", "Q", "B", "D", "N"] },
+/**
+ * `topLines` is what the best route may legitimately be built from. Alternates are
+ * not pinned to a list, because the tiers in `data/index.json` are rebuilt from live
+ * MTA history and a re-tiering legitimately promotes a different alternate. Every
+ * route is instead held to structural invariants that no re-tiering can satisfy by
+ * accident: the legs chain, each leg's line is served at both ends, and no candidate
+ * is a detour.
+ */
+const PAIRS: Array<{ from: string; to: string; topLines: string[] }> = [
+  // Jackson Hts is E/F/M/R/7; the one-seat rides into the Times Sq complex are E, R and 7
+  { from: "Jackson Hts-Roosevelt Av", to: "Times Sq-42 St", topLines: ["E", "R", "7"] },
+  // the 4 runs Jerome Av straight to Grand Central; B/D to 125 St and across is the alternate
+  { from: "161 St-Yankee Stadium", to: "Grand Central-42 St", topLines: ["4", "5", "6", "B", "D"] },
+  // the R is the only one-seat ride between these two complexes
+  { from: "Atlantic Av-Barclays Ctr", to: "Jay St-MetroTech", topLines: ["R"] },
 ];
+
+/** The line of every leg must actually be served at both ends of that leg. */
+function lineIsServedEndToEnd(route: Route) {
+  for (const leg of route.legs) {
+    expect(graph.nodes.get(leg.fromStop)?.lines, `${leg.line} at ${leg.fromName}`).toContain(leg.line);
+    expect(graph.nodes.get(leg.toStop)?.lines, `${leg.line} at ${leg.toName}`).toContain(leg.line);
+    // and the leg must be walkable along that line in one direction
+    expect(() => legDirection(graph, leg)).not.toThrow();
+  }
+}
 
 describe("findRoutes", () => {
   for (const pair of PAIRS) {
@@ -118,7 +136,20 @@ describe("findRoutes", () => {
         expect(r.riskScore).toBeGreaterThanOrEqual(0);
         expect(r.riskScore).toBeLessThanOrEqual(100);
         expect(r.explanation.length).toBeGreaterThan(20);
-        for (const l of r.legs) expect(pair.lines).toContain(l.line);
+        lineIsServedEndToEnd(r);
+      }
+      // the best route is the one the pair is chosen for, and it is pinned
+      for (const l of res.routes[0].legs) expect(pair.topLines).toContain(l.line);
+
+      /**
+       * No candidate may be a joyride. This is the check that caught "Atlantic Av
+       * -> Coney Island -> Jay St": 6 accessible stops against a shortest of 2,
+       * which scored below the direct R purely on elevator tiers.
+       */
+      const stopsOf = (r: Route) => r.legs.reduce((n, l) => n + l.stops, 0);
+      const shortest = Math.min(...res.routes.map(stopsOf));
+      for (const r of res.routes) {
+        expect(stopsOf(r), `${r.id} detours`).toBeLessThanOrEqual(Math.max(shortest + 2, shortest * 2));
       }
       // ids are distinct and stable
       expect(new Set(res.routes.map((r) => r.id)).size).toBe(res.routes.length);
