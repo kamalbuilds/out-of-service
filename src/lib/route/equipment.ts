@@ -1,5 +1,4 @@
-import { readFileSync, existsSync } from "node:fs";
-import path from "node:path";
+import equipmentMaster from "../../../data/equipment.json" with { type: "json" };
 
 /** One row of the MTA elevator & escalator equipment master (nyct_ene_equipments.json). */
 export type EquipmentRecord = {
@@ -33,10 +32,7 @@ export type NextAda = string | null | { stopId: string; line: string } | Array<{
 export const EQUIPMENT_SOURCE =
   "https://api-endpoint.mta.info/Dataservice/mtagtfsfeeds/nyct%2Fnyct_ene_equipments.json";
 
-const CANDIDATE_PATHS = [
-  path.join(process.cwd(), "data", "equipment.json"),
-  path.join(process.cwd(), "src", "lib", "route", "__fixtures__", "equipment.sample.json"),
-];
+const EQUIPMENT_PATH = "data/equipment.json";
 
 function coerceRows(parsed: unknown): EquipmentRecord[] | null {
   const rows = Array.isArray(parsed)
@@ -60,16 +56,12 @@ let cached: { path: string; rows: EquipmentRecord[] } | null = null;
  */
 export function loadEquipment(): { rows: EquipmentRecord[]; path: string; source: string } {
   if (cached) return { ...cached, source: EQUIPMENT_SOURCE };
-  for (const p of CANDIDATE_PATHS) {
-    if (!existsSync(p)) continue;
-    const rows = coerceRows(JSON.parse(readFileSync(p, "utf8")));
-    if (!rows) continue;
-    cached = { path: p, rows };
-    return { rows, path: p, source: EQUIPMENT_SOURCE };
+  const rows = coerceRows(equipmentMaster as unknown);
+  if (!rows) {
+    throw new Error(`equipment master at ${EQUIPMENT_PATH} has an unexpected shape. Fetch it from ${EQUIPMENT_SOURCE}`);
   }
-  throw new Error(
-    `equipment master not found. Looked in:\n  ${CANDIDATE_PATHS.join("\n  ")}\nFetch it from ${EQUIPMENT_SOURCE}`,
-  );
+  cached = { path: EQUIPMENT_PATH, rows };
+  return { rows, path: EQUIPMENT_PATH, source: EQUIPMENT_SOURCE };
 }
 
 /** An active ADA elevator: the only equipment class the accessible graph is built from. */

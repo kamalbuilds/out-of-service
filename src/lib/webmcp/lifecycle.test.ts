@@ -303,7 +303,7 @@ describe("in-flight calls hold off the next generation", () => {
     let release!: () => void;
     const slow = withToolLog(
       "slow_tool",
-      () => new Promise<string>((resolve) => (release = () => resolve("done")))
+      (_input: unknown) => new Promise<string>((resolve) => (release = () => resolve("done")))
     );
     const call = slow({});
     expect(inFlightCount()).toBe(1);
