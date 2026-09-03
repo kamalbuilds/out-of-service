@@ -52,7 +52,7 @@ export function LiveStrip({ live }: { live: LiveSnapshot }) {
   return (
     <section aria-label="ADA elevators out right now" className="rounded-plate border border-ink">
       <header className="flex flex-wrap items-baseline justify-between gap-x-6 gap-y-2 bg-ink px-4 py-3 text-paper">
-        <h2 className="flex items-baseline gap-2.5">
+        <div className="flex items-baseline gap-2.5">
           <SourceNote
             dataset={LIVE_DATASET.dataset}
             query={live.sourceUrl}
@@ -61,8 +61,8 @@ export function LiveStrip({ live }: { live: LiveSnapshot }) {
           >
             <span className="plate num text-[2rem] leading-none">{ada.length}</span>
           </SourceNote>
-          <span className="text-[0.9375rem] font-medium">ADA elevators out right now</span>
-        </h2>
+          <h2 className="text-[0.9375rem] font-medium">ADA elevators out right now</h2>
+        </div>
         <div className="flex items-baseline gap-4 text-[0.6875rem] text-paper/70">
           <FetchedAgo fetchedAt={live.fetchedAt} />
           <a className="underline underline-offset-2 hover:text-paper" href={MTA_STATUS_URL} target="_blank" rel="noreferrer">

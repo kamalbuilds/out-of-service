@@ -122,7 +122,7 @@ export default async function Home() {
             </li>
           ))}
         </ol>
-        <p className="mt-5 border-t border-hair pt-3 text-[0.75rem] text-ink-soft">
+        <div className="mt-5 border-t border-hair pt-3 text-[0.75rem] text-ink-soft">
           <SourceNote
             dataset={EQUIPMENT_DATASET.dataset}
             query={EQUIPMENT_DATASET.query}
@@ -139,7 +139,7 @@ export default async function Home() {
           >
             <span className="num">{live.outages.length}</span> live outage rows read this request
           </SourceNote>
-        </p>
+        </div>
       </footer>
     </main>
   );

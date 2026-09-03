@@ -13,8 +13,15 @@ const LINE_COLOURS: Record<string, string> = {
   SIR: "#0039A6",
 };
 
-/** The two lines the MTA sets in black, plus grey, which needs the ink letter too. */
-const DARK_TEXT = new Set(["N", "Q", "R", "W"]);
+/**
+ * Which bullets carry an ink letter. Taken from the computed contrast table in
+ * DESIGN.md, not from memory: white on #FF6319 is 2.6:1 and fails at any size,
+ * black on it is 7.05:1.
+ */
+const DARK_TEXT = new Set(["B", "D", "F", "M", "G", "L", "N", "Q", "R", "W"]);
+
+/** #808183 fails AA against either letter colour, so the S bullet is set heavier. */
+const HEAVY = new Set(["S"]);
 
 const SIZES = {
   xs: "h-4.5 w-4.5 text-[0.625rem]",
@@ -36,7 +43,12 @@ export function LineBullet({
   return (
     <span
       className={`inline-flex shrink-0 items-center justify-center rounded-full font-semibold leading-none ${SIZES[size]}`}
-      style={{ backgroundColor: bg, color: fg, fontStretch: "92%" }}
+      style={{
+        backgroundColor: bg,
+        color: fg,
+        fontStretch: "92%",
+        fontWeight: HEAVY.has(key) ? 700 : undefined,
+      }}
       aria-label={`${key} train`}
       title={`${key} train`}
     >

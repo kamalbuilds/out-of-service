@@ -21,7 +21,7 @@ function Toggle({
   return (
     <label
       className={`inline-flex cursor-pointer items-center gap-2 rounded-control border px-2.5 py-1.5 text-[0.8125rem] font-medium transition-colors duration-150 ${
-        checked ? "border-ink bg-ink text-paper" : "border-hair-strong bg-paper-raised text-ink hover:border-ink"
+        checked ? "border-ink bg-ink text-paper" : "border-hair-strong bg-paper text-ink hover:border-ink"
       }`}
     >
       <input
@@ -127,7 +127,7 @@ export function CreateTrip({ stations }: { stations: StationSummary[] }) {
               name="maxTransfers"
               value={maxTransfers}
               onChange={(e) => setMaxTransfers(Number(e.target.value))}
-              className="num rounded-control border border-hair-strong bg-paper-raised px-2 py-1.5"
+              className="num rounded-control border border-hair-strong bg-paper px-2 py-1.5"
               data-testid="c-maxTransfers"
             >
               {[0, 1, 2, 3, 4].map((n) => (

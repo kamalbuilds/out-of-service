@@ -53,7 +53,7 @@ export function StationPicker({
         value={query}
         onChange={(e) => setQuery(e.target.value)}
         placeholder="Type a station or a line, say 14 St or L…"
-        className="rounded-control border border-hair-strong bg-paper-raised px-3 py-2.5 text-[1rem] placeholder:text-ink-soft/70 focus:border-accent"
+        className="rounded-control border border-hair-strong bg-paper px-3 py-2.5 text-[1rem] placeholder:text-ink-soft/70 focus:border-accent"
         data-testid={`${testId}-search`}
       />
       <select
@@ -63,7 +63,7 @@ export function StationPicker({
         size={6}
         onChange={(e) => onChange(e.target.value)}
         aria-label={label}
-        className="code rounded-control border border-hair-strong bg-paper-raised py-1 text-[0.8125rem]"
+        className="code rounded-control border border-hair-strong bg-paper py-1 text-[0.8125rem]"
         data-testid={testId}
       >
         <option value="">
@@ -79,7 +79,7 @@ export function StationPicker({
         ))}
       </select>
 
-      <div className="min-h-[2.75rem] rounded-plate border border-hair bg-paper-raised px-3 py-2">
+      <div className="min-h-[2.75rem] rounded-plate border border-hair bg-paper px-3 py-2">
         {selected ? (
           <>
             <div className="flex flex-wrap items-center gap-x-2 gap-y-1">

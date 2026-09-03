@@ -16,15 +16,18 @@
 
   /* Surface: warm off-white MTA card stock, near-black ink. Never #fff, never #000. */
   --color-paper: #f2efe9;
-  --color-paper-sunk: #e8e4db;
-  --color-paper-raised: #f8f6f2;
+  --color-paper-sunk: #ece8dc;
+  --color-paper-inset: #e4dfce;
   --color-ink: #0a0a0a;
-  --color-ink-soft: #55524c;
-  --color-hair: #d3cec3;
-  --color-hair-strong: #b0aa9c;
+  --color-ink-soft: #4a4a46;
+  --color-ink-subtle: #7a776d;
+  --color-hair: #ddd8c8;
+  --color-hair-strong: #b8b29c;
 
-  /* One accent: MTA signage blue. Interactive only, never body text. */
+  /* One accent: MTA signage blue. Interactive only, never body text.
+     MTA orange (#FF6319) is the B/D/F/M bullet and nothing else. */
   --color-accent: #0039a6;
+  --color-accent-soft: #dce6f5;
   --color-accent-ink: #002a7a;
 
   /* Reliability tiers, all AA on the surface (docs/DESIGN.md contrast table). */
@@ -32,7 +35,7 @@
   --color-tier-watch: #8a5a00;
   --color-tier-unreliable: #a6360f;
   --color-tier-out: #7a1010;
-  --color-tier-unknown: #55524c;
+  --color-tier-unknown: #4a4a46;
 
   /* A simulated outage is never mistaken for a real one. */
   --color-sim: #6c2bd9;
@@ -85,10 +88,10 @@ body {
 
   /* A column heading on a status board. Used sparingly, never stacked on an h2. */
   .colhead {
-    font-family: var(--font-mono);
     font-size: 0.6875rem;
+    font-weight: 600;
     line-height: 1.2;
-    letter-spacing: 0.16em;
+    letter-spacing: 0.13em;
     text-transform: uppercase;
     color: var(--color-ink-soft);
   }

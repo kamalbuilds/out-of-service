@@ -31,9 +31,9 @@ export function ElevatorChip({ elevator, simulated }: { elevator: ElevatorRef; s
   const unscheduled = elevator.unscheduled24m;
 
   return (
-    <span
-      className={`inline-flex items-stretch overflow-hidden rounded-plate border ${
-        out ? "border-ink bg-ink text-paper" : "border-hair bg-paper-raised text-ink"
+    <div
+      className={`inline-flex items-stretch overflow-hidden rounded-plate border align-top ${
+        out ? "border-ink bg-ink text-paper" : "border-hair bg-paper text-ink"
       }`}
       title={`${elevator.code}: ${elevator.serving || elevator.station}. Tier ${t.label}.${
         avail ? ` 24-month availability ${avail}.` : " No availability history."
@@ -46,7 +46,7 @@ export function ElevatorChip({ elevator, simulated }: { elevator: ElevatorRef; s
         className="w-[3px] shrink-0"
         style={{ backgroundColor: out ? "var(--color-paper)" : t.bar }}
       />
-      <span className="flex items-baseline gap-1.5 px-1.5 py-[3px]">
+      <div className="flex items-baseline gap-1.5 px-1.5 py-[3px]">
         <SourceNote
           dataset={elevator.source?.dataset}
           query={elevator.source?.query}
@@ -71,8 +71,8 @@ export function ElevatorChip({ elevator, simulated }: { elevator: ElevatorRef; s
             sim
           </span>
         ) : null}
-      </span>
-    </span>
+      </div>
+    </div>
   );
 }
 

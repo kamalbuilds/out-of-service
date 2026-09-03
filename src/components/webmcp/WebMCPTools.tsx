@@ -155,73 +155,115 @@ export function WebMCPTools({
   return (
     <>
       {gate}
-    <section
-      data-webmcp-panel
-      data-webmcp-layer={layer}
-      data-webmcp-role={role}
-      className="border-4 border-black bg-white text-black"
-    >
-      <header className="flex flex-wrap items-baseline justify-between gap-2 border-b-4 border-black bg-black px-3 py-2 text-white">
-        <h2 className="font-mono text-xs uppercase tracking-[0.2em]">
-          WebMCP: {layer === "native" ? "native" : layer === "polyfill" ? "polyfill" : "unavailable"}
-        </h2>
-        <span className="font-mono text-xs">
-          {role} session &middot; {registered.length} tools &middot; gen {generation}
-        </span>
-      </header>
-
-      {layer === "unavailable" && (
-        <p className="px-3 py-2 text-sm">
-          No <code>document.modelContext</code> in this browser and the polyfill did not install.
-          Enable <code>chrome://flags/#enable-webmcp-testing</code> in Chrome 149+.
-        </p>
-      )}
-
-      <ul className="divide-y-2 divide-black">
-        {registered.map((t) => (
-          <li key={t.name} className="flex items-center justify-between gap-3 px-3 py-1.5 font-mono text-xs">
-            <span>{t.name}</span>
-            <span className="flex gap-2">
-              {t.untrusted && <span className="bg-amber-300 px-1">untrusted output</span>}
-              <span className={t.readOnlyHint ? "text-neutral-600" : "bg-black px-1 text-white"}>
-                {t.readOnlyHint ? "readOnlyHint: true" : "readOnlyHint: false"}
-              </span>
+      <section
+        data-webmcp-panel
+        data-webmcp-layer={layer}
+        data-webmcp-role={role}
+        className="border border-hair-strong bg-paper"
+      >
+        <header className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1 border-b border-hair bg-paper-sunk px-3 py-1.5">
+          <h2 className="colhead">tools registered in this window</h2>
+          <span className="flex items-baseline gap-2 text-[0.6875rem]">
+            <span
+              className={`code px-1 py-px text-[0.625rem] uppercase tracking-[0.1em] ${
+                layer === "unavailable"
+                  ? "border border-hair-strong text-ink-soft"
+                  : "bg-accent text-paper"
+              }`}
+            >
+              {layer}
             </span>
-          </li>
-        ))}
-      </ul>
+            <span className="num text-ink-soft">
+              {role} · {registered.length} tools · gen {generation}
+            </span>
+          </span>
+        </header>
 
-      {browserTools.length > 0 && (
-        <p className="border-t-2 border-black px-3 py-1.5 font-mono text-[11px] leading-snug text-neutral-700">
-          document.modelContext.getTools(): {browserTools.join(", ")}
-        </p>
-      )}
+        {layer === "unavailable" && (
+          <p className="px-3 py-2.5 text-[0.8125rem] leading-snug">
+            No <code className="code">document.modelContext</code> in this browser and the polyfill
+            did not install. Turn on{" "}
+            <code className="code">chrome://flags/#enable-webmcp-testing</code> in Chrome 149 or
+            later, then reload.
+          </p>
+        )}
 
-      <div className="border-t-4 border-black">
-        <h3 className="px-3 py-1.5 font-mono text-xs uppercase tracking-[0.2em]">
-          Tool log ({log.length})
-        </h3>
-        {log.length === 0 ? (
-          <p className="px-3 pb-2 text-xs text-neutral-600">
-            No tool calls yet in this session.
+        {registered.length === 0 && layer !== "unavailable" ? (
+          <p className="px-3 py-2.5 text-[0.8125rem] text-ink-soft">
+            Registering this session&rsquo;s tools…
           </p>
         ) : (
-          <ol className="divide-y divide-neutral-300 border-t-2 border-black">
-            {log.map((e) => (
-              <li key={e.id} className="px-3 py-1.5 font-mono text-[11px] leading-snug">
-                <span className={e.ok ? "text-neutral-900" : "bg-red-600 px-1 text-white"}>
-                  {e.ok ? "ok" : "error"}
-                </span>{" "}
-                <strong>{e.name}</strong> {e.durationMs}ms
-                <br />
-                <span className="text-neutral-600">{JSON.stringify(e.args)}</span>
-                {!e.ok && <span className="block text-red-700">{e.error}</span>}
-              </li>
-            ))}
-          </ol>
+          <table className="w-full border-collapse text-left">
+            <thead>
+              <tr className="border-b border-hair">
+                <th scope="col" className="colhead w-8 px-3 py-1 font-semibold">
+                  <span className="sr-only">Mutating</span>
+                </th>
+                <th scope="col" className="colhead px-0 py-1 font-semibold">
+                  tool
+                </th>
+                <th scope="col" className="colhead px-3 py-1 text-right font-semibold">
+                  effect
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              {registered.map((t) => (
+                <tr key={t.name} className="border-b border-hair last:border-b-0">
+                  <td className="px-3 py-1">
+                    <span
+                      aria-hidden
+                      className={`inline-block h-2.5 w-2.5 border border-ink ${
+                        t.readOnlyHint ? "" : "bg-ink"
+                      }`}
+                    />
+                  </td>
+                  <td className="code py-1 text-[0.75rem]">{t.name}</td>
+                  <td className="py-1 pr-3 text-right text-[0.6875rem] text-ink-soft">
+                    {t.untrusted ? (
+                      <span className="mr-2 border border-tier-watch px-1 text-tier-watch">
+                        untrusted output
+                      </span>
+                    ) : null}
+                    {t.readOnlyHint ? "reads" : "writes"}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         )}
-      </div>
-    </section>
+
+        {browserTools.length > 0 && (
+          <p className="code border-t border-hair px-3 py-1.5 text-[0.6875rem] leading-relaxed text-ink-subtle">
+            document.modelContext.getTools() → {browserTools.join(", ")}
+          </p>
+        )}
+
+        <div className="border-t border-hair-strong">
+          <h3 className="colhead border-b border-hair bg-paper-sunk px-3 py-1.5">
+            tool log · <span className="num">{log.length}</span>
+          </h3>
+          {log.length === 0 ? (
+            <p className="px-3 py-2.5 text-[0.8125rem] text-ink-soft">
+              No tool call has come in yet. Ask the agent for a route and the first line lands here.
+            </p>
+          ) : (
+            <ol className="max-h-72 overflow-y-auto bg-ink text-paper">
+              {log.map((e) => (
+                <li key={e.id} className="code border-b border-paper/10 px-3 py-1.5 text-[0.6875rem] leading-relaxed last:border-b-0">
+                  <span className={e.ok ? "text-paper/50" : "text-paper"} aria-hidden>
+                    {e.ok ? "$" : "!"}
+                  </span>{" "}
+                  <span className="font-medium">{e.name}</span>{" "}
+                  <span className="num text-paper/50">{e.durationMs}ms</span>
+                  <div className="break-all text-paper/55">{JSON.stringify(e.args)}</div>
+                  {!e.ok && <div className="text-tier-watch">{e.error}</div>}
+                </li>
+              ))}
+            </ol>
+          )}
+        </div>
+      </section>
     </>
   );
 }

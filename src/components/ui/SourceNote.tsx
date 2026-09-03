@@ -23,7 +23,7 @@ export function SourceNote({
   return (
     <details className={`sourced inline-block align-baseline ${className}`}>
       <summary>{children}</summary>
-      <div className="code mt-1.5 max-w-md rounded-plate border border-hair bg-paper-raised px-2.5 py-2 text-[0.6875rem] leading-relaxed text-ink-soft">
+      <div className="code mt-1.5 max-w-md rounded-plate border border-hair bg-paper-sunk px-2.5 py-2 text-[0.6875rem] leading-relaxed text-ink-soft">
         {dataset ? <div className="text-ink">{dataset}</div> : null}
         {rows !== undefined ? <div className="num">{rows.toLocaleString("en-US")} rows</div> : null}
         {query ? <div className="mt-0.5 break-all">{query}</div> : null}

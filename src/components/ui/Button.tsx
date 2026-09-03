@@ -12,9 +12,9 @@ const VARIANTS: Record<Variant, string> = {
     "bg-accent text-paper border-accent hover:bg-accent-ink hover:border-accent-ink",
   solid: "bg-ink text-paper border-ink hover:bg-ink-soft hover:border-ink-soft",
   outline:
-    "bg-paper-raised text-ink border-hair-strong hover:border-ink hover:bg-paper-sunk",
+    "bg-paper text-ink border-hair-strong hover:border-ink hover:bg-paper-sunk",
   danger:
-    "bg-paper-raised text-tier-unreliable border-hair-strong hover:border-tier-unreliable hover:bg-tier-unreliable hover:text-paper",
+    "bg-paper text-tier-unreliable border-hair-strong hover:border-tier-unreliable hover:bg-tier-unreliable hover:text-paper",
 };
 
 export function Button({
