@@ -3,7 +3,8 @@
 import { useCallback, useEffect, useMemo, useRef, useState, useSyncExternalStore } from "react";
 import type { Role, Trip, TripActions, TripReaders } from "@/lib/webmcp/contracts";
 import { toolsForRole } from "@/lib/webmcp/tools";
-import { withToolLog, subscribeToolLog, getToolLog, type ToolLogEntry } from "@/lib/webmcp/log";
+import { subscribeToolLog, getToolLog, type ToolLogEntry } from "@/lib/webmcp/log";
+import { registerTools, type RegisteredInfo, type RegistrationTarget } from "@/lib/webmcp/register";
 import { ensureModelContext, type WebMcpLayer } from "@/lib/webmcp/runtime";
 
 /**
@@ -12,17 +13,7 @@ import { ensureModelContext, type WebMcpLayer } from "@/lib/webmcp/runtime";
  * the second argument, so we register through this narrower local view of the same object and
  * treat `options` as optional at runtime. See docs/WEBMCP.md, "Which layer".
  */
-type SpecTool = {
-  name: string;
-  title?: string;
-  description: string;
-  inputSchema: object;
-  annotations: { readOnlyHint: boolean; untrustedContentHint: boolean };
-  execute: (input: Record<string, unknown>, options?: { signal?: AbortSignal }) => Promise<unknown>;
-};
-
-type SpecModelContext = {
-  registerTool(tool: SpecTool, options?: { signal?: AbortSignal }): Promise<void>;
+type SpecModelContext = RegistrationTarget & {
   getTools(): Promise<Array<{ name: string; annotations?: { readOnlyHint?: boolean } }>>;
   addEventListener(type: string, listener: () => void): void;
   removeEventListener(type: string, listener: () => void): void;
@@ -36,8 +27,6 @@ export type WebMCPToolsProps = {
   /** Hide the badge/log panel (the tools still register). */
   headless?: boolean;
 };
-
-type RegisteredInfo = { name: string; readOnlyHint: boolean; untrusted: boolean };
 
 const EMPTY_LOG: ToolLogEntry[] = [];
 
@@ -94,34 +83,9 @@ export function WebMCPTools({ role, trip, actions, readers, headless = false }: 
     });
 
     (async () => {
-      const done: RegisteredInfo[] = [];
-      for (const def of defs) {
-        // Declarative tools come from <form toolname>, registered by the browser itself.
-        // Registering them here too would collide on name (InvalidStateError).
-        if (def.declarative) continue;
-        if (controller.signal.aborted) return;
-        try {
-          await context.registerTool(
-            {
-              name: def.name,
-              title: def.title,
-              description: def.description,
-              inputSchema: def.inputSchema,
-              annotations: def.annotations,
-              execute: withToolLog(def.name, def.execute),
-            },
-            { signal: controller.signal }
-          );
-          done.push({
-            name: def.name,
-            readOnlyHint: def.annotations.readOnlyHint,
-            untrusted: def.annotations.untrustedContentHint,
-          });
-        } catch (error) {
-          if (controller.signal.aborted) return;
-          console.error(`[webmcp] could not register ${def.name}:`, error);
-        }
-      }
+      const done = await registerTools(context, defs, controller.signal, (name, error) =>
+        console.error(`[webmcp] could not register ${name}:`, error)
+      );
       if (controller.signal.aborted) return;
       setRegistered(done);
       setGeneration((g) => g + 1);
