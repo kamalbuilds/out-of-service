@@ -12,12 +12,14 @@ const TOOL_DESCRIPTION =
  * The home page's declarative tool. Same rules as ReportForm: no `toolautosubmit`, and the
  * agent's result comes back through `SubmitEvent.respondWith()` rather than a navigation.
  */
+export type CreateTripResult = { trip: Trip; riderUrl: string; companionUrl: string };
+
 export function CreateTripForm({
   createTrip,
   onCreated,
 }: {
-  createTrip: (input: CreateTripInput) => Promise<Trip>;
-  onCreated?: (trip: Trip) => void;
+  createTrip: (input: CreateTripInput) => Promise<CreateTripResult>;
+  onCreated?: (result: CreateTripResult) => void;
 }) {
   const [agentFilled, setAgentFilled] = useState(false);
   const [status, setStatus] = useState<string | null>(null);
@@ -37,14 +39,14 @@ export function CreateTripForm({
     };
   }, []);
 
-  async function create(form: HTMLFormElement): Promise<{ trip: Trip; result: Record<string, unknown> }> {
+  async function create(form: HTMLFormElement): Promise<{ result: CreateTripResult; toolResult: Record<string, unknown> }> {
     const data = new FormData(form);
     const from = String(data.get("from") ?? "").trim();
     const to = String(data.get("to") ?? "").trim();
     if (!from || !to) throw new Error("Both from and to are required.");
     if (from.toLowerCase() === to.toLowerCase()) throw new Error("from and to are the same station.");
     const maxTransfersRaw = Number(data.get("maxTransfers"));
-    const trip = await createTrip({
+    const result = await createTrip({
       from,
       to,
       constraints: {
@@ -53,15 +55,16 @@ export function CreateTripForm({
         maxTransfers: Number.isFinite(maxTransfersRaw) ? maxTransfersRaw : 2,
       },
     });
+    const { trip } = result;
     return {
-      trip,
-      result: {
+      result,
+      toolResult: {
         tripId: trip.id,
         from: trip.fromName,
         to: trip.toName,
         candidateCount: trip.candidates.length,
-        companionUrl: `${window.location.origin}/t/${trip.id}?role=companion`,
-        note: "Open the companion link in a second window to give a travelling companion their own, smaller tool set.",
+        companionUrl: `${window.location.origin}${result.companionUrl}`,
+        note: "Open the companion link in a second window to give a travelling companion their own, smaller tool set. The link carries the companion's capability key; it is shown once, here.",
       },
     };
   }
@@ -76,11 +79,11 @@ export function CreateTripForm({
         event.preventDefault();
         const form = event.currentTarget;
         const done = create(form).then(
-          ({ trip, result }) => {
+          ({ result, toolResult }) => {
             setAgentFilled(false);
-            setStatus(`Trip ${trip.id} created.`);
-            onCreated?.(trip);
-            return result;
+            setStatus(`Trip ${result.trip.id} created.`);
+            onCreated?.(result);
+            return toolResult;
           },
           (error: unknown) => {
             const message = error instanceof Error ? error.message : String(error);

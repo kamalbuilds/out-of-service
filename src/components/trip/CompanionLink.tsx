@@ -4,9 +4,21 @@ import { useState } from "react";
 import { Button } from "@/components/ui/Button";
 
 /** Rider only: the URL that opens this trip in the companion's session. */
-export function CompanionLink({ tripId }: { tripId: string }) {
+export function CompanionLink({ tripId, companionKey }: { tripId: string; companionKey?: string }) {
   const [copied, setCopied] = useState(false);
-  const path = `/t/${tripId}?role=companion`;
+
+  if (!companionKey) {
+    return (
+      <section className="border border-hair-strong bg-paper">
+        <h2 className="colhead border-b border-hair bg-paper-sunk px-3 py-1.5">companion link</h2>
+        <p className="px-3 py-2.5 text-[0.75rem] leading-snug text-ink-soft">
+          The companion key for this trip is not available in this session.
+        </p>
+      </section>
+    );
+  }
+
+  const path = `/t/${tripId}?k=${companionKey}`;
   const href = typeof window === "undefined" ? path : `${window.location.origin}${path}`;
 
   return (

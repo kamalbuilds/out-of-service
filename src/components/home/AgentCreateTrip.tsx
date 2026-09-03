@@ -19,13 +19,26 @@ export function AgentCreateTrip() {
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(input),
         });
-        const body = (await res.json()) as { trip?: Trip; error?: string };
-        if (!res.ok || !body.trip) {
+        const body = (await res.json()) as {
+          trip?: Trip;
+          riderUrl?: string;
+          companionUrl?: string;
+          companionKey?: string;
+          error?: string;
+        };
+        if (!res.ok || !body.trip || !body.riderUrl || !body.companionUrl) {
           throw new Error(body.error ?? `The server returned HTTP ${res.status}.`);
         }
-        return body.trip;
+        if (body.companionKey) {
+          try {
+            sessionStorage.setItem(`oos:companionKey:${body.trip.id}`, body.companionKey);
+          } catch {
+            /* storage unavailable */
+          }
+        }
+        return { trip: body.trip, riderUrl: body.riderUrl, companionUrl: body.companionUrl };
       }}
-      onCreated={(trip) => router.push(`/t/${trip.id}`)}
+      onCreated={({ riderUrl }) => router.push(riderUrl)}
     />
   );
 }

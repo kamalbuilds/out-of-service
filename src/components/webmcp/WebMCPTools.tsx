@@ -26,6 +26,8 @@ export type WebMCPToolsProps = {
   trip: Trip | null;
   actions: TripActions;
   readers: TripReaders;
+  /** The rider session's one-time view of the companion's key, threaded to share_trip. */
+  companionKey?: string;
   /** Hide the badge/log panel (the tools still register). */
   headless?: boolean;
   /**
@@ -48,6 +50,7 @@ export function WebMCPTools({
   trip,
   actions,
   readers,
+  companionKey,
   headless = false,
   reportForm = true,
 }: WebMCPToolsProps) {
@@ -62,11 +65,13 @@ export function WebMCPTools({
   const actionsRef = useRef(actions);
   const readersRef = useRef(readers);
   const tripRef = useRef(trip);
+  const companionKeyRef = useRef(companionKey);
   // Declared before the registration effect so it commits first in the same render pass.
   useEffect(() => {
     actionsRef.current = actions;
     readersRef.current = readers;
     tripRef.current = trip;
+    companionKeyRef.current = companionKey;
   });
 
   useEffect(() => {
@@ -100,6 +105,7 @@ export function WebMCPTools({
     const defs = toolsForRole(role, tripRef.current, {
       actions: actionsRef.current,
       readers: readersRef.current,
+      companionKey: companionKeyRef.current,
     });
 
     generationChain = generationChain.then(async () => {

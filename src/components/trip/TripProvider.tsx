@@ -21,12 +21,14 @@ export type TripContextValue = {
   role: Role;
   actions: TripActions;
   readers: TripReaders;
+  /** The companion's capability key, known to the rider session only, once. */
+  companionKey?: string;
   live: LiveSnapshot | null;
-  /** Live outages plus any ?demo=1 simulations, simulated ones flagged. */
+  /** Live outages plus any shared `trip.simulatedOut` rows, simulated ones flagged. */
   outages: LiveOutage[];
   simulated: SimulatedOutage[];
-  simulate: (code: string) => void;
-  clearSimulated: () => void;
+  simulate: (code: string) => Promise<void>;
+  clearSimulated: () => Promise<void>;
   demo: boolean;
   tripStream: "connecting" | "open" | "closed";
   liveStream: "connecting" | "open" | "closed";
@@ -44,13 +46,13 @@ export function useTrip(): TripContextValue {
 async function postAction(
   tripId: string,
   type: string,
-  role: Role,
+  key: string,
   payload: Record<string, unknown>,
 ): Promise<Trip> {
   const res = await fetch(`/api/trip/${tripId}/action`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ type, role, payload }),
+    body: JSON.stringify({ type, key, payload }),
   });
   const body = (await res.json()) as { trip?: Trip; error?: string };
   if (!res.ok || !body.trip) {
@@ -62,19 +64,24 @@ async function postAction(
 export function TripProvider({
   tripId,
   role,
+  sessionKey,
+  companionKey,
   initialTrip,
   demo,
   children,
 }: {
   tripId: string;
   role: Role;
+  /** This session's own capability key (the `?k=` it opened with). Sent with every action. */
+  sessionKey: string;
+  /** The rider session's one-time view of the companion's key, for CompanionLink and share_trip. */
+  companionKey?: string;
   initialTrip: Trip;
   demo: boolean;
   children: ReactNode;
 }) {
   const [trip, setTrip] = useState<Trip>(initialTrip);
   const [live, setLive] = useState<LiveSnapshot | null>(null);
-  const [simulated, setSimulated] = useState<SimulatedOutage[]>([]);
   const [tripStream, setTripStream] = useState<TripContextValue["tripStream"]>("connecting");
   const [liveStream, setLiveStream] = useState<TripContextValue["liveStream"]>("connecting");
   const [error, setError] = useState<string | null>(null);
@@ -185,54 +192,11 @@ export function TripProvider({
     };
   }, []);
 
-  /* ?demo=1 only. Never written to the store, never sent to the index. */
-  const simulate = useCallback(
-    (code: string) => {
-      const upper = code.trim().toUpperCase();
-      if (!upper) return;
-      const known = trip.candidates
-        .flatMap((r) => r.elevators)
-        .find((e) => e.code === upper);
-      const now = new Date();
-      setSimulated((prev) =>
-        prev.some((o) => o.equipmentCode === upper)
-          ? prev
-          : [
-              ...prev,
-              {
-                equipmentCode: upper,
-                equipmentType: "EL",
-                station: known?.station ?? "simulated",
-                lines: [],
-                serving: known?.serving ?? "simulated outage for the demo",
-                ada: true,
-                outageStart: now.toISOString(),
-                estimatedReturn: null,
-                reason: "SIMULATED (demo control, not from the MTA feed)",
-                isUpcoming: false,
-                isMaintenance: false,
-                isCurrent: true,
-                hoursOut: 0,
-                simulated: true,
-              },
-            ],
-      );
-    },
-    [trip.candidates],
-  );
-
-  const clearSimulated = useCallback(() => setSimulated([]), []);
-
-  const outages = useMemo<LiveOutage[]>(
-    () => [...simulated, ...(live?.outages ?? [])],
-    [simulated, live],
-  );
-
   const run = useCallback(
     async (type: string, payload: Record<string, unknown>) => {
       setError(null);
       try {
-        const next = await postAction(tripId, type, role, payload);
+        const next = await postAction(tripId, type, sessionKey, payload);
         apply(next);
         return next;
       } catch (err) {
@@ -240,7 +204,57 @@ export function TripProvider({
         throw err;
       }
     },
-    [tripId, role, apply],
+    [tripId, sessionKey, apply],
+  );
+
+  /*
+   * The `?demo=1` control, now trip state instead of one tab's React state: it is
+   * a `simulate` action (rider key + `demo: true`), so both windows see the same
+   * forced outage, the same rescored candidates, and the same clear, over the
+   * existing trip SSE stream.
+   */
+  const simulate = useCallback(
+    async (code: string) => {
+      const upper = code.trim().toUpperCase();
+      if (!upper) return;
+      await run("simulate", { code: upper, on: true, demo: true });
+    },
+    [run],
+  );
+
+  const clearSimulated = useCallback(async () => {
+    for (const code of trip.simulatedOut) {
+      await run("simulate", { code, on: false, demo: true });
+    }
+  }, [run, trip.simulatedOut]);
+
+  /** `trip.simulatedOut` projected into the outage-row shape the live panel already renders. */
+  const simulated = useMemo<SimulatedOutage[]>(() => {
+    const now = new Date().toISOString();
+    return trip.simulatedOut.map((code) => {
+      const known = trip.candidates.flatMap((r) => r.elevators).find((e) => e.code === code);
+      return {
+        equipmentCode: code,
+        equipmentType: "EL",
+        station: known?.station ?? "simulated",
+        lines: [],
+        serving: known?.serving ?? "SIMULATED (demo control, not the MTA feed)",
+        ada: true,
+        outageStart: now,
+        estimatedReturn: null,
+        reason: "SIMULATED (demo control, not the MTA feed)",
+        isUpcoming: false,
+        isMaintenance: false,
+        isCurrent: true,
+        hoursOut: 0,
+        simulated: true as const,
+      };
+    });
+  }, [trip.simulatedOut, trip.candidates]);
+
+  const outages = useMemo<LiveOutage[]>(
+    () => [...simulated, ...(live?.outages ?? [])],
+    [simulated, live],
   );
 
   const actions = useMemo<TripActions>(
@@ -251,14 +265,20 @@ export function TripProvider({
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(input),
         });
-        const body = (await res.json()) as { trip?: Trip; error?: string };
-        if (!res.ok || !body.trip) {
+        const body = (await res.json()) as {
+          trip?: Trip;
+          riderUrl?: string;
+          companionUrl?: string;
+          error?: string;
+        };
+        if (!res.ok || !body.trip || !body.riderUrl || !body.companionUrl) {
           throw new Error(body.error ?? `Creating the trip failed with HTTP ${res.status}.`);
         }
-        return body.trip;
+        return { ...body.trip, riderUrl: body.riderUrl, companionUrl: body.companionUrl };
       },
       acceptRoute: (routeId) => run("accept_route", { routeId }),
       acceptReroute: (proposalId) => run("accept_reroute", { proposalId }),
+      rejectReroute: (proposalId) => run("accept_reroute", { proposalId, decision: "reject" }),
       proposeReroute: (route: Route, reason: string) =>
         run("propose_reroute", { route, routeId: route.id, reason }),
       watch: (codes) => run("watch", { codes }),
@@ -268,7 +288,7 @@ export function TripProvider({
         const res = await fetch("/api/route", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ from, to, constraints }),
+          body: JSON.stringify({ from, to, constraints, simulatedOut: trip.simulatedOut }),
         });
         const body = (await res.json()) as {
           routes?: Route[];
@@ -281,7 +301,7 @@ export function TripProvider({
         return { routes: body.routes, fetchedAt: body.fetchedAt };
       },
     }),
-    [run],
+    [run, trip.simulatedOut],
   );
 
   /* The rider's and the companion's agents read the same endpoints. The only
@@ -303,6 +323,7 @@ export function TripProvider({
               serving: `SIMULATED (demo control, not the MTA feed): ${o.serving}`,
               ada: true,
               outageDate: o.outageStart,
+              simulated: true,
             })),
             ...real.outages,
           ],
@@ -317,6 +338,7 @@ export function TripProvider({
       role,
       actions,
       readers,
+      companionKey,
       live,
       outages,
       simulated,
@@ -328,7 +350,7 @@ export function TripProvider({
       error,
     }),
     [
-      trip, role, actions, readers, live, outages, simulated, simulate,
+      trip, role, actions, readers, companionKey, live, outages, simulated, simulate,
       clearSimulated, demo, tripStream, liveStream, error,
     ],
   );

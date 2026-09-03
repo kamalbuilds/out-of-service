@@ -70,11 +70,27 @@ export function CreateTrip({ stations }: { stations: StationSummary[] }) {
               constraints: { wheelchair, stroller, avoidEscalators, maxTransfers },
             }),
           });
-          const body = (await res.json()) as { trip?: Trip; error?: string };
-          if (!res.ok || !body.trip) {
+          const body = (await res.json()) as {
+            trip?: Trip;
+            riderUrl?: string;
+            companionKey?: string;
+            error?: string;
+          };
+          if (!res.ok || !body.trip || !body.riderUrl) {
             throw new Error(body.error ?? `The server returned HTTP ${res.status}.`);
           }
-          router.push(`/t/${body.trip.id}`);
+          // The companion key is handed to the creator exactly once, in this
+          // response. Remembered locally so CompanionLink can still build a
+          // working companion URL after the redirect; never re-sent to the
+          // server and never present in any later GET, SSE frame, or tool result.
+          if (body.companionKey) {
+            try {
+              sessionStorage.setItem(`oos:companionKey:${body.trip.id}`, body.companionKey);
+            } catch {
+              /* storage unavailable: CompanionLink falls back to "not available" */
+            }
+          }
+          router.push(body.riderUrl);
         } catch (err) {
           setError((err as Error).message);
           setBusy(false);

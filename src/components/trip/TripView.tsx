@@ -73,6 +73,7 @@ export function TripView() {
     role,
     actions,
     readers,
+    companionKey,
     live,
     outages,
     simulated,
@@ -304,19 +305,7 @@ export function TripView() {
                           type="button"
                           variant="danger"
                           disabled={busy !== null}
-                          onClick={() =>
-                            guard(`no-${p.id}`, () =>
-                              fetch(`/api/trip/${trip.id}/action`, {
-                                method: "POST",
-                                headers: { "Content-Type": "application/json" },
-                                body: JSON.stringify({
-                                  type: "accept_reroute",
-                                  role,
-                                  payload: { proposalId: p.id, decision: "reject" },
-                                }),
-                              }),
-                            )
-                          }
+                          onClick={() => guard(`no-${p.id}`, () => actions.rejectReroute(p.id))}
                           data-testid={`reject-proposal-${p.id}`}
                         >
                           Reject
@@ -328,7 +317,7 @@ export function TripView() {
               )}
             </div>
 
-            {role === "rider" ? <CompanionLink tripId={trip.id} /> : null}
+            {role === "rider" ? <CompanionLink tripId={trip.id} companionKey={companionKey} /> : null}
           </section>
 
           {/* -------------------------------- board -------------------------------- */}
@@ -460,15 +449,31 @@ export function TripView() {
 
             {role === "rider" ? <ReportForm actions={actions} /> : null}
 
-            <WebMCPTools role={role} trip={trip} actions={actions} readers={readers} reportForm={false} />
+            <WebMCPTools
+              role={role}
+              trip={trip}
+              actions={actions}
+              readers={readers}
+              companionKey={companionKey}
+              reportForm={false}
+            />
 
-            {demo ? (
+            {demo && role !== "rider" ? (
+              <Panel title="demo control · ?demo=1" tone="sim">
+                <p className="px-3 py-2.5 text-[0.75rem] leading-snug text-ink-soft">
+                  The rider&rsquo;s window controls the simulated outage; this window sees it the
+                  moment they set it, over the same trip stream as everything else.
+                </p>
+              </Panel>
+            ) : null}
+
+            {demo && role === "rider" ? (
               <Panel title="demo control · ?demo=1" tone="sim">
                 <div className="flex flex-col gap-2.5 px-3 py-2.5">
                   <p className="text-[0.75rem] leading-snug text-ink-soft">
-                    Forces one equipment code out in this browser session only. It is labelled
-                    SIMULATED here and in every tool result, is never written to the trip, and never
-                    reaches the index or the MTA feed.
+                    Forces one equipment code out for both windows on this trip. It is trip state,
+                    shared over the same SSE stream as everything else, labelled SIMULATED
+                    everywhere it appears, and never reaches the index or the MTA feed.
                   </p>
                   <div className="flex flex-wrap gap-2">
                     <select
@@ -485,11 +490,21 @@ export function TripView() {
                         </option>
                       ))}
                     </select>
-                    <Button type="button" onClick={() => simulate(simCode)} disabled={!simCode} data-testid="sim-go">
+                    <Button
+                      type="button"
+                      onClick={() => guard("sim-go", () => simulate(simCode))}
+                      disabled={!simCode || busy !== null}
+                      data-testid="sim-go"
+                    >
                       Simulate Outage
                     </Button>
                     {simulated.length > 0 ? (
-                      <Button type="button" variant="danger" onClick={clearSimulated}>
+                      <Button
+                        type="button"
+                        variant="danger"
+                        disabled={busy !== null}
+                        onClick={() => guard("sim-clear", clearSimulated)}
+                      >
                         Clear {simulated.length}
                       </Button>
                     ) : null}
