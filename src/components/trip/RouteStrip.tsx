@@ -21,6 +21,27 @@ function riskColour(route: Route, broken: boolean): string {
   return "var(--color-tier-unknown)";
 }
 
+const ISO = /\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d+)?Z/g;
+
+/**
+ * The scorer writes its explanation with raw ISO instants. Nobody reads a Z-suffixed
+ * timestamp on a platform. Rewrite them in New York time, fixed to that zone so the
+ * server and the browser render the same string and hydration stays quiet.
+ */
+function readableTimes(text: string): string {
+  return text.replace(ISO, (iso) => {
+    const d = new Date(iso);
+    if (Number.isNaN(d.getTime())) return iso;
+    return d.toLocaleString("en-US", {
+      timeZone: "America/New_York",
+      month: "short",
+      day: "numeric",
+      hour: "numeric",
+      minute: "2-digit",
+    });
+  });
+}
+
 function norm(s: string): string {
   return s.toLowerCase().replace(/[^a-z0-9]/g, "");
 }
@@ -56,6 +77,7 @@ export function RouteStrip({
   simulatedOut,
   actions,
   compact,
+  lowestRisk,
 }: {
   route: Route;
   accepted?: boolean;
@@ -64,6 +86,8 @@ export function RouteStrip({
   actions?: ReactNode;
   /** Inside a proposal card, where the header is already stated above. */
   compact?: boolean;
+  /** The best-scoring candidate on this trip, so the three do not read as equals. */
+  lowestRisk?: boolean;
 }) {
   const sim = simulatedOut ?? new Set<string>();
   const brokenNow = route.broken || route.elevators.some((e) => sim.has(e.code));
@@ -72,53 +96,59 @@ export function RouteStrip({
 
   return (
     <article
-      className={`border ${accepted ? "border-ink bg-ink text-paper" : "border-hair-strong bg-paper"}`}
+      className={`border border-l-4 ${accepted ? "border-ink bg-ink text-paper" : "border-hair-strong bg-paper"}`}
+      style={{ borderLeftColor: accepted ? "var(--color-paper)" : riskColour(route, brokenNow) }}
       aria-label={`Route ${route.id}, ${route.riskLabel}${brokenNow ? ", elevator out" : ""}`}
       data-testid={`route-${route.id}`}
     >
       {compact ? null : (
-        <header className="flex items-stretch border-b border-current/25">
-          <div
-            aria-hidden
-            className="w-1.5 shrink-0"
-            style={{ backgroundColor: accepted ? "var(--color-paper)" : riskColour(route, brokenNow) }}
-          />
-          <div className="flex flex-1 flex-wrap items-baseline justify-between gap-x-5 gap-y-1 px-3 py-2">
-            <div className="flex items-baseline gap-2.5">
-              <span className="plate text-[1.25rem] uppercase">{route.id}</span>
-              {accepted ? (
-                <span className="border border-paper px-1.5 py-px text-[0.625rem] font-semibold uppercase tracking-[0.13em]">
-                  accepted
-                </span>
-              ) : null}
-              {brokenNow ? (
-                <span
-                  className="px-1.5 py-px text-[0.625rem] font-semibold uppercase tracking-[0.13em] text-paper"
-                  style={{ backgroundColor: "var(--color-tier-out)" }}
-                >
-                  {route.broken ? "elevator out" : "simulated outage"}
-                </span>
-              ) : null}
-            </div>
-            <div className="flex items-baseline gap-4 text-[0.75rem]">
-              <span className={accepted ? "text-paper/75" : "text-ink-soft"}>
-                <span className="num text-[1rem] font-semibold text-current">{route.transfers}</span>{" "}
-                transfer{route.transfers === 1 ? "" : "s"}
+        <header className="flex flex-wrap items-baseline justify-between gap-x-5 gap-y-1.5 border-b border-current/25 px-3 py-2.5">
+          <div className="flex flex-wrap items-baseline gap-x-2.5 gap-y-1.5">
+            <span
+              className="num text-[1.75rem] font-semibold leading-none"
+              style={accepted ? undefined : { color: riskColour(route, brokenNow) }}
+            >
+              {route.riskScore.toFixed(0)}
+            </span>
+            <span
+              className="text-[0.875rem] font-semibold"
+              style={accepted ? undefined : { color: riskColour(route, brokenNow) }}
+            >
+              {route.riskLabel}
+            </span>
+            {accepted ? (
+              <span className="border border-paper px-1.5 py-px text-[0.625rem] font-semibold uppercase tracking-[0.13em]">
+                accepted
               </span>
-              <span className={accepted ? "text-paper/75" : "text-ink-soft"}>
-                risk{" "}
-                <span className="num text-[1rem] font-semibold text-current">
-                  {route.riskScore.toFixed(0)}
-                </span>{" "}
-                {route.riskLabel}
+            ) : null}
+            {brokenNow ? (
+              <span
+                className="px-1.5 py-px text-[0.625rem] font-semibold uppercase tracking-[0.13em] text-paper"
+                style={{ backgroundColor: "var(--color-tier-out)" }}
+              >
+                {route.broken ? "elevator out" : "simulated outage"}
               </span>
-            </div>
+            ) : null}
+            {lowestRisk && !accepted && !brokenNow ? (
+              <span className="border border-hair-strong px-1.5 py-px text-[0.625rem] font-semibold uppercase tracking-[0.13em] text-ink-soft">
+                lowest risk here
+              </span>
+            ) : null}
+          </div>
+          <div className={`code num text-[0.6875rem] ${accepted ? "text-paper/60" : "text-ink-subtle"}`}>
+            {route.transfers} transfer{route.transfers === 1 ? "" : "s"} · {route.id}
           </div>
         </header>
       )}
 
       {/* The line itself: origin, the trains you ride, the stations you change at. */}
-      <ol className={`flex flex-wrap items-center gap-x-2.5 gap-y-2 px-3 py-3 ${brokenNow && !accepted ? "hatched" : ""}`}>
+      {/* Hatching the line itself says "this line is closed". Hatching the whole
+          panel says nothing once every candidate is broken, which is common. */}
+      <ol
+        className={`flex flex-wrap items-center gap-x-2.5 gap-y-2 px-3 py-3 ${
+          brokenNow && !accepted ? "hatched" : ""
+        }`}
+      >
         {route.legs.map((leg, i) => (
           <li key={`${leg.line}-${leg.fromStop}-${i}`} className="flex items-center gap-2.5">
             {i === 0 ? <span className="plate text-[0.9375rem]">{leg.fromName}</span> : null}
@@ -189,7 +219,7 @@ export function RouteStrip({
             accepted ? "text-paper/85" : "text-ink-soft"
           }`}
         >
-          {route.explanation}
+          {readableTimes(route.explanation)}
         </p>
       ) : null}
 

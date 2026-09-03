@@ -92,6 +92,12 @@ export function TripView() {
   const simulatedCodes = useMemo(() => new Set(simulated.map((o) => o.equipmentCode)), [simulated]);
 
   const accepted = trip.candidates.find((r) => r.id === trip.acceptedRouteId) ?? null;
+  const bestId = useMemo(() => {
+    if (trip.candidates.length < 2) return null;
+    const usable = trip.candidates.filter((r) => !r.broken);
+    const pool = usable.length > 0 ? usable : trip.candidates;
+    return pool.reduce((a, b) => (b.riskScore < a.riskScore ? b : a)).id;
+  }, [trip.candidates]);
   const pending = trip.proposals.filter((p) => p.status === "pending");
 
   const routeCodes = useMemo(() => {
@@ -157,7 +163,7 @@ export function TripView() {
         <div className="border-b border-ink bg-ink text-paper" data-testid="role-banner">
           <div className="mx-auto flex w-full max-w-[1360px] flex-wrap items-baseline justify-between gap-x-8 gap-y-2 px-4 py-4 sm:px-8">
             <div>
-              <p className="plate text-[1.5rem] sm:text-[1.875rem]">Companion view</p>
+              <h1 className="plate text-[1.5rem] sm:text-[1.875rem]">Companion view</h1>
               <p className="plate mt-1 text-[1.0625rem] text-paper/80">{routeLine}</p>
             </div>
             <p className="max-w-sm text-[0.8125rem] leading-snug text-paper/75">
@@ -254,6 +260,7 @@ export function TripView() {
                     route={r}
                     accepted={r.id === trip.acceptedRouteId}
                     simulatedOut={simulatedCodes}
+                    lowestRisk={r.id === bestId}
                     actions={proposeActions(r)}
                   />
                 ))

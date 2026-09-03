@@ -118,7 +118,7 @@ body {
   background-image: repeating-linear-gradient(
     -45deg,
     transparent 0 7px,
-    color-mix(in srgb, var(--color-ink) 12%, transparent) 7px 9px
+    color-mix(in srgb, var(--color-tier-out) 22%, transparent) 7px 9px
   );
 }
 
