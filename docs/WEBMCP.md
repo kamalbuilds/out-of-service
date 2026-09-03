@@ -221,6 +221,24 @@ returned (first 300 chars, a string):
 {"stations":[{"id":"636","name":"Jay St-Metro Tech","gtfsStopIds":["A41","R29"],"lines":["A","C","F","R"],"elevatorCount":4,"worstTier":"unreliable","ada":true,"complexId":"636","stopIds":["A41","R29"],"outNow":0}],"count":1,"source":{"dataset":"MTA elevator/escalator equipment index (data/index.jso
 ```
 
+A real mutation through the browser, on the same build: `executeTool(add_note, ...)` put the
+confirmation card on the page (`AGENT WANTS TO ACT / Add this note to the trip? / ...`), the call
+stayed pending until a human pressed Confirm, and the note then appeared on the shared trip
+timeline server-side (`GET /api/trip/<id>` shows `"text":"Confirm gate proof from the qa
+profile"`). The in-page tool log recorded `ok add_note 9412ms`: nine of those seconds were the
+human deciding.
+
+**Dated finding on Chrome pre-153 unregistration.** That first run also exposed a real bug, now
+fixed. The mutation bumps `trip.version`, which re-registers the tool set, which aborts the
+previous generation's `AbortController`, which in Chrome before 153 **cancels the in-flight
+execution**: the note landed, but the agent got
+`UnknownError: The operation failed for an unknown transient reason` instead of the result.
+`whenToolsIdle()` in `log.ts` counts executing calls, and the effect cleanup in `<WebMCPTools>`
+waits for zero in-flight calls (5s cap) before aborting. Generations are serialized through a
+promise chain so the new set only registers after the old one is gone, which also avoids
+duplicate-name `InvalidStateError`. Chrome 153+ decouples the two natively; this keeps 149-152
+correct.
+
 **Dated finding on webmcp#278.** The spec IDL types `executeTool`'s second argument as
 `optional object inputObject`. In this Chrome build it is a JSON **string**: passing the plain
 object `{query:'Jay St',limit:2}` throws `UnknownError: Failed to parse input arguments`, and
