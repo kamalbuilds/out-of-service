@@ -47,6 +47,42 @@ function preview(value: unknown, max = 240): string {
   return text.length > max ? `${text.slice(0, max)}...` : text;
 }
 
+let inFlight = 0;
+const idleWaiters: Array<() => void> = [];
+
+/** How many tool calls are executing right now. */
+export function inFlightCount(): number {
+  return inFlight;
+}
+
+/**
+ * Resolves when no tool call is executing, or after `timeoutMs`.
+ *
+ * Aborting a registration cancels in-flight executions in Chrome before 153, so a mutation that
+ * bumps trip.version would re-register the tool set and kill its own return value: the human
+ * confirms, the mutation lands, and the agent gets UnknownError instead of the result. Chrome 153
+ * decoupled the two; on older builds this is how we get the same behaviour.
+ */
+export function whenToolsIdle(timeoutMs = 5000): Promise<void> {
+  if (inFlight === 0) return Promise.resolve();
+  return new Promise((resolve) => {
+    let settled = false;
+    const done = () => {
+      if (settled) return;
+      settled = true;
+      clearTimeout(timer);
+      resolve();
+    };
+    const timer = setTimeout(done, timeoutMs);
+    idleWaiters.push(done);
+  });
+}
+
+function releaseIfIdle() {
+  if (inFlight > 0) return;
+  while (idleWaiters.length) idleWaiters.shift()!();
+}
+
 function push(entry: ToolLogEntry) {
   entries = [entry, ...entries].slice(0, MAX);
   emit();
@@ -62,6 +98,7 @@ export function withToolLog<
   const wrapped = async (input: Record<string, unknown>, options?: { signal?: AbortSignal }) => {
     const startedAt = Date.now();
     const id = ++seq;
+    inFlight += 1;
     try {
       const result = await execute(input, options);
       push({
@@ -85,6 +122,9 @@ export function withToolLog<
         error: error instanceof Error ? error.message : String(error),
       });
       throw error;
+    } finally {
+      inFlight -= 1;
+      releaseIfIdle();
     }
   };
   return wrapped as T;

@@ -9,7 +9,7 @@ import { registerTools } from "./register";
 import { toolsForRole } from "./tools";
 import { ToolRejectedError } from "./confirm";
 import type { Route, Trip, TripActions, TripReaders } from "./contracts";
-import { resetToolLog } from "./log";
+import { resetToolLog, whenToolsIdle, inFlightCount, withToolLog } from "./log";
 
 type ModelContextForTest = {
   registerTool: (tool: never, options?: { signal?: AbortSignal }) => Promise<void>;
@@ -295,6 +295,29 @@ describe("confirm-before-mutate", () => {
     );
     session.controller.abort();
     await new Promise((r) => setTimeout(r, 0));
+  });
+});
+
+describe("in-flight calls hold off the next generation", () => {
+  it("whenToolsIdle waits for a running tool call and then resolves", async () => {
+    let release!: () => void;
+    const slow = withToolLog(
+      "slow_tool",
+      () => new Promise<string>((resolve) => (release = () => resolve("done")))
+    );
+    const call = slow({});
+    expect(inFlightCount()).toBe(1);
+
+    let idle = false;
+    void whenToolsIdle(1000).then(() => (idle = true));
+    await new Promise((r) => setTimeout(r, 20));
+    expect(idle).toBe(false);
+
+    release();
+    await call;
+    await new Promise((r) => setTimeout(r, 0));
+    expect(inFlightCount()).toBe(0);
+    expect(idle).toBe(true);
   });
 });
 

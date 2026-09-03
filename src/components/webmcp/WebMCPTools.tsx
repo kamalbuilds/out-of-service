@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState, useSyncExternalStore } from "react";
 import type { Role, Trip, TripActions, TripReaders } from "@/lib/webmcp/contracts";
 import { toolsForRole } from "@/lib/webmcp/tools";
-import { subscribeToolLog, getToolLog, type ToolLogEntry } from "@/lib/webmcp/log";
+import { subscribeToolLog, getToolLog, whenToolsIdle, type ToolLogEntry } from "@/lib/webmcp/log";
 import { registerTools, type RegisteredInfo, type RegistrationTarget } from "@/lib/webmcp/register";
 import { ensureModelContext, type WebMcpLayer } from "@/lib/webmcp/runtime";
 import { ConfirmCard } from "@/components/webmcp/ConfirmCard";
@@ -36,6 +36,12 @@ export type WebMCPToolsProps = {
 };
 
 const EMPTY_LOG: ToolLogEntry[] = [];
+
+/**
+ * Generations are serialized: a generation only registers after the previous one has finished
+ * unregistering, otherwise the two overlap and the browser rejects the duplicate names.
+ */
+let generationChain: Promise<void> = Promise.resolve();
 
 export function WebMCPTools({
   role,
@@ -96,17 +102,25 @@ export function WebMCPTools({
       readers: readersRef.current,
     });
 
-    (async () => {
+    generationChain = generationChain.then(async () => {
+      if (controller.signal.aborted) return;
       const done = await registerTools(context, defs, controller.signal, (name, error) =>
         console.error(`[webmcp] could not register ${name}:`, error)
       );
       if (controller.signal.aborted) return;
       setRegistered(done);
       setGeneration((g) => g + 1);
-    })();
+    });
 
-    // Aborting the signal is the only way to unregister: there is no unregisterTool().
-    return () => controller.abort();
+    // Aborting the signal is the only way to unregister: there is no unregisterTool(). Wait for
+    // in-flight calls first, or a mutation that changes trip.version unregisters the very tool
+    // that is still waiting to hand its result back.
+    return () => {
+      generationChain = generationChain.then(async () => {
+        await whenToolsIdle();
+        controller.abort();
+      });
+    };
   }, [context, role, tripId, version, pendingCount, brokenKey]);
 
   // Mirror what the browser itself reports, so the panel shows declarative form tools too.
