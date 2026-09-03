@@ -4,6 +4,9 @@ NYC subway routing for wheelchair users, where every route is scored on the real
 of the elevators it depends on, and a rider and a companion each get their own agent on the same
 page with different tools.
 
+Demo video (2:39): https://youtu.be/Ui_1FORk94w
+
+
 Live: https://out-of-service-sepia.vercel.app
 Repo: https://github.com/kamalbuilds/out-of-service (MIT)
 Built for The WebMCP Challenge.
