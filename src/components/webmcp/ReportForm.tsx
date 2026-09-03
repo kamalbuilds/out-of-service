@@ -58,7 +58,7 @@ export function ReportForm({ actions }: { actions: TripActions }) {
     <form
       toolname={TOOL_NAME}
       tooldescription={TOOL_DESCRIPTION}
-      className={`${styles.toolForm} ${agentFilled ? styles.agentFilled : ""} p-3`}
+      className={`${styles.toolForm} ${agentFilled ? styles.agentFilled : ""} p-4`}
       onSubmit={(event) => {
         const native = event.nativeEvent as SubmitEvent;
         event.preventDefault();
@@ -82,48 +82,48 @@ export function ReportForm({ actions }: { actions: TripActions }) {
         else void done.catch(() => undefined);
       }}
     >
-      <h2 className="font-mono text-xs uppercase tracking-[0.2em]">Report broken equipment</h2>
+      <h2 className="colhead">Report broken equipment</h2>
 
-      <label className="mt-2 block text-sm font-bold">
+      <label className="mt-3 block text-[0.8125rem] font-semibold">
         Equipment code
         <input
           name="equipment"
           required
           toolparamdescription='The MTA equipment code of the elevator or escalator, e.g. "EL240". station_status lists the codes for a station.'
           placeholder="EL240"
-          className="mt-1 block w-full border-2 border-black px-2 py-2 font-mono text-base"
+          className="code mt-1 block w-full rounded-control border border-hair-strong bg-paper px-2.5 py-2 text-[0.9375rem] font-normal focus:border-accent"
         />
       </label>
 
-      <label className="mt-2 block text-sm font-bold">
+      <label className="mt-3 block text-[0.8125rem] font-semibold">
         What happened
         <textarea
           name="description"
           required
           rows={2}
           toolparamdescription="What the rider actually saw, in their own words, e.g. 'doors will not close, out of service sign taped to it'."
-          className="mt-1 block w-full border-2 border-black px-2 py-2 text-base"
+          className="mt-1 block w-full rounded-control border border-hair-strong bg-paper px-2.5 py-2 text-[0.9375rem] font-normal focus:border-accent"
         />
       </label>
 
-      <label className="mt-2 block text-sm font-bold">
+      <label className="mt-3 block text-[0.8125rem] font-semibold">
         When
         <input
           name="when"
           toolparamdescription='Roughly when it happened, e.g. "just now" or "about 10 minutes ago".'
           placeholder="just now"
-          className="mt-1 block w-full border-2 border-black px-2 py-2 text-base"
+          className="mt-1 block w-full rounded-control border border-hair-strong bg-paper px-2.5 py-2 text-[0.9375rem] font-normal focus:border-accent"
         />
       </label>
 
       <button
         type="submit"
-        className={`${styles.submit} mt-3 w-full bg-black px-4 py-3 text-lg font-bold uppercase tracking-wide text-white`}
+        className={`${styles.submit} mt-4 w-full rounded-control bg-accent px-4 py-2.5 text-[0.9375rem] font-semibold text-paper transition-transform duration-150 active:scale-[0.97]`}
       >
         Send report
       </button>
 
-      {status && <p className="mt-2 font-mono text-xs">{status}</p>}
+      {status && <p className="code mt-2 text-[0.6875rem]" aria-live="polite">{status}</p>}
     </form>
   );
 }

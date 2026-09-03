@@ -70,7 +70,7 @@ export function CreateTripForm({
     <form
       toolname={TOOL_NAME}
       tooldescription={TOOL_DESCRIPTION}
-      className={`${styles.toolForm} ${agentFilled ? styles.agentFilled : ""} p-3`}
+      className={`${styles.toolForm} ${agentFilled ? styles.agentFilled : ""} p-4`}
       onSubmit={(event) => {
         const native = event.nativeEvent as SubmitEvent;
         event.preventDefault();
@@ -92,52 +92,52 @@ export function CreateTripForm({
         else void done.catch(() => undefined);
       }}
     >
-      <h2 className="font-mono text-xs uppercase tracking-[0.2em]">Plan an accessible trip</h2>
+      <h2 className="colhead">Plan an accessible trip</h2>
 
-      <label className="mt-2 block text-sm font-bold">
+      <label className="mt-3 block text-[0.8125rem] font-semibold">
         From
         <input
           name="from"
           required
           toolparamdescription='Origin station name or complex id, e.g. "Jay St-MetroTech". Use list_accessible_stations to resolve a spoken name first.'
           placeholder="Jay St-MetroTech"
-          className="mt-1 block w-full border-2 border-black px-2 py-2 text-base"
+          className="mt-1 block w-full rounded-control border border-hair-strong bg-paper px-2.5 py-2 text-[0.9375rem] font-normal focus:border-accent"
         />
       </label>
 
-      <label className="mt-2 block text-sm font-bold">
+      <label className="mt-3 block text-[0.8125rem] font-semibold">
         To
         <input
           name="to"
           required
           toolparamdescription='Destination station name or complex id, e.g. "14 St-Union Sq".'
           placeholder="14 St-Union Sq"
-          className="mt-1 block w-full border-2 border-black px-2 py-2 text-base"
+          className="mt-1 block w-full rounded-control border border-hair-strong bg-paper px-2.5 py-2 text-[0.9375rem] font-normal focus:border-accent"
         />
       </label>
 
-      <fieldset className="mt-3 border-2 border-black p-2">
-        <legend className="px-1 font-mono text-xs uppercase tracking-wide">Constraints</legend>
-        <label className="flex items-center gap-2 text-sm font-bold">
+      <fieldset className="mt-3 border border-hair-strong p-2.5">
+        <legend className="colhead px-1">Constraints</legend>
+        <label className="flex items-center gap-2 text-[0.8125rem] font-medium">
           <input
             type="checkbox"
             name="wheelchair"
             defaultChecked
             toolparamdescription="Check when the rider needs a fully step-free path, elevators only."
-            className="h-5 w-5 accent-black"
+            className="h-4 w-4 accent-accent"
           />
           Step-free the whole way
         </label>
-        <label className="mt-1 flex items-center gap-2 text-sm font-bold">
+        <label className="mt-2 flex items-center gap-2 text-[0.8125rem] font-medium">
           <input
             type="checkbox"
             name="avoidEscalators"
             toolparamdescription="Check when escalators are not an acceptable substitute for an elevator."
-            className="h-5 w-5 accent-black"
+            className="h-4 w-4 accent-accent"
           />
           No escalators
         </label>
-        <label className="mt-2 block text-sm font-bold">
+        <label className="mt-3 block text-[0.8125rem] font-semibold">
           Most transfers
           <input
             type="number"
@@ -146,19 +146,19 @@ export function CreateTripForm({
             max={4}
             defaultValue={2}
             toolparamdescription="The most transfers the rider will accept, 0 to 4."
-            className="mt-1 block w-24 border-2 border-black px-2 py-1 font-mono text-base"
+            className="num mt-1 block w-24 rounded-control border border-hair-strong bg-paper px-2 py-1.5 text-[0.9375rem] font-normal focus:border-accent"
           />
         </label>
       </fieldset>
 
       <button
         type="submit"
-        className={`${styles.submit} mt-3 w-full bg-black px-4 py-3 text-lg font-bold uppercase tracking-wide text-white`}
+        className={`${styles.submit} mt-4 w-full rounded-control bg-accent px-4 py-2.5 text-[0.9375rem] font-semibold text-paper transition-transform duration-150 active:scale-[0.97]`}
       >
         Create trip
       </button>
 
-      {status && <p className="mt-2 font-mono text-xs">{status}</p>}
+      {status && <p className="code mt-2 text-[0.6875rem]" aria-live="polite">{status}</p>}
     </form>
   );
 }

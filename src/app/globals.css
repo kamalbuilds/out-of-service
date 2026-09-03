@@ -1,30 +1,57 @@
 @import "tailwindcss";
 
 /*
- * Transit signage. Helvetica, black on white, one accent per meaning.
- * Colour is never decoration here: it is the tier of an elevator or the
- * line bullet of a train. No gradients, no shadows, no rounded cards.
+ * Out of Service reads as transit signage on paper, not as a dashboard.
+ * Every colour here is a meaning: a subway line, an elevator reliability tier,
+ * or the fact that something is out. Nothing is decoration.
+ *
+ * Tokens live in one @theme block. Components reference the semantic name
+ * (bg-paper, text-ink, border-hair, text-tier-unreliable), never a raw hex.
  */
 
 @theme {
-  --font-sans: "Helvetica Neue", Helvetica, Arial, "Liberation Sans", sans-serif;
+  /* Type. next/font binds the real families on <html>; see the html rule below. */
+  --font-sans: ui-sans-serif, system-ui, "Helvetica Neue", Arial, sans-serif;
   --font-mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
 
-  --color-ink: #000000;
-  --color-paper: #ffffff;
-  --color-rule: #000000;
-  --color-muted: #58595b;
-  --color-hair: #d5d5d5;
+  /* Surface: warm off-white MTA card stock, near-black ink. Never #fff, never #000. */
+  --color-paper: #f2efe9;
+  --color-paper-sunk: #e8e4db;
+  --color-paper-raised: #f8f6f2;
+  --color-ink: #0a0a0a;
+  --color-ink-soft: #55524c;
+  --color-hair: #d3cec3;
+  --color-hair-strong: #b0aa9c;
 
-  --color-tier-reliable: #00873d;
-  --color-tier-watch: #b45309;
-  --color-tier-unreliable: #c4271a;
-  --color-tier-unknown: #58595b;
+  /* One accent: MTA signage blue. Interactive only, never body text. */
+  --color-accent: #0039a6;
+  --color-accent-ink: #002a7a;
+
+  /* Reliability tiers, all AA on the surface (docs/DESIGN.md contrast table). */
+  --color-tier-reliable: #0c6b3d;
+  --color-tier-watch: #8a5a00;
+  --color-tier-unreliable: #a6360f;
+  --color-tier-out: #7a1010;
+  --color-tier-unknown: #55524c;
+
+  /* A simulated outage is never mistaken for a real one. */
   --color-sim: #6c2bd9;
+
+  /* Square corners on panels and chips; 2px only on things you type in or press. */
+  --radius-plate: 0px;
+  --radius-control: 2px;
 }
 
+/*
+ * next/font defines --font-archivo / --font-plex-mono on the element carrying its
+ * className, which is <html>. Binding --font-sans here rather than in :root is the
+ * difference between Archivo and a silent serif fallback.
+ */
 html {
+  --font-sans: var(--font-archivo), ui-sans-serif, system-ui, Arial, sans-serif;
+  --font-mono: var(--font-plex-mono), ui-monospace, Menlo, Consolas, monospace;
   -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
 }
 
 body {
@@ -34,32 +61,65 @@ body {
   font-synthesis-weight: none;
 }
 
-/* Signage type: tight, heavy, uppercase where it labels rather than reads. */
-.signage {
-  letter-spacing: -0.025em;
-  font-weight: 700;
-  line-height: 0.95;
+@layer base {
+  /* Every figure on this page is read against another figure. Line them up. */
+  .num {
+    font-variant-numeric: tabular-nums;
+    font-feature-settings: "tnum" 1;
+  }
+
+  /* Station names and route ids: the condensed, tight setting of a platform sign. */
+  .plate {
+    font-stretch: 88%;
+    letter-spacing: -0.02em;
+    font-weight: 650;
+    line-height: 1.02;
+  }
+
+  /* Equipment codes and times: a maintenance tag, not body copy. */
+  .code {
+    font-family: var(--font-mono);
+    font-variant-numeric: tabular-nums;
+    letter-spacing: 0.01em;
+  }
+
+  /* A column heading on a status board. Used sparingly, never stacked on an h2. */
+  .colhead {
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+    line-height: 1.2;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--color-ink-soft);
+  }
+
+  :where(a, button, input, select, textarea, summary, [tabindex]):focus-visible {
+    outline: 3px solid var(--color-accent);
+    outline-offset: 2px;
+  }
+
+  /* Native listbox styled as a departure board rather than an OS widget. */
+  select[size] option {
+    padding: 5px 8px;
+    color: var(--color-ink);
+  }
+  /* Only paint a selection when one exists: an empty picker must not look picked. */
+  select[size]:not([data-empty="true"]) option:checked {
+    background: var(--color-ink);
+    color: var(--color-paper);
+  }
 }
 
-.label {
-  font-size: 0.6875rem;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  font-weight: 700;
-  color: var(--color-muted);
+/* A route whose elevator is out is hatched like a closed entrance, not glowing red. */
+.hatched {
+  background-image: repeating-linear-gradient(
+    -45deg,
+    transparent 0 7px,
+    color-mix(in srgb, var(--color-ink) 12%, transparent) 7px 9px
+  );
 }
 
-.rule {
-  border-color: var(--color-ink);
-}
-
-/* Focus is a black box, visible on every control, never removed. */
-:where(a, button, input, select, summary, [tabindex]):focus-visible {
-  outline: 3px solid var(--color-ink);
-  outline-offset: 2px;
-}
-
-/* Provenance expander: a dotted underline you can click or tab to. */
+/* Provenance: a dotted value you can click or tab to for the query behind it. */
 .sourced > summary {
   cursor: help;
   list-style: none;

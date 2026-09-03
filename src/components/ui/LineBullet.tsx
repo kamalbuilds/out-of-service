@@ -1,4 +1,4 @@
-/** MTA route bullet: a filled circle carrying the line letter or number. */
+/** MTA route bullet: the real line colours, a filled circle carrying the letter. */
 const LINE_COLOURS: Record<string, string> = {
   "1": "#EE352E", "2": "#EE352E", "3": "#EE352E",
   "4": "#00933C", "5": "#00933C", "6": "#00933C",
@@ -13,12 +13,14 @@ const LINE_COLOURS: Record<string, string> = {
   SIR: "#0039A6",
 };
 
+/** The two lines the MTA sets in black, plus grey, which needs the ink letter too. */
 const DARK_TEXT = new Set(["N", "Q", "R", "W"]);
 
 const SIZES = {
-  sm: "h-5 w-5 text-[0.6875rem]",
-  md: "h-7 w-7 text-sm",
-  lg: "h-9 w-9 text-lg",
+  xs: "h-4.5 w-4.5 text-[0.625rem]",
+  sm: "h-5.5 w-5.5 text-[0.75rem]",
+  md: "h-7 w-7 text-[0.9375rem]",
+  lg: "h-9 w-9 text-[1.1875rem]",
 } as const;
 
 export function LineBullet({
@@ -29,12 +31,12 @@ export function LineBullet({
   size?: keyof typeof SIZES;
 }) {
   const key = line.trim().toUpperCase();
-  const bg = LINE_COLOURS[key] ?? "#000000";
-  const fg = DARK_TEXT.has(key) ? "#000000" : "#ffffff";
+  const bg = LINE_COLOURS[key] ?? "#14130f";
+  const fg = DARK_TEXT.has(key) ? "#14130f" : "#ffffff";
   return (
     <span
-      className={`inline-flex shrink-0 items-center justify-center rounded-full font-bold ${SIZES[size]}`}
-      style={{ backgroundColor: bg, color: fg }}
+      className={`inline-flex shrink-0 items-center justify-center rounded-full font-semibold leading-none ${SIZES[size]}`}
+      style={{ backgroundColor: bg, color: fg, fontStretch: "92%" }}
       aria-label={`${key} train`}
       title={`${key} train`}
     >
