@@ -90,3 +90,77 @@ project's security claims rather than just score them lower.
 ## 5. Total
 
 **16/20**
+
+## Re-score after fixes (14:50 UTC)
+
+Same rules as the first pass: repo read plus `npx vitest run`, `npx tsc --noEmit`, curl against
+the live deployment. No browser, 15-minute budget this time.
+
+### What I verified
+
+- `npx vitest run` → **9 files, 153 tests, 153 passed**, up from 118 in 5 files. The new file is
+  `src/lib/store/actions.test.ts`, and it tests the exact gap I found: missing key, a guessed key,
+  the rider key on a companion-only action, the companion key on a rider-only action, and retry
+  exhaustion returning a `409` with a message an agent can act on, all against the real store and
+  the real route handlers, not mocks of them.
+- `npx tsc --noEmit` → clean exit, zero errors.
+- `src/lib/store/actions.ts:50-58` (`roleForKey`) replaces `parseRole`: role is looked up from
+  `trip.riderKey` / `trip.companionKey`, not read off the request body. `applyAction`
+  (line 253-onward) calls `roleForKey(trip, key)` before `assertRole`, and 403s with `role === null`
+  when the presented key matches neither.
+- Created a trip live: `POST /api/trip {"from":"611","to":"318","constraints":{"wheelchair":true}}`
+  → `201`, id `kwpoe6v7ut`, `riderKey: "d2uW_W..."`, `companionKey: "J6Gb_C..."` in the response
+  envelope, but inside the embedded `trip` object itself both fields are already `""` — stripped
+  at the source, not redacted downstream.
+- No key at all:
+  ```
+  POST /api/trip/kwpoe6v7ut/action {"type":"accept_route","payload":{"routeId":"r_084d19bd"}}
+  -> 403 {"error":"This link's key does not match this trip. Use the rider or companion URL
+     exactly as it was shared; a guessed or edited key is not a valid credential."}
+  ```
+- Companion key on a rider-only action:
+  ```
+  POST .../action {"type":"accept_reroute","key":"J6Gb_...","payload":{"proposalId":"p_x"}}
+  -> 403 {"error":"Only the rider can accept reroute. ..."}
+  ```
+- Rider key on a companion-only action:
+  ```
+  POST .../action {"type":"propose_reroute","key":"d2uW_...","payload":{"routeId":"r_084d19bd","reason":"test"}}
+  -> 403 {"error":"Only the companion can propose reroute. ..."}
+  ```
+- `GET /api/trip/kwpoe6v7ut` → body has `"riderKey":"","companionKey":""`, neither actual key
+  string appears anywhere in the response bytes. `Cache-Control: private, no-store` on this route
+  — the exact header I flagged as `public` last time is gone; `src/lib/http.ts` now centralizes
+  `PRIVATE_NO_STORE` so both `/api/trip/:id` and the action route can't drift apart again.
+- The 404 miss I called out is fixed: `applyAction` now does
+  `if (!trip) throw new ActionError(..., 404)` (`src/lib/store/actions.ts:255`), and live:
+  `POST /api/trip/does-not-exist-xyz/action {...} -> 404 {"error":"No trip with id \"does-not-exist-xyz\"."}`.
+- Oversized note, sent straight to the HTTP layer, no browser: `POST .../action
+  {"type":"note","key":"<riderKey>","payload":{"text":"<600 A's>"}}` → `400 {"error":"note text is
+  600 characters, over the 500-character limit. Shorten it and try again."}` — a real validation
+  error, not the silent `.slice(0, 500)` truncation I'd have let through unnoticed before.
+- Concurrency: 70 concurrent POSTs to the same trip, `xargs -P 20` → `26x 200, 28x 409, 16x 429`
+  on a live run. The 409s are retry-exhaustion doing exactly what
+  `src/lib/store/actions.ts`'s trailing comment says it should: "a 409, an agent can re-`get_trip`
+  and retry, not a 500 that reads like the server is broken." No 500s anywhere in the burst.
+
+### Scores
+
+| Criterion | Score | Why |
+|---|---|---|
+| WebMCP Leverage | 5/5 | Unchanged from my first pass — the `generationChain` serialization in `WebMCPTools.tsx` was already the strongest part of this submission and the fix didn't touch it. |
+| Execution | 4/5 | The one gap that broke my confidence in the trust story — role as an unauthenticated string — is closed by a real capability token checked server-side, with tests that exercise the route handlers directly; still 4 and not 5 because the 429 path I forced returns no `Retry-After`-aware guidance beyond the header itself, and the `public` cache-control class of bug now has one canonical fix point (`src/lib/http.ts`) but I'd still want a lint rule stopping a future route from hand-rolling its own headers. |
+| Potential Impact | 4/5 | Unchanged: the routing problem and the demonstrated failure mode were never the weak point. |
+| Creativity & Ambition | 5/5 | Raised from 4: the role-separation idea now has a server-side implementation that matches its ambition — two capability tokens minted once, never re-derivable from a guess, is the actual mechanism a two-agent product needs, not just the shape of one. |
+
+**New total: 18/20**
+
+### Next thing that would move the score
+
+`src/app/api/trip/[id]/action/route.ts`: the two rate-limit checks (IP and trip) run sequentially
+before the body is parsed, which is correct, but both go to the same `checkRateLimit` call shape
+with no distinction between a read-adjacent action (`watch`, `note`) and a write that contends on
+`optimistic-concurrency` (`accept_route`, `accept_reroute`). Splitting the trip-scoped limit so
+`accept_reroute`/`accept_route` get a tighter ceiling than `note`/`watch` would make the 409-vs-429
+distinction under load legible to an agent deciding which action to retry first, and would be the
+next thing I'd pull up in DevTools if I had the browser budget for it.
