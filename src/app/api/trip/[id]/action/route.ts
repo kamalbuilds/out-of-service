@@ -1,5 +1,5 @@
 import { applyAction, ActionError, RoleError } from "@/lib/store/actions";
-import { parseRole } from "@/lib/adapters/input";
+import { stripKeys } from "@/lib/store";
 import type { TripActionType } from "@/lib/types";
 
 export const dynamic = "force-dynamic";
@@ -11,6 +11,7 @@ const TYPES: TripActionType[] = [
   "watch",
   "note",
   "report",
+  "simulate",
 ];
 
 export async function POST(request: Request, ctx: RouteContext<"/api/trip/[id]/action">) {
@@ -31,12 +32,15 @@ export async function POST(request: Request, ctx: RouteContext<"/api/trip/[id]/a
     );
   }
 
-  const role = parseRole(body.role);
+  // Role is never read from the body: it is derived, inside applyAction, from
+  // which capability key was presented. Any `role` field on the request is
+  // ignored so a caller cannot self-declare rider power.
+  const key = String(body.key ?? "").trim();
   const payload = (body.payload ?? {}) as Record<string, unknown>;
 
   try {
-    const trip = await applyAction(id, type, role, payload);
-    return Response.json({ trip });
+    const trip = await applyAction(id, type, key, payload);
+    return Response.json({ trip: stripKeys(trip) });
   } catch (err) {
     if (err instanceof RoleError) {
       return Response.json({ error: err.message }, { status: 403 });

@@ -2,7 +2,7 @@ import { findRoutes } from "@/lib/adapters/routes";
 import { liveSnapshotOrEmpty } from "@/lib/adapters/live";
 import { listStations, resolveStation } from "@/lib/adapters/stations";
 import { parseConstraints } from "@/lib/adapters/input";
-import { createTrip } from "@/lib/store";
+import { createTrip, stripKeys } from "@/lib/store";
 
 export const dynamic = "force-dynamic";
 
@@ -53,8 +53,19 @@ export async function POST(request: Request) {
       candidates,
     });
 
+    // The one-time exception: the creator's own response carries both capability
+    // keys and the two ready-to-share URLs. Every later read of this trip (GET,
+    // SSE, tool results) strips both keys.
     return Response.json(
-      { trip, companionUrl: `/t/${trip.id}?role=companion`, notes, source },
+      {
+        trip: stripKeys(trip),
+        riderKey: trip.riderKey,
+        companionKey: trip.companionKey,
+        riderUrl: `/t/${trip.id}?k=${trip.riderKey}`,
+        companionUrl: `/t/${trip.id}?k=${trip.companionKey}`,
+        notes,
+        source,
+      },
       { status: 201 },
     );
   } catch (err) {

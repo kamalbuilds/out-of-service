@@ -38,7 +38,35 @@ export async function POST(request: Request) {
 
     const constraints = parseConstraints(body.constraints);
     const live = await liveSnapshotOrEmpty();
-    const { routes, notes, source } = findRoutes(fromStation.id, toStation.id, constraints, live);
+    const simulatedOut = Array.isArray(body.simulatedOut)
+      ? (body.simulatedOut as unknown[]).map((c) => String(c).trim().toUpperCase()).filter(Boolean)
+      : [];
+    const liveWithSim =
+      simulatedOut.length === 0
+        ? live
+        : {
+            ...live,
+            outages: [
+              ...live.outages,
+              ...simulatedOut.map((equipmentCode) => ({
+                equipmentCode,
+                equipmentType: "EL",
+                station: "simulated",
+                lines: [],
+                serving: "SIMULATED (demo control, not the MTA feed)",
+                ada: true,
+                outageStart: new Date().toISOString(),
+                estimatedReturn: null,
+                reason: "SIMULATED (demo control, not the MTA feed)",
+                isUpcoming: false,
+                isMaintenance: false,
+                isCurrent: true,
+                hoursOut: 0,
+                simulated: true,
+              })),
+            ],
+          };
+    const { routes, notes, source } = findRoutes(fromStation.id, toStation.id, constraints, liveWithSim);
 
     return Response.json({
       from: fromStation,
