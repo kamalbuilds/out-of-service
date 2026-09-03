@@ -1,4 +1,8 @@
 import type { Proposal, Role, Route, TimelineEvent, Trip, TripActionType } from "@/lib/types";
+import { explainRoute, scoreRoute } from "@/lib/route";
+import { defaultIndex } from "@/lib/route/defaultIndex";
+import { liveSnapshotOrEmpty } from "@/lib/adapters/live";
+import { toRoutingOutages } from "@/lib/adapters/routes";
 import { getTrip, putTrip, StaleWriteError } from "./index";
 
 export class RoleError extends Error {
@@ -17,8 +21,21 @@ export class ActionError extends Error {
   }
 }
 
-const RIDER_ONLY: TripActionType[] = ["accept_route", "accept_reroute", "report"];
+const RIDER_ONLY: TripActionType[] = ["accept_route", "accept_reroute", "report", "simulate"];
 const COMPANION_ONLY: TripActionType[] = ["propose_reroute"];
+
+/**
+ * `role` is never a client-supplied label. It is derived from which of the trip's
+ * two capability tokens (`riderKey` / `companionKey`) the caller presented. A key
+ * that matches neither is not "companion by default" — it is not authenticated at
+ * all, so the caller gets no role and every gated action 403s.
+ */
+export function roleForKey(trip: Trip, key: string): Role | null {
+  if (!key) return null;
+  if (key === trip.riderKey) return "rider";
+  if (key === trip.companionKey) return "companion";
+  return null;
+}
 
 export function assertRole(type: TripActionType, role: Role): void {
   if (RIDER_ONLY.includes(type) && role !== "rider") {
@@ -167,22 +184,93 @@ function mutate(trip: Trip, type: TripActionType, role: Role, payload: Payload):
       );
       return next;
     }
+
+    case "simulate": {
+      const code = String(payload.code ?? "").trim().toUpperCase();
+      if (!code) throw new ActionError("simulate needs an equipment code, for example EL328.");
+      const on = payload.on !== false;
+      const already = next.simulatedOut.includes(code);
+      if (on && !already) {
+        next.simulatedOut = [...next.simulatedOut, code];
+        next.notes.push(event(role, "simulate", `SIMULATED outage on ${code} (demo control)`));
+      } else if (!on && already) {
+        next.simulatedOut = next.simulatedOut.filter((c) => c !== code);
+        next.notes.push(event(role, "simulate", `SIMULATED outage on ${code} cleared (demo control)`));
+      }
+      // Candidates are re-scored below, in applyAction, after the live feed is fetched.
+      return next;
+    }
   }
 }
 
-/** Apply one action with optimistic-concurrency retry. */
+/**
+ * Re-score every candidate against the live feed plus the trip's simulated outage
+ * codes, using the same `explainRoute` + `scoreRoute` pair `/api/route` uses. Legs,
+ * transfers and route id are untouched, so the accepted route and any proposal
+ * still resolve to the same id; only `elevators`, `riskScore`, `riskLabel`,
+ * `broken` and `explanation` are recomputed.
+ */
+export async function rescoreCandidates(trip: Trip): Promise<Route[]> {
+  const live = await liveSnapshotOrEmpty();
+  const outages = [
+    ...toRoutingOutages(live),
+    ...trip.simulatedOut.map((code) => ({ equipment: code, reason: "SIMULATED (demo control, not the MTA feed)" })),
+  ];
+  const index = defaultIndex();
+  return trip.candidates.map((route) => {
+    const dependencies = explainRoute(route);
+    const scored = scoreRoute(
+      { legs: route.legs, transfers: route.transfers, dependencies },
+      index,
+      outages,
+    );
+    return {
+      ...route,
+      elevators: scored.elevators,
+      riskScore: scored.riskScore,
+      riskLabel: scored.riskLabel,
+      broken: scored.broken,
+      explanation: scored.explanation,
+    };
+  });
+}
+
+/**
+ * Apply one action with optimistic-concurrency retry. `key` is the capability
+ * token from the caller's link; role is derived from it here, never taken from
+ * the request body. A key that matches neither `riderKey` nor `companionKey`
+ * 403s before any mutation runs.
+ *
+ * `simulate` additionally requires `payload.demo === true`: the shared demo
+ * control identifies itself so an agent cannot flip a fake outage onto a real
+ * trip just by holding the rider key.
+ */
 export async function applyAction(
   tripId: string,
   type: TripActionType,
-  role: Role,
+  key: string,
   payload: Payload = {},
 ): Promise<Trip> {
-  assertRole(type, role);
   let lastError: unknown;
   for (let attempt = 0; attempt < 4; attempt++) {
     const trip = await getTrip(tripId);
     if (!trip) throw new ActionError(`No trip with id "${tripId}".`);
-    const next = mutate(trip, type, role, payload);
+    const role = roleForKey(trip, key);
+    if (!role) {
+      throw new RoleError(
+        "This link's key does not match this trip. Use the rider or companion URL exactly as it was shared; a guessed or edited key is not a valid credential.",
+      );
+    }
+    assertRole(type, role);
+    if (type === "simulate" && payload.demo !== true) {
+      throw new RoleError(
+        "simulate is the ?demo=1 control only. Pass demo: true from the demo panel; it is not a normal rider action.",
+      );
+    }
+    let next = mutate(trip, type, role, payload);
+    if (type === "simulate") {
+      next = { ...next, candidates: await rescoreCandidates(next) };
+    }
     try {
       return await putTrip(next);
     } catch (err) {

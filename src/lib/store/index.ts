@@ -1,3 +1,4 @@
+import { randomBytes } from "node:crypto";
 import type {
   Constraints,
   Route,
@@ -67,6 +68,21 @@ export function newTripId(): string {
   return Array.from(bytes, (b) => alphabet[b % alphabet.length]).join("");
 }
 
+/**
+ * A per-link capability token, unguessable and unrelated to the trip id (which is
+ * visible in both the rider and companion URL and is not a secret). `role` is
+ * derived from which of these a caller presents; see `src/lib/store/actions.ts`.
+ */
+export function newCapabilityKey(): string {
+  return randomBytes(18).toString("base64url");
+}
+
+/** Strip both capability keys before a trip is ever serialised to GET, SSE, or a tool result. */
+export function stripKeys(trip: Trip): Trip {
+  const { riderKey: _riderKey, companionKey: _companionKey, ...rest } = trip;
+  return { ...rest, riderKey: "", companionKey: "" };
+}
+
 export async function createTrip(args: CreateTripArgs): Promise<Trip> {
   const now = new Date().toISOString();
   const seed: TimelineEvent = {
@@ -88,6 +104,9 @@ export async function createTrip(args: CreateTripArgs): Promise<Trip> {
     watch: [],
     notes: [seed],
     reports: [],
+    riderKey: newCapabilityKey(),
+    companionKey: newCapabilityKey(),
+    simulatedOut: [],
     version: 1,
   };
   return putTrip(trip);

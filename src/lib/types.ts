@@ -79,6 +79,16 @@ export type Trip = {
   watch: string[];
   notes: TimelineEvent[];
   reports: TripReport[];
+  /**
+   * Per-link capability tokens minted at creation. `role` is derived from which of
+   * these a caller presents; it is never trusted as a self-declared label. Stripped
+   * from every serialised trip (GET, SSE, tool results) except the one-time POST
+   * /api/trip response, which hands both to the creator.
+   */
+  riderKey: string;
+  companionKey: string;
+  /** Equipment codes forced out by the shared `?demo=1` control. Shared across both windows. */
+  simulatedOut: string[];
   version: number;
 };
 
@@ -88,11 +98,13 @@ export type TripActionType =
   | "propose_reroute"
   | "watch"
   | "note"
-  | "report";
+  | "report"
+  | "simulate";
 
 export type TripAction = {
   type: TripActionType;
-  role: Role;
+  /** The capability token from the caller's link. Role is derived from this, never trusted as a label. */
+  key: string;
   payload?: Record<string, unknown>;
 };
 
