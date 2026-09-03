@@ -18,9 +18,20 @@ vi.mock("@/lib/adapters/live", () => ({
   liveSnapshotOrEmpty: async () => EMPTY_LIVE,
 }));
 
+// `putTrip` is programmable so the retry-exhaustion test can force every attempt in
+// `applyAction`'s loop to collide, deterministically, without racing real concurrent writes.
+// Defaults to the real implementation; only the one test below overrides it, and restores it
+// immediately after.
+const { putTripMock } = vi.hoisted(() => ({ putTripMock: vi.fn() }));
+vi.mock("@/lib/store", async (importOriginal) => {
+  const actual = await importOriginal<typeof import("@/lib/store")>();
+  putTripMock.mockImplementation(actual.putTrip);
+  return { ...actual, putTrip: putTripMock };
+});
+
 import { findRoutes, explainRoute } from "@/lib/route";
-import { createTrip, getTrip as storeGetTrip } from "@/lib/store";
-import { applyAction, RoleError } from "@/lib/store/actions";
+import { createTrip, getTrip as storeGetTrip, StaleWriteError } from "@/lib/store";
+import { applyAction, ActionError, RoleError } from "@/lib/store/actions";
 import type { Trip } from "@/lib/types";
 import { GET as getTripRoute } from "@/app/api/trip/[id]/route";
 import { GET as streamRoute } from "@/app/api/trip/[id]/stream/route";
@@ -188,5 +199,128 @@ describe("both capability keys are stripped from every unauthenticated or model-
     const raw = JSON.stringify(result);
     expect(raw).not.toContain(trip.riderKey);
     expect(raw).not.toContain(trip.companionKey);
+  });
+});
+
+describe("free text over its length ceiling is rejected with 400, never silently truncated", () => {
+  it("a note over 500 characters: 400 with the actual and allowed length, nothing stored", async () => {
+    const trip = await buildTrip();
+    const text = "A".repeat(612);
+    await expect(
+      applyAction(trip.id, "note", trip.riderKey, { text }),
+    ).rejects.toMatchObject({ status: 400, message: expect.stringContaining("612") });
+    const after = await storeGetTrip(trip.id);
+    expect(after!.notes.some((n) => n.text.startsWith("AAAA"))).toBe(false);
+  });
+
+  it("a note at exactly 500 characters is accepted, in full, not truncated further", async () => {
+    const trip = await buildTrip();
+    const text = "B".repeat(500);
+    const after = await applyAction(trip.id, "note", trip.riderKey, { text });
+    expect(after.notes.at(-1)!.text).toBe(text);
+    expect(after.notes.at(-1)!.text).toHaveLength(500);
+  });
+
+  it("a report description over 1000 characters: 400, nothing stored", async () => {
+    const trip = await buildTrip();
+    const description = "C".repeat(1200);
+    await expect(
+      applyAction(trip.id, "report", trip.riderKey, { equipment: "EL228", description }),
+    ).rejects.toMatchObject({ status: 400, message: expect.stringContaining("1200") });
+    const after = await storeGetTrip(trip.id);
+    expect(after!.reports).toHaveLength(0);
+  });
+
+  it("a propose_reroute reason over 500 characters: 400", async () => {
+    const trip = await buildTrip();
+    await expect(
+      applyAction(trip.id, "propose_reroute", trip.companionKey, {
+        routeId: trip.candidates[0].id,
+        reason: "D".repeat(501),
+      }),
+    ).rejects.toMatchObject({ status: 400 });
+  });
+
+  it("an equipment code over 32 characters on report: 400", async () => {
+    const trip = await buildTrip();
+    await expect(
+      applyAction(trip.id, "report", trip.riderKey, {
+        equipment: "E".repeat(40),
+        description: "too long a code",
+      }),
+    ).rejects.toMatchObject({ status: 400 });
+  });
+});
+
+describe("status codes an agent can act on: 404 for an unknown trip, 409 for retry exhaustion", () => {
+  it("POST .../action against an unknown trip id: 404, not 400", async () => {
+    await expect(
+      applyAction("does-not-exist-at-all", "watch", "some-key", { code: "EL1" }),
+    ).rejects.toMatchObject({ status: 404 });
+  });
+
+  it("every optimistic-concurrency retry colliding: 409, not 500", async () => {
+    const trip = await buildTrip();
+    putTripMock.mockRejectedValue(new StaleWriteError(trip.id, trip.version, trip.version + 1));
+    try {
+      await expect(
+        applyAction(trip.id, "watch", trip.riderKey, { code: "EL1" }),
+      ).rejects.toMatchObject({ status: 409, name: "ActionError" });
+    } finally {
+      // Restore the passthrough so every later test in this file writes for real.
+      const actual = await vi.importActual<typeof import("@/lib/store")>("@/lib/store");
+      putTripMock.mockImplementation(actual.putTrip);
+    }
+  });
+});
+
+describe("GET /api/trip/[id] and the SSE stream spotlight free text the same way get_trip does", () => {
+  it("GET wraps notes[].text, reports[].description and proposals[].reason", async () => {
+    let trip = await buildTrip();
+    trip = await applyAction(trip.id, "note", trip.riderKey, { text: "call me when you land" });
+    trip = await applyAction(trip.id, "report", trip.riderKey, {
+      equipment: "EL228",
+      description: "door won't close",
+    });
+    trip = await applyAction(trip.id, "propose_reroute", trip.companionKey, {
+      routeId: trip.candidates[0].id,
+      reason: "the A is faster right now",
+    });
+
+    const res = await getTripRoute(new Request(`http://test/api/trip/${trip.id}`), {
+      params: Promise.resolve({ id: trip.id }),
+    } as never);
+    const body = (await res.json()) as { trip: Trip };
+    const humanNote = body.trip.notes.find((n) => n.kind === "note")!;
+    expect(humanNote.text).toBe("<untrusted-user-text>call me when you land</untrusted-user-text>");
+    expect(body.trip.reports[0]!.description).toBe(
+      "<untrusted-user-text>door won't close</untrusted-user-text>",
+    );
+    expect(body.trip.proposals[0]!.reason).toBe(
+      "<untrusted-user-text>the A is faster right now</untrusted-user-text>",
+    );
+    expect(res.headers.get("Cache-Control")).toBe("private, no-store");
+  });
+
+  it("the SSE stream's trip frame carries the same spotlighted text", async () => {
+    let trip = await buildTrip();
+    trip = await applyAction(trip.id, "note", trip.riderKey, { text: "spotlight me over sse" });
+    const controller = new AbortController();
+    const req = new Request(`http://test/api/trip/${trip.id}/stream`, { signal: controller.signal });
+    const res = await streamRoute(req, { params: Promise.resolve({ id: trip.id }) } as never);
+    const reader = res.body!.getReader();
+    const { value } = await reader.read();
+    const text = new TextDecoder().decode(value);
+    expect(text).toContain("<untrusted-user-text>spotlight me over sse</untrusted-user-text>");
+    controller.abort();
+    await reader.cancel().catch(() => undefined);
+  });
+
+  it("GET /api/trip/[id] on an unknown trip is still private, no-store", async () => {
+    const res = await getTripRoute(new Request("http://test/api/trip/does-not-exist"), {
+      params: Promise.resolve({ id: "does-not-exist" }),
+    } as never);
+    expect(res.status).toBe(404);
+    expect(res.headers.get("Cache-Control")).toBe("private, no-store");
   });
 });

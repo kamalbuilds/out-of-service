@@ -13,6 +13,25 @@ import {
 import type { Constraints, LiveOutage, LiveSnapshot, Role, Route, Trip } from "@/lib/types";
 import type { TripActions, TripReaders } from "@/lib/webmcp/contracts";
 import { defaultReaders } from "@/lib/webmcp/readers";
+import { unspotlight } from "@/lib/spotlight";
+
+/**
+ * The trip SSE stream spotlights free text the same way the `get_trip` tool does (see
+ * docs/WEBMCP.md's Security section), so any other reader of that endpoint gets the
+ * untrusted-content boundary. This page is a trusted first-party human reader, not a model, so
+ * it undoes the wrapping before the text ever reaches a component: a person should see their
+ * note, not `<untrusted-user-text>` markup around it. `initialTrip` (server-rendered, via plain
+ * `stripKeys`) never carried the wrapper in the first place; `unspotlight` is a no-op on text
+ * that isn't wrapped, so re-applying it here is safe either way.
+ */
+function unspotlightTrip(trip: Trip): Trip {
+  return {
+    ...trip,
+    notes: trip.notes.map((n) => ({ ...n, text: unspotlight(n.text) })),
+    reports: trip.reports.map((r) => ({ ...r, description: unspotlight(r.description) })),
+    proposals: trip.proposals.map((p) => ({ ...p, reason: unspotlight(p.reason) })),
+  };
+}
 
 export type SimulatedOutage = LiveOutage & { simulated: true };
 
@@ -90,7 +109,7 @@ export function TripProvider({
   const apply = useCallback((next: Trip) => {
     if (next.version < versionRef.current) return;
     versionRef.current = next.version;
-    setTrip(next);
+    setTrip(unspotlightTrip(next));
   }, []);
 
   /*

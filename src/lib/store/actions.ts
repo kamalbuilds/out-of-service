@@ -14,15 +14,35 @@ export class RoleError extends Error {
 }
 
 export class ActionError extends Error {
-  readonly status = 400;
-  constructor(message: string) {
+  readonly status: number;
+  constructor(message: string, status = 400) {
     super(message);
     this.name = "ActionError";
+    this.status = status;
   }
 }
 
 const RIDER_ONLY: TripActionType[] = ["accept_route", "accept_reroute", "report", "simulate"];
 const COMPANION_ONLY: TripActionType[] = ["propose_reroute"];
+
+/**
+ * Free-text ceilings. Crossing one is a 400 with the actual and allowed length in the message,
+ * not a silent `.slice()` that drops the tail of what someone typed with no signal it happened.
+ * Equipment codes and reasons are capped too: they are free text a caller controls just as much
+ * as a note is, even though they read like short codes in the common case.
+ */
+const NOTE_MAX = 500;
+const REPORT_DESCRIPTION_MAX = 1000;
+const REROUTE_REASON_MAX = 500;
+const EQUIPMENT_CODE_MAX = 32;
+
+function requireWithinLength(field: string, value: string, max: number): void {
+  if (value.length > max) {
+    throw new ActionError(
+      `${field} is ${value.length} characters, over the ${max}-character limit. Shorten it and try again.`,
+    );
+  }
+}
 
 /**
  * `role` is never a client-supplied label. It is derived from which of the trip's
@@ -98,6 +118,7 @@ function mutate(trip: Trip, type: TripActionType, role: Role, payload: Payload):
       }
       const reason = String(payload.reason ?? "").trim();
       if (!reason) throw new ActionError("propose_reroute needs a reason the rider can read.");
+      requireWithinLength("reason", reason, REROUTE_REASON_MAX);
       const proposal: Proposal = {
         id: id("p"),
         by: "companion",
@@ -153,6 +174,7 @@ function mutate(trip: Trip, type: TripActionType, role: Role, payload: Payload):
       if (codes.length === 0) {
         throw new ActionError("watch needs at least one equipment code, for example EL293.");
       }
+      for (const c of codes) requireWithinLength("watch code", c, EQUIPMENT_CODE_MAX);
       const added = codes.filter((c) => !next.watch.includes(c));
       next.watch = [...next.watch, ...added];
       next.notes.push(
@@ -162,17 +184,20 @@ function mutate(trip: Trip, type: TripActionType, role: Role, payload: Payload):
     }
 
     case "note": {
-      const text = String(payload.text ?? "").trim().slice(0, 500);
+      const text = String(payload.text ?? "").trim();
       if (!text) throw new ActionError("A note needs some text.");
+      requireWithinLength("note text", text, NOTE_MAX);
       next.notes.push(event(role, "note", text));
       return next;
     }
 
     case "report": {
       const equipment = String(payload.equipment ?? "").trim().toUpperCase();
-      const description = String(payload.description ?? "").trim().slice(0, 1000);
+      const description = String(payload.description ?? "").trim();
       if (!equipment) throw new ActionError("A report needs an equipment code, for example EL293.");
       if (!description) throw new ActionError("A report needs a description of what is wrong.");
+      requireWithinLength("equipment code", equipment, EQUIPMENT_CODE_MAX);
+      requireWithinLength("description", description, REPORT_DESCRIPTION_MAX);
       next.reports.push({
         id: id("rep"),
         equipment,
@@ -188,6 +213,7 @@ function mutate(trip: Trip, type: TripActionType, role: Role, payload: Payload):
     case "simulate": {
       const code = String(payload.code ?? "").trim().toUpperCase();
       if (!code) throw new ActionError("simulate needs an equipment code, for example EL328.");
+      requireWithinLength("equipment code", code, EQUIPMENT_CODE_MAX);
       const on = payload.on !== false;
       const already = next.simulatedOut.includes(code);
       if (on && !already) {
@@ -254,7 +280,7 @@ export async function applyAction(
   let lastError: unknown;
   for (let attempt = 0; attempt < 4; attempt++) {
     const trip = await getTrip(tripId);
-    if (!trip) throw new ActionError(`No trip with id "${tripId}".`);
+    if (!trip) throw new ActionError(`No trip with id "${tripId}".`, 404);
     const role = roleForKey(trip, key);
     if (!role) {
       throw new RoleError(
@@ -281,7 +307,12 @@ export async function applyAction(
       throw err;
     }
   }
-  throw lastError instanceof Error
-    ? lastError
-    : new Error("Could not write the trip after 4 attempts.");
+  // Every attempt hit a real write conflict (someone else's write won the race each time), not
+  // a bug in this request: that is a 409, an agent can re-`get_trip` and retry, not a 500 that
+  // reads like the server is broken.
+  const message =
+    lastError instanceof Error
+      ? lastError.message
+      : "Could not write the trip after 4 attempts: another write kept winning the race.";
+  throw new ActionError(message, 409);
 }

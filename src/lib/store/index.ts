@@ -6,6 +6,7 @@ import type {
   Trip,
 } from "@/lib/types";
 import { backend, type BackendName } from "./backend";
+import { spotlight } from "@/lib/spotlight";
 
 export class StaleWriteError extends Error {
   constructor(
@@ -81,6 +82,26 @@ export function newCapabilityKey(): string {
 export function stripKeys(trip: Trip): Trip {
   const { riderKey: _riderKey, companionKey: _companionKey, ...rest } = trip;
   return { ...rest, riderKey: "", companionKey: "" };
+}
+
+/**
+ * `stripKeys` plus the same spotlighting the `get_trip` WebMCP tool applies to free text
+ * (`src/lib/webmcp/tools.ts`): notes[].text, reports[].description and proposals[].reason are
+ * wrapped in `<untrusted-user-text>` before this trip leaves the server. Used by the plain REST
+ * reads (`GET /api/trip/:id`, the SSE stream) so a caller that talks to this origin over `fetch`
+ * instead of `document.modelContext` gets the identical untrusted-content boundary a tool call
+ * would have shown it, not the tool's markup stripped bare. Human-facing surfaces (the trip page
+ * itself, the one-time `POST /api/trip` response) use plain `stripKeys` instead, since a person
+ * reading their own page should not see the delimiter markup.
+ */
+export function stripKeysAndSpotlight(trip: Trip): Trip {
+  const stripped = stripKeys(trip);
+  return {
+    ...stripped,
+    notes: stripped.notes.map((n) => ({ ...n, text: spotlight(n.text) })),
+    reports: stripped.reports.map((r) => ({ ...r, description: spotlight(r.description) })),
+    proposals: stripped.proposals.map((p) => ({ ...p, reason: spotlight(p.reason) })),
+  };
 }
 
 export async function createTrip(args: CreateTripArgs): Promise<Trip> {

@@ -19,6 +19,9 @@ import type {
   WebMcpToolDef,
 } from "./contracts";
 import { confirm as defaultConfirm, type ConfirmRequest } from "./confirm";
+import { spotlight } from "@/lib/spotlight";
+
+export { spotlight };
 
 export type ConfirmFn = (request: ConfirmRequest) => Promise<void>;
 
@@ -79,16 +82,6 @@ const WRITE: { readOnlyHint: false; untrustedContentHint: false } = {
   readOnlyHint: false,
   untrustedContentHint: false,
 };
-
-/**
- * Spotlighting (https://arxiv.org/abs/2403.14720): free text typed by another human is
- * delimited before it reaches the model, and the tool that returns it is annotated
- * `untrustedContentHint: true`.
- */
-export function spotlight(text: string): string {
-  const safe = text.replace(/<\/?untrusted-user-text>/gi, "");
-  return `<untrusted-user-text>${safe}</untrusted-user-text>`;
-}
 
 function requireTrip(trip: Trip | null, toolName: string): Trip {
   if (!trip) {

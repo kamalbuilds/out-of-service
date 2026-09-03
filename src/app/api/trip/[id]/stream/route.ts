@@ -1,4 +1,4 @@
-import { getTrip, stripKeys } from "@/lib/store";
+import { getTrip, stripKeysAndSpotlight } from "@/lib/store";
 
 export const dynamic = "force-dynamic";
 
@@ -53,7 +53,7 @@ export async function GET(request: Request, ctx: RouteContext<"/api/trip/[id]/st
           }
           if (trip.version !== lastVersion) {
             lastVersion = trip.version;
-            send("trip", stripKeys(trip));
+            send("trip", stripKeysAndSpotlight(trip));
           } else {
             controller.enqueue(encoder.encode(`: keepalive v${trip.version}\n\n`));
           }
