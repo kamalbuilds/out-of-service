@@ -1,0 +1,1 @@
+Superseded — the single source of truth for this project's design tokens is [`/DESIGN.md`](../DESIGN.md) at the repo root; this file's research (aura.build scouting, the Vercel Web Interface Guidelines, mined typography/layout prose) has been merged into it.
