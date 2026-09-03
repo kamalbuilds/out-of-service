@@ -185,6 +185,22 @@ function memory(): StoreBackend {
 
 const globalBackend = globalThis as unknown as { __oosBackend?: StoreBackend };
 
+/**
+ * The same REST credential precedence `backend()` uses (Upstash first, then Vercel KV), exposed
+ * so `src/lib/store/ratelimit.ts` can issue its own INCR/EXPIRE commands against the identical
+ * store without duplicating env-var precedence or minting a second Trip-shaped backend.
+ */
+export function redisRestCredentials(): { url: string; token: string } | null {
+  const env = process.env;
+  if (env.UPSTASH_REDIS_REST_URL && env.UPSTASH_REDIS_REST_TOKEN) {
+    return { url: env.UPSTASH_REDIS_REST_URL, token: env.UPSTASH_REDIS_REST_TOKEN };
+  }
+  if (env.KV_REST_API_URL && env.KV_REST_API_TOKEN) {
+    return { url: env.KV_REST_API_URL, token: env.KV_REST_API_TOKEN };
+  }
+  return null;
+}
+
 export function backend(): StoreBackend {
   if (globalBackend.__oosBackend) return globalBackend.__oosBackend;
 

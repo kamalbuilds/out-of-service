@@ -3,10 +3,28 @@ import { liveSnapshotOrEmpty } from "@/lib/adapters/live";
 import { listStations, resolveStation } from "@/lib/adapters/stations";
 import { parseConstraints } from "@/lib/adapters/input";
 import { createTrip, stripKeys } from "@/lib/store";
+import { checkRateLimit, clientIp } from "@/lib/store/ratelimit";
+import { bodyTooLarge, tooLargeResponse, rateLimitedResponse, PRIVATE_NO_STORE } from "@/lib/http";
 
 export const dynamic = "force-dynamic";
 
+/** 60 trip creations per minute per caller IP. There is no trip id yet at this point, so this
+ * route only has the IP axis to rate-limit on; per-trip limiting starts at the action route. */
+const CREATE_RATE_LIMIT = 60;
+const CREATE_RATE_WINDOW_SECONDS = 60;
+
 export async function POST(request: Request) {
+  const ip = clientIp(request);
+  const verdict = await checkRateLimit(`ip:${ip}:trip-create`, CREATE_RATE_LIMIT, CREATE_RATE_WINDOW_SECONDS);
+  if (!verdict.allowed) {
+    return rateLimitedResponse(
+      verdict.retryAfterSeconds,
+      "Too many trips created from this address. Wait a moment and try again.",
+    );
+  }
+
+  if (bodyTooLarge(request)) return tooLargeResponse();
+
   let body: Record<string, unknown>;
   try {
     body = (await request.json()) as Record<string, unknown>;
@@ -66,7 +84,7 @@ export async function POST(request: Request) {
         notes,
         source,
       },
-      { status: 201 },
+      { status: 201, headers: PRIVATE_NO_STORE },
     );
   } catch (err) {
     return Response.json({ error: (err as Error).message }, { status: 503 });
