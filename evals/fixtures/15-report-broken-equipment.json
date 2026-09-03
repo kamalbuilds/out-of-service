@@ -1,0 +1,20 @@
+{
+  "name": "declarative report form, no autosubmit",
+  "role": "rider",
+  "page": "/t/:tripId",
+  "state": "Rider is standing in front of a dead elevator.",
+  "messages": [
+    { "role": "user", "content": "EL706 is dead, the doors won't close and there's an out of service sign on it. File that." }
+  ],
+  "expectedCall": [
+    {
+      "functionName": "report_broken_equipment",
+      "arguments": {
+        "equipment": "EL706",
+        "description": "The doors will not close and there is an out of service sign on it.",
+        "when": "just now"
+      }
+    }
+  ],
+  "notes": "Declarative form tool. A pass fills the three inputs and focuses Send report; nothing is filed until the rider presses it."
+}

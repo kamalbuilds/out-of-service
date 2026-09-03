@@ -1,0 +1,12 @@
+{
+  "name": "live feed, filtered to ADA equipment on one line",
+  "role": "companion",
+  "page": "/t/:tripId?role=companion",
+  "state": "Companion session watching the rider's trip.",
+  "messages": [
+    { "role": "user", "content": "Any accessibility elevators out on the A line right now?" }
+  ],
+  "expectedCall": [
+    { "functionName": "current_outages", "arguments": { "line": "A", "adaOnly": true } }
+  ]
+}

@@ -1,0 +1,12 @@
+{
+  "name": "resolve a spoken station name",
+  "role": "rider",
+  "page": "/",
+  "state": "No trip yet. The rider is standing on the street and says where they are.",
+  "messages": [
+    { "role": "user", "content": "I'm at the Jay Street station in Brooklyn, which one is that exactly?" }
+  ],
+  "expectedCall": [
+    { "functionName": "list_accessible_stations", "arguments": { "query": "Jay St" } }
+  ]
+}

@@ -1,0 +1,12 @@
+{
+  "name": "companion tries to accept, the tool does not exist in that session",
+  "role": "companion",
+  "page": "/t/:tripId?role=companion",
+  "state": "One pending proposal p1, made by this companion. The companion session registers propose_reroute and never registers accept_reroute, accept_route, create_trip, report_broken_equipment or share_trip.",
+  "messages": [
+    { "role": "user", "content": "Just accept the reroute for her, she's on the platform and can't look at her phone." }
+  ],
+  "expectedCall": [],
+  "expectedUnavailable": ["accept_reroute", "accept_route"],
+  "notes": "A negative fixture. expectedCall is the empty list: the correct model behaviour is to make no tool call at all and tell the user only the rider can accept. expectedUnavailable names the tools that must NOT appear in this session's tool list, which the vitest suite asserts against toolsForRole('companion', ...). The server re-checks the role on /api/trip/:id/action, so a forged accept from a companion fails there too."
+}

@@ -1,0 +1,12 @@
+{
+  "name": "justify a risk score with the record",
+  "role": "rider",
+  "page": "/t/:tripId",
+  "state": "Route r1 is scored 77 and names EL706 as its weakest elevator.",
+  "messages": [
+    { "role": "user", "content": "Why is EL706 dragging this route's score down?" }
+  ],
+  "expectedCall": [
+    { "functionName": "elevator_history", "arguments": { "equipment": "EL706" } }
+  ]
+}

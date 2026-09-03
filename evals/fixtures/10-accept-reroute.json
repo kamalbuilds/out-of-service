@@ -1,0 +1,12 @@
+{
+  "name": "rider accepts the companion's proposal",
+  "role": "rider",
+  "page": "/t/:tripId",
+  "state": "One pending proposal p1 from the companion; accept_reroute's description says so.",
+  "messages": [
+    { "role": "user", "content": "My friend says the elevator went out and sent a different way. Fine, take it." }
+  ],
+  "expectedCall": [
+    { "functionName": "accept_reroute", "arguments": { "proposalId": "p1" } }
+  ]
+}

@@ -1,0 +1,10 @@
+{
+  "name": "read the shared state before answering",
+  "role": "companion",
+  "page": "/t/:tripId?role=companion",
+  "state": "Companion has just opened the link and knows nothing about the trip yet.",
+  "messages": [
+    { "role": "user", "content": "What has she picked so far and has anything gone wrong?" }
+  ],
+  "expectedCall": [{ "functionName": "get_trip", "arguments": {} }]
+}

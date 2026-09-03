@@ -1,0 +1,12 @@
+{
+  "name": "leave a note on the shared timeline",
+  "role": "rider",
+  "page": "/t/:tripId",
+  "state": "Trip open, both windows watching the same trip.",
+  "messages": [
+    { "role": "user", "content": "Tell him the working elevator is the one behind the newsstand." }
+  ],
+  "expectedCall": [
+    { "functionName": "add_note", "arguments": { "text": "The working elevator is the one behind the newsstand." } }
+  ]
+}

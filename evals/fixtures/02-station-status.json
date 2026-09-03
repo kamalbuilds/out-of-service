@@ -1,0 +1,12 @@
+{
+  "name": "check one station before setting off",
+  "role": "rider",
+  "page": "/t/:tripId",
+  "state": "Trip open, route r1 accepted.",
+  "messages": [
+    { "role": "user", "content": "Are the elevators at Jay St-Metro Tech working right now?" }
+  ],
+  "expectedCall": [
+    { "functionName": "station_status", "arguments": { "station": "Jay St-Metro Tech" } }
+  ]
+}

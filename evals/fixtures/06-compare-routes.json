@@ -1,0 +1,15 @@
+{
+  "name": "side by side instead of re-searching",
+  "role": "rider",
+  "page": "/t/:tripId",
+  "state": "Trip has candidates r_1c991b1a, r_43544007 and r_f7dfdd57.",
+  "messages": [
+    { "role": "user", "content": "Which is safer, the one-seat R ride or the one with the transfer at Fulton St?" }
+  ],
+  "expectedCall": [
+    {
+      "functionName": "compare_routes",
+      "arguments": { "routeIds": ["r_1c991b1a", "r_f7dfdd57"] }
+    }
+  ]
+}

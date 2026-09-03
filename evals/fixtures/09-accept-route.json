@@ -1,0 +1,13 @@
+{
+  "name": "accept the initial route, gated by the confirm card",
+  "role": "rider",
+  "page": "/t/:tripId",
+  "state": "Three candidates, none accepted.",
+  "messages": [
+    { "role": "user", "content": "Take the one-seat R ride, r_1c991b1a." }
+  ],
+  "expectedCall": [
+    { "functionName": "accept_route", "arguments": { "routeId": "r_1c991b1a" } }
+  ],
+  "notes": "The call does not resolve until a human presses Confirm in the in-page card."
+}

@@ -1,0 +1,10 @@
+{
+  "name": "hand the companion their link",
+  "role": "rider",
+  "page": "/t/:tripId",
+  "state": "Trip open, no companion yet.",
+  "messages": [
+    { "role": "user", "content": "How do I get my brother onto this so he can help?" }
+  ],
+  "expectedCall": [{ "functionName": "share_trip", "arguments": {} }]
+}

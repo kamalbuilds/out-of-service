@@ -1,0 +1,16 @@
+{
+  "name": "do not accept a route that was never searched for",
+  "role": "rider",
+  "page": "/t/:tripId",
+  "state": "Trip open, candidates are stale after a live change; the accept_reroute description says the accepted route is broken.",
+  "messages": [
+    { "role": "user", "content": "Something changed, sort it out and put me on whatever works." }
+  ],
+  "expectedCall": [
+    {
+      "functionName": "route_accessible",
+      "arguments": { "from": "Jay St-Metro Tech", "to": "14 St-Union Sq" }
+    }
+  ],
+  "notes": "Ordering test, Chrome eval failure mode 2: the read must come before the mutation. Accepting first would be a fail even though accept_route exists in this session."
+}

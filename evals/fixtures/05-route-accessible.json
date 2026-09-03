@@ -1,0 +1,21 @@
+{
+  "name": "step-free search with constraints stated in words",
+  "role": "rider",
+  "page": "/t/:tripId",
+  "state": "Trip open. The rider changes their mind about escalators.",
+  "messages": [
+    { "role": "user", "content": "Find me a way from Jay St-Metro Tech to 14 St-Union Sq that is step free the whole way, no escalators, and at most one transfer." }
+  ],
+  "expectedCall": [
+    {
+      "functionName": "route_accessible",
+      "arguments": {
+        "from": "Jay St-Metro Tech",
+        "to": "14 St-Union Sq",
+        "wheelchair": true,
+        "avoidEscalators": true,
+        "maxTransfers": 1
+      }
+    }
+  ]
+}

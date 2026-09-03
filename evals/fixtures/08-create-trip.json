@@ -1,0 +1,21 @@
+{
+  "name": "declarative form tool fills, human submits",
+  "role": "rider",
+  "page": "/",
+  "state": "Home page. The create-trip form is registered as a declarative tool (no toolautosubmit).",
+  "messages": [
+    { "role": "user", "content": "Plan me a wheelchair trip from Jay St-Metro Tech to 14 St-Union Sq, two transfers max." }
+  ],
+  "expectedCall": [
+    {
+      "functionName": "create_trip",
+      "arguments": {
+        "from": "Jay St-Metro Tech",
+        "to": "14 St-Union Sq",
+        "wheelchair": true,
+        "maxTransfers": 2
+      }
+    }
+  ],
+  "notes": "Because the form has no toolautosubmit, a pass here means the fields were filled and the submit button focused. The trip is only created after the rider presses Create."
+}

@@ -1,0 +1,12 @@
+{
+  "name": "subscribe to the elevators that matter",
+  "role": "companion",
+  "page": "/t/:tripId?role=companion",
+  "state": "Accepted route depends on EL706 and EL709.",
+  "messages": [
+    { "role": "user", "content": "Keep an eye on both Jay St elevators for me, EL706 and EL709." }
+  ],
+  "expectedCall": [
+    { "functionName": "watch_equipment", "arguments": { "equipment": ["EL706", "EL709"] } }
+  ]
+}
