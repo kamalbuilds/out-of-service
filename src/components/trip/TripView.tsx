@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/Button";
 import { TierLegend } from "@/components/ui/ElevatorChip";
 import { SourceNote } from "@/components/ui/SourceNote";
 import { WebMCPTools } from "@/components/webmcp/WebMCPTools";
+import { ReportForm } from "@/components/webmcp/ReportForm";
 import type { LiveOutage, Route } from "@/lib/types";
 import { MTA_STATUS_URL } from "@/lib/adapters/sources";
 
@@ -54,8 +55,6 @@ export function TripView() {
   const [reason, setReason] = useState("");
   const [note, setNote] = useState("");
   const [simCode, setSimCode] = useState("");
-  const [reportCode, setReportCode] = useState("");
-  const [reportText, setReportText] = useState("");
 
   const simulatedCodes = useMemo(
     () => new Set(simulated.map((o) => o.equipmentCode)),
@@ -402,46 +401,7 @@ export function TripView() {
             </form>
           </div>
 
-          {role === "rider" ? (
-            <form
-              className="border-2 border-ink"
-              onSubmit={(ev) => {
-                ev.preventDefault();
-                if (!reportCode.trim() || !reportText.trim()) return;
-                const code = reportCode.trim();
-                const text = reportText.trim();
-                setReportCode("");
-                setReportText("");
-                void guard("report", () => actions.report(code, text));
-              }}
-            >
-              <div className="label border-b-2 border-ink px-3 py-1.5">
-                report broken equipment
-              </div>
-              <div className="flex flex-col gap-2 px-3 py-2">
-                <input
-                  value={reportCode}
-                  onChange={(e) => setReportCode(e.target.value)}
-                  placeholder="EL240"
-                  aria-label="Equipment code"
-                  className="border-2 border-ink px-2 py-1 text-sm font-mono"
-                  data-testid="report-code"
-                />
-                <textarea
-                  value={reportText}
-                  onChange={(e) => setReportText(e.target.value)}
-                  placeholder="What is wrong? This goes into the shared trip record, not to the MTA."
-                  aria-label="What is wrong"
-                  rows={2}
-                  className="border-2 border-ink px-2 py-1 text-sm"
-                  data-testid="report-text"
-                />
-                <Button type="submit" variant="solid" disabled={busy !== null}>
-                  submit report
-                </Button>
-              </div>
-            </form>
-          ) : null}
+          {role === "rider" ? <ReportForm actions={actions} /> : null}
 
           <WebMCPTools role={role} trip={trip} actions={actions} readers={readers} />
 
