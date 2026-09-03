@@ -119,7 +119,8 @@ beforeAll(async () => {
   installTestDom();
   const { initializeWebMCPPolyfill } = await import("@mcp-b/webmcp-polyfill");
   initializeWebMCPPolyfill();
-  mc = (document as Document & { modelContext?: unknown }).modelContext as ModelContextForTest;
+  mc = (document as Document & { modelContext?: unknown })
+    .modelContext as unknown as ModelContextForTest;
 });
 
 afterAll(async () => {

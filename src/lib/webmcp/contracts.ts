@@ -1,121 +1,53 @@
 /**
  * The interface the WebMCP tool layer needs from the rest of the app.
  *
- * `src/lib/types.ts` (UI agent) is the canonical home for the domain types. Until it lands,
- * they are declared here verbatim from docs/BUILD-SPEC.md "Shared types" so this layer
- * compiles and tests on its own. When types.ts exists, replace the block below with
- * `export type { ... } from "@/lib/types";` and nothing else in this file changes.
+ * Domain types come from `src/lib/types.ts` (UI agent, canonical). This file adds only what is
+ * specific to the tool layer: provenance wrappers, the reader/action interfaces the tools call,
+ * and the WebMCP tool descriptor shape.
  */
+import type { StationSummary as IndexStation } from "@/lib/types";
 
-export type Role = "rider" | "companion";
+export type {
+  Role,
+  Constraints,
+  Tier,
+  SourceRef,
+  ElevatorRef,
+  RouteLeg,
+  Route,
+  Proposal,
+  TimelineEvent,
+  TripReport,
+  Trip,
+  CreateTripInput,
+} from "@/lib/types";
 
-export type Constraints = {
-  wheelchair: boolean;
-  stroller?: boolean;
-  avoidEscalators: boolean;
-  maxTransfers: number;
-};
+import type { Constraints, Route, SourceRef, Trip, CreateTripInput, ElevatorRef } from "@/lib/types";
 
-export type Tier = "reliable" | "watch" | "unreliable" | "unknown";
-
-export type SourceRef = { dataset: string; query: string; rows: number };
-
-export type ElevatorRef = {
-  code: string;
-  station: string;
-  serving: string;
-  tier: Tier;
-  availability24m?: number;
-  unscheduled24m?: number;
-  entrapments24m?: number;
-  currentlyOut: boolean;
-  estimatedReturn?: string;
-  source?: SourceRef;
-};
-
-export type RouteLeg = {
-  line: string;
-  fromStop: string;
-  fromName: string;
-  toStop: string;
-  toName: string;
-  stops: number;
-};
-
-export type Route = {
-  id: string;
-  legs: RouteLeg[];
-  transfers: number;
-  elevators: ElevatorRef[];
-  riskScore: number;
-  riskLabel: string;
-  broken: boolean;
-  explanation: string;
-};
-
-export type Proposal = {
-  id: string;
-  by: Role;
-  route: Route;
-  reason: string;
-  createdAt: string;
-  status: "pending" | "accepted" | "rejected";
-};
-
-export type TimelineEvent = {
-  at: string;
-  by: Role | "system" | "agent";
-  kind: string;
-  text: string;
-};
-
-export type TripReport = { id: string; equipment: string; description: string; at: string };
-
-export type Trip = {
-  id: string;
-  createdAt: string;
-  from: string;
-  to: string;
-  fromName: string;
-  toName: string;
-  constraints: Constraints;
-  candidates: Route[];
-  acceptedRouteId?: string;
-  proposals: Proposal[];
-  watch: string[];
-  notes: TimelineEvent[];
-  reports: TripReport[];
-  version: number;
-};
-
-export type CreateTripInput = {
-  from: string;
-  to: string;
-  constraints: Constraints;
-};
-
-/** One row of the live MTA elevator/escalator outage feed. */
+/**
+ * The tool-facing projection of one live outage row. `LiveOutage` in @/lib/types is the full
+ * feed row; a model does not need eleven fields to answer "is this elevator out", and Chrome's
+ * guidance is to return the minimum a model needs (1.5K chars per tool output).
+ */
 export type Outage = {
   equipment: string;
   station: string;
   line?: string;
   serving?: string;
   reason?: string;
-  outageType?: string;
   ada?: boolean;
   outageDate?: string;
-  estimatedReturn?: string;
+  estimatedReturn?: string | null;
+  upcoming?: boolean;
 };
 
-export type StationSummary = {
+/** What `/api/stations` puts on the wire: the index row plus the tool-layer aliases. */
+export type StationSummary = IndexStation & {
   complexId: string;
-  name: string;
-  lines: string[];
-  stopIds?: string[];
-  elevatorCount: number;
-  worstTier: Tier;
+  stopIds: string[];
   outNow?: number;
 };
+
 
 /**
  * Provenance carried by every read. `source` names the dataset + the exact query that
@@ -146,6 +78,7 @@ export interface TripReaders {
     station?: string;
     line?: string;
     adaOnly?: boolean;
+    includeUpcoming?: boolean;
   }): Promise<Sourced<{ outages: Outage[] }>>;
 }
 

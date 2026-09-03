@@ -238,6 +238,9 @@ export function currentOutages(ctx: Ctx): WebMcpToolDef {
       station: str("Only outages at this station name or complex id."),
       line: str('Only outages on this line, e.g. "A".'),
       adaOnly: bool("When true, only equipment the MTA marks as ADA-required."),
+      includeUpcoming: bool(
+        "When true, also return scheduled/upcoming outages, not just what is out right now."
+      ),
     }),
     annotations: READ,
     execute: async (input) => {
@@ -245,6 +248,7 @@ export function currentOutages(ctx: Ctx): WebMcpToolDef {
         station: input.station as string | undefined,
         line: input.line as string | undefined,
         adaOnly: input.adaOnly as boolean | undefined,
+        includeUpcoming: input.includeUpcoming as boolean | undefined,
       });
       return {
         outages: out.outages,

@@ -7,7 +7,8 @@
  * through to the model. When an endpoint omits them, the tool result omits them too rather
  * than inventing a citation.
  */
-import type { ElevatorRef, Outage, SourceRef, StationSummary, TripReaders, Sourced } from "./contracts";
+import type { LiveOutage } from "@/lib/types";
+import type { ElevatorRef, Outage, SourceRef, StationSummary, TripReaders } from "./contracts";
 
 type ApiEnvelope = { source?: SourceRef; fetchedAt?: string };
 
@@ -22,9 +23,26 @@ async function getJson<T>(url: string): Promise<T & ApiEnvelope> {
   return (await res.json()) as T & ApiEnvelope;
 }
 
-function matchStation(row: { station?: string; complexId?: string; name?: string }, needle: string) {
+/** Project a full feed row down to what a model needs, keeping the words a human would say. */
+function toOutage(o: LiveOutage): Outage {
+  return {
+    equipment: o.equipmentCode,
+    station: o.station,
+    line: o.lines.join("/"),
+    serving: o.serving,
+    reason: o.reason,
+    ada: o.ada,
+    outageDate: o.outageStart,
+    estimatedReturn: o.estimatedReturn,
+    upcoming: o.isUpcoming,
+  };
+}
+
+function matchStation(row: LiveOutage, needle: string) {
   const n = needle.trim().toLowerCase();
-  return [row.station, row.complexId, row.name].some((v) => v && String(v).toLowerCase().includes(n));
+  return [row.station, row.stationComplexId, row.gtfsStopId].some(
+    (v) => v && String(v).toLowerCase().includes(n)
+  );
 }
 
 export function defaultReaders(): TripReaders {
@@ -46,7 +64,7 @@ export function defaultReaders(): TripReaders {
       const data = await getJson<{
         station: StationSummary;
         elevators: ElevatorRef[];
-        outages: Outage[];
+        outages: LiveOutage[];
       }>(`/api/stations?station=${encodeURIComponent(station)}`);
       if (!data.station) {
         throw new Error(
@@ -56,7 +74,7 @@ export function defaultReaders(): TripReaders {
       return {
         station: data.station,
         elevators: data.elevators ?? [],
-        outages: data.outages ?? [],
+        outages: (data.outages ?? []).map(toOutage),
         source: data.source,
         fetchedAt: data.fetchedAt,
       };
@@ -80,13 +98,27 @@ export function defaultReaders(): TripReaders {
       };
     },
 
-    async currentOutages({ station, line, adaOnly }) {
-      const data = await getJson<{ outages: Outage[] }>("/api/live");
-      let outages = data.outages ?? [];
-      if (station) outages = outages.filter((o) => matchStation(o, station));
-      if (line) outages = outages.filter((o) => (o.line ?? "").toUpperCase().includes(line.toUpperCase()));
-      if (adaOnly) outages = outages.filter((o) => o.ada === true);
-      return { outages, source: data.source, fetchedAt: data.fetchedAt } satisfies Sourced<{ outages: Outage[] }>;
+    async currentOutages({ station, line, adaOnly, includeUpcoming }) {
+      const data = await getJson<{ outages: LiveOutage[]; sourceUrl?: string; coverage?: number }>(
+        "/api/live"
+      );
+      let rows = data.outages ?? [];
+      if (!includeUpcoming) rows = rows.filter((o) => o.isCurrent);
+      if (station) rows = rows.filter((o) => matchStation(o, station));
+      if (line) {
+        const want = line.trim().toUpperCase();
+        rows = rows.filter((o) => o.lines.some((l) => l.toUpperCase() === want));
+      }
+      if (adaOnly) rows = rows.filter((o) => o.ada === true);
+      return {
+        outages: rows.map(toOutage),
+        source: data.source ?? {
+          dataset: "MTA elevator/escalator live outage feed",
+          query: data.sourceUrl ?? "/api/live",
+          rows: (data.outages ?? []).length,
+        },
+        fetchedAt: data.fetchedAt,
+      };
     },
   };
 }
