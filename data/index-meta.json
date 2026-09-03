@@ -1,0 +1,29 @@
+{
+  "build_timestamp": "2026-09-03T10:52:03.287Z",
+  "total_rows_pulled": 82385,
+  "distinct_equipment_code": 695,
+  "date_range": {
+    "min_month": "2015-01",
+    "max_month": "2026-07"
+  },
+  "sources": {
+    "historical": "https://data.ny.gov/resource/rc78-7x78.json",
+    "equipment_master": "https://api-endpoint.mta.info/Dataservice/mtagtfsfeeds/nyct%2Fnyct_ene_equipments.json",
+    "live_outages": "https://api-endpoint.mta.info/Dataservice/mtagtfsfeeds/nyct%2Fnyct_ene.json"
+  },
+  "equipment_master_rows": 704,
+  "live_outage_rows": 83,
+  "join_coverage": {
+    "live_outage_ids_present_in_index": {
+      "matched": 75,
+      "total": 75,
+      "share": 1
+    },
+    "equipment_master_ids_present_in_index": {
+      "matched": 691,
+      "total": 704,
+      "share": 0.9815340909090909
+    }
+  },
+  "index_entry_count": 695
+}

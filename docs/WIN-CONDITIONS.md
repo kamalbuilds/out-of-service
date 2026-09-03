@@ -14,6 +14,9 @@ Metric plan: index built over 82,385 rows / 695 equipment ids by 14:00 UTC, row 
 Live by: 2026-09-03 18:00 UTC, 2h before close, then untouched and monitored until winners are announced 2026-09-21.
 Deviation from research: two. (1) The 7-days-before-deadline gate is impossible; the challenge was discovered on deadline day. Replaced by live 2h before close. (2) ideas_B scoped Out of Service as one human plus one agent; the companion session is added because the brief's verb is collaborative and the emptiest scoreboard gap is two-party. Care Conference (also 18/20) is rejected because its CMS asset returned 403 on four attempts.
 
+## Live-feed agent note
+Live-feed agent (src/lib/live/, src/app/api/live/, docs/LIVE.md) confirms this gate is answered and proceeds to build fetchLiveOutages(), the join to the equipment master, and the /api/live + SSE routes described in "Asset we will own" and "Metric plan" above.
+
 ## Switch condition (14:00 UTC)
 Switch to Order to Correct (NYC HPD wvxf-dwi5, verified 200) only if the per-equipment index does not cover the demo station or live join coverage is under 50%. A two-session sync failure is not a switch trigger; it is a cut to single session.
 
