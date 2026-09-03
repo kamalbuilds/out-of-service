@@ -91,6 +91,23 @@ export function indexMeta(): {
   };
 }
 
+/**
+ * The predicate the home page's station-filter input (`StationPicker`) uses, extracted as a pure
+ * function so it is unit-testable without a browser. Guarded against a malformed station record
+ * (a missing/non-string `name`, a non-array `lines`, or a non-string line) throwing `TypeError:
+ * ... .toLowerCase is not a function` mid-keystroke: `listStations()` today always returns clean
+ * records, but nothing at the type level stops that from changing, and a bad row should be
+ * treated as "does not match" for that one station, not crash the filter for every station.
+ */
+export function stationMatchesQuery(station: StationSummary, query: string): boolean {
+  const q = query.trim().toLowerCase();
+  if (!q) return true;
+  const name = typeof station.name === "string" ? station.name.toLowerCase() : "";
+  if (name.includes(q)) return true;
+  const lines = Array.isArray(station.lines) ? station.lines : [];
+  return lines.some((l) => typeof l === "string" && l.toLowerCase() === q);
+}
+
 /** Name, complex id or GTFS stop id to a station, in that order of confidence. */
 export function resolveStation(query: string, stations = listStations()): StationSummary | null {
   const q = query.trim().toLowerCase();

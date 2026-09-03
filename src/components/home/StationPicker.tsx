@@ -2,6 +2,7 @@
 
 import { useId, useMemo, useState } from "react";
 import type { StationSummary } from "@/lib/types";
+import { stationMatchesQuery } from "@/lib/adapters/stations";
 import { LineBullets } from "@/components/ui/LineBullet";
 import { tierStyle } from "@/components/ui/ElevatorChip";
 
@@ -30,12 +31,7 @@ export function StationPicker({
   const listId = useId();
 
   const matches = useMemo(() => {
-    const q = query.trim().toLowerCase();
-    const rows = q
-      ? stations.filter(
-          (s) => s.name.toLowerCase().includes(q) || s.lines.some((l) => l.toLowerCase() === q),
-        )
-      : stations;
+    const rows = query.trim() ? stations.filter((s) => stationMatchesQuery(s, query)) : stations;
     return rows.slice(0, 60);
   }, [query, stations]);
 
