@@ -6,8 +6,6 @@ import type {
 } from "@/lib/types";
 import { backend, type BackendName } from "./backend";
 
-const PREFIX = "oos:trip:";
-
 export class StaleWriteError extends Error {
   constructor(
     readonly id: string,
@@ -33,13 +31,7 @@ export function storeBackendDetail(): string {
 
 export async function getTrip(id: string): Promise<Trip | null> {
   if (!id || !/^[A-Za-z0-9_-]{4,64}$/.test(id)) return null;
-  const raw = await backend().get(PREFIX + id);
-  if (!raw) return null;
-  try {
-    return JSON.parse(raw) as Trip;
-  } catch {
-    throw new Error(`Trip ${id} is stored but is not valid JSON.`);
-  }
+  return backend().read(id);
 }
 
 /**
@@ -52,7 +44,10 @@ export async function putTrip(trip: Trip): Promise<Trip> {
   if (trip.version !== storedVersion + 1) {
     throw new StaleWriteError(trip.id, storedVersion, trip.version);
   }
-  await backend().set(PREFIX + trip.id, JSON.stringify(trip));
+  const won = await backend().write(trip);
+  if (!won) {
+    throw new StaleWriteError(trip.id, trip.version, trip.version);
+  }
   return trip;
 }
 
@@ -99,6 +94,5 @@ export async function createTrip(args: CreateTripArgs): Promise<Trip> {
 }
 
 export async function listTripIds(): Promise<string[]> {
-  const keys = await backend().keys(PREFIX);
-  return keys.map((k) => k.slice(PREFIX.length));
+  return backend().listIds();
 }

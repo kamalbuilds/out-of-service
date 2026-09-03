@@ -1,18 +1,28 @@
 /**
- * Key/value backends for trip state. Chosen at runtime from env var NAMES only.
- * No values are ever logged. No new dependencies: every remote backend is
- * plain `fetch` against its documented REST API.
+ * Trip-state backends, chosen at runtime from env var NAMES only. No value is
+ * ever logged. No new dependencies: every remote backend is plain `fetch`
+ * against its documented REST API.
+ *
+ * Every backend is append-only and versioned. A trip version is written once,
+ * to its own key, and a write of a version that already exists fails instead
+ * of overwriting. That is the optimistic-concurrency check, and on Vercel Blob
+ * it also sidesteps the CDN: a version is a new immutable URL, so a read never
+ * sees a 60-second-stale copy of a pathname that was overwritten.
  */
+import type { Trip } from "@/lib/types";
 
 export type BackendName = "upstash-redis" | "vercel-kv" | "vercel-blob" | "memory";
 
 export interface StoreBackend {
   name: BackendName;
   detail: string;
-  get(key: string): Promise<string | null>;
-  set(key: string, value: string): Promise<void>;
-  keys(prefix: string): Promise<string[]>;
+  read(id: string): Promise<Trip | null>;
+  /** false means that version already exists: someone else wrote first. */
+  write(trip: Trip): Promise<boolean>;
+  listIds(): Promise<string[]>;
 }
+
+const pad = (v: number) => String(v).padStart(6, "0");
 
 /* ------------------------------------------------------------------ */
 /* Upstash / Vercel KV (identical REST protocol)                       */
@@ -23,96 +33,121 @@ function redisRest(name: BackendName, url: string, token: string): StoreBackend 
   async function cmd<T>(args: (string | number)[]): Promise<T> {
     const res = await fetch(base, {
       method: "POST",
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json",
-      },
+      headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" },
       body: JSON.stringify(args),
       cache: "no-store",
     });
     if (!res.ok) {
-      throw new Error(
-        `store: ${name} command ${String(args[0])} failed with HTTP ${res.status}`,
-      );
+      throw new Error(`store: ${name} ${String(args[0])} failed with HTTP ${res.status}`);
     }
     const json = (await res.json()) as { result?: T; error?: string };
     if (json.error) throw new Error(`store: ${name} error: ${json.error}`);
     return json.result as T;
   }
+  const key = (id: string, v: number) => `oos:trip:${id}:v${pad(v)}`;
+  const head = (id: string) => `oos:trip:${id}:head`;
+
   return {
     name,
-    detail: `${new URL(base).host} (REST)`,
-    async get(key) {
-      return (await cmd<string | null>(["GET", key])) ?? null;
+    detail: `${new URL(base).host} (REST, SET NX per version)`,
+    async read(id) {
+      const v = await cmd<string | null>(["GET", head(id)]);
+      if (!v) return null;
+      const raw = await cmd<string | null>(["GET", key(id, Number(v))]);
+      return raw ? (JSON.parse(raw) as Trip) : null;
     },
-    async set(key, value) {
-      await cmd(["SET", key, value]);
+    async write(trip) {
+      const ok = await cmd<string | null>([
+        "SET",
+        key(trip.id, trip.version),
+        JSON.stringify(trip),
+        "NX",
+      ]);
+      if (!ok) return false;
+      await cmd(["SET", head(trip.id), String(trip.version)]);
+      return true;
     },
-    async keys(prefix) {
-      return (await cmd<string[]>(["KEYS", `${prefix}*`])) ?? [];
+    async listIds() {
+      const keys = (await cmd<string[]>(["KEYS", "oos:trip:*:head"])) ?? [];
+      return keys.map((k) => k.slice("oos:trip:".length, -":head".length));
     },
   };
 }
 
 /* ------------------------------------------------------------------ */
-/* Vercel Blob                                                         */
+/* Vercel Blob: one immutable blob per trip version                    */
 /* ------------------------------------------------------------------ */
 
 const BLOB_API = "https://blob.vercel-storage.com";
 
-function vercelBlob(token: string): StoreBackend {
-  const urlCache = new Map<string, string>();
+type BlobRow = { pathname: string; url: string };
 
-  async function resolve(key: string): Promise<string | null> {
-    const cached = urlCache.get(key);
-    if (cached) return cached;
-    const res = await fetch(`${BLOB_API}/?prefix=${encodeURIComponent(key)}&limit=1`, {
-      headers: { Authorization: `Bearer ${token}`, "x-api-version": "7" },
+function vercelBlob(token: string): StoreBackend {
+  const auth = { Authorization: `Bearer ${token}`, "x-api-version": "7" };
+  // Per-instance memo so the 2s SSE poll costs one list() and no body fetch
+  // when nothing has changed.
+  const memo = new Map<string, { version: number; trip: Trip }>();
+
+  async function list(prefix: string): Promise<BlobRow[]> {
+    const res = await fetch(`${BLOB_API}/?prefix=${encodeURIComponent(prefix)}&limit=1000`, {
+      headers: auth,
       cache: "no-store",
     });
     if (!res.ok) throw new Error(`store: blob list failed with HTTP ${res.status}`);
-    const json = (await res.json()) as { blobs?: { pathname: string; url: string }[] };
-    const hit = json.blobs?.find((b) => b.pathname === key);
-    if (!hit) return null;
-    urlCache.set(key, hit.url);
-    return hit.url;
+    const json = (await res.json()) as { blobs?: BlobRow[] };
+    return json.blobs ?? [];
   }
+
+  const versionOf = (pathname: string) => Number(pathname.split("/").pop()?.replace(".json", ""));
 
   return {
     name: "vercel-blob",
-    detail: "blob.vercel-storage.com (REST, 60s edge cache on reads)",
-    async get(key) {
-      const url = await resolve(key);
-      if (!url) return null;
-      const res = await fetch(`${url}?v=${Date.now()}`, { cache: "no-store" });
-      if (res.status === 404) return null;
+    detail: "blob.vercel-storage.com (REST, immutable trips/<id>/<version>.json)",
+    async read(id) {
+      const rows = await list(`trips/${id}/`);
+      if (rows.length === 0) return null;
+      let best: BlobRow | null = null;
+      let bestVersion = -1;
+      for (const r of rows) {
+        const v = versionOf(r.pathname);
+        if (Number.isFinite(v) && v > bestVersion) {
+          bestVersion = v;
+          best = r;
+        }
+      }
+      if (!best) return null;
+      const cached = memo.get(id);
+      if (cached && cached.version === bestVersion) return cached.trip;
+      const res = await fetch(best.url, { cache: "no-store" });
       if (!res.ok) throw new Error(`store: blob get failed with HTTP ${res.status}`);
-      return await res.text();
+      const trip = (await res.json()) as Trip;
+      memo.set(id, { version: bestVersion, trip });
+      return trip;
     },
-    async set(key, value) {
-      const res = await fetch(`${BLOB_API}/${key}`, {
+    async write(trip) {
+      const pathname = `trips/${trip.id}/${pad(trip.version)}.json`;
+      const res = await fetch(`${BLOB_API}/${pathname}`, {
         method: "PUT",
         headers: {
-          Authorization: `Bearer ${token}`,
-          "x-api-version": "7",
+          ...auth,
           "x-content-type": "application/json",
           "x-add-random-suffix": "0",
-          "x-cache-control-max-age": "0",
+          "x-cache-control-max-age": "31536000",
         },
-        body: value,
+        body: JSON.stringify(trip),
       });
-      if (!res.ok) throw new Error(`store: blob put failed with HTTP ${res.status}`);
-      const json = (await res.json()) as { url?: string };
-      if (json.url) urlCache.set(key, json.url);
+      if (res.status === 409) return false;
+      if (!res.ok) {
+        const body = await res.text().catch(() => "");
+        if (/already exists/i.test(body)) return false;
+        throw new Error(`store: blob put failed with HTTP ${res.status}. ${body.slice(0, 200)}`);
+      }
+      memo.set(trip.id, { version: trip.version, trip });
+      return true;
     },
-    async keys(prefix) {
-      const res = await fetch(`${BLOB_API}/?prefix=${encodeURIComponent(prefix)}`, {
-        headers: { Authorization: `Bearer ${token}`, "x-api-version": "7" },
-        cache: "no-store",
-      });
-      if (!res.ok) throw new Error(`store: blob list failed with HTTP ${res.status}`);
-      const json = (await res.json()) as { blobs?: { pathname: string }[] };
-      return (json.blobs ?? []).map((b) => b.pathname);
+    async listIds() {
+      const rows = await list("trips/");
+      return [...new Set(rows.map((r) => r.pathname.split("/")[1]).filter(Boolean))];
     },
   };
 }
@@ -121,22 +156,25 @@ function vercelBlob(token: string): StoreBackend {
 /* In-memory (dev only)                                                */
 /* ------------------------------------------------------------------ */
 
-const globalMem = globalThis as unknown as { __oosMem?: Map<string, string> };
+const globalMem = globalThis as unknown as { __oosMem?: Map<string, Trip> };
 
 function memory(): StoreBackend {
-  globalMem.__oosMem ??= new Map<string, string>();
+  globalMem.__oosMem ??= new Map<string, Trip>();
   const map = globalMem.__oosMem;
   return {
     name: "memory",
     detail: "process-local Map, lost on restart, not shared between serverless instances",
-    async get(key) {
-      return map.get(key) ?? null;
+    async read(id) {
+      return map.get(id) ?? null;
     },
-    async set(key, value) {
-      map.set(key, value);
+    async write(trip) {
+      const existing = map.get(trip.id);
+      if (existing && existing.version >= trip.version) return false;
+      map.set(trip.id, trip);
+      return true;
     },
-    async keys(prefix) {
-      return [...map.keys()].filter((k) => k.startsWith(prefix));
+    async listIds() {
+      return [...map.keys()];
     },
   };
 }
@@ -154,11 +192,7 @@ export function backend(): StoreBackend {
   let chosen: StoreBackend;
 
   if (env.UPSTASH_REDIS_REST_URL && env.UPSTASH_REDIS_REST_TOKEN) {
-    chosen = redisRest(
-      "upstash-redis",
-      env.UPSTASH_REDIS_REST_URL,
-      env.UPSTASH_REDIS_REST_TOKEN,
-    );
+    chosen = redisRest("upstash-redis", env.UPSTASH_REDIS_REST_URL, env.UPSTASH_REDIS_REST_TOKEN);
   } else if (env.KV_REST_API_URL && env.KV_REST_API_TOKEN) {
     chosen = redisRest("vercel-kv", env.KV_REST_API_URL, env.KV_REST_API_TOKEN);
   } else if (env.BLOB_READ_WRITE_TOKEN) {
@@ -166,10 +200,10 @@ export function backend(): StoreBackend {
   } else {
     chosen = memory();
     console.warn(
-      "[out-of-service] STORE BACKEND = in-memory Map. Trip state is NOT shared " +
-        "between processes and is lost on restart. Set UPSTASH_REDIS_REST_URL + " +
-        "UPSTASH_REDIS_REST_TOKEN, or KV_REST_API_URL + KV_REST_API_TOKEN, or " +
-        "BLOB_READ_WRITE_TOKEN to use a real backend.",
+      "[out-of-service] STORE BACKEND = in-memory Map. Trip state is NOT shared between " +
+        "processes and is lost on restart. Set BLOB_READ_WRITE_TOKEN (production), or " +
+        "UPSTASH_REDIS_REST_URL + UPSTASH_REDIS_REST_TOKEN, or KV_REST_API_URL + " +
+        "KV_REST_API_TOKEN, to use a real backend.",
     );
   }
 

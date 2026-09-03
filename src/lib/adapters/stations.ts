@@ -11,7 +11,7 @@ import {
   scoreStation as rawScoreStation,
 } from "@/lib/index";
 import type { EquipmentIndexEntry, StationScore } from "@/lib/index/types";
-import type { StationSummary, Tier } from "@/lib/types";
+import type { ElevatorRef, StationSummary, Tier } from "@/lib/types";
 
 export function normaliseTier(raw: string | undefined): Tier {
   if (!raw) return "unknown";
@@ -98,4 +98,29 @@ export function resolveStation(query: string, stations = listStations()): Statio
     stations.find((s) => s.name.toLowerCase().includes(q)) ??
     null
   );
+}
+
+/** One index row as the `ElevatorRef` the UI renders and the tools return. */
+export function toElevatorRef(
+  e: EquipmentIndexEntry,
+  live?: { estimatedReturn: string | null; isCurrent: boolean },
+): ElevatorRef {
+  const m = e.metrics;
+  return {
+    code: e.equipment_code,
+    station: e.station,
+    serving: e.serving,
+    tier: normaliseTier(e.tier),
+    availability24m: m.availability_24h_mean_24m ?? undefined,
+    unscheduled24m: m.unscheduled_24m,
+    entrapments24m: m.entrapments_24m,
+    currentlyOut: live ? live.isCurrent : e.currently_out,
+    estimatedReturn:
+      live?.estimatedReturn ?? e.current_outage?.estimatedreturntoservice ?? undefined,
+    source: {
+      dataset: m.source.dataset,
+      query: m.source.query,
+      rows: m.source.rows,
+    },
+  };
 }

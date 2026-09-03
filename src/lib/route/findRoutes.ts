@@ -3,17 +3,31 @@ import { routeElevators, type ElevatorDependency, type LegPlan } from "./elevato
 import { Direction, getGraph, resolveNode, StationGraph, StationNode } from "./graph";
 import { EQUIPMENT_SOURCE } from "./equipment";
 import { scoreRoute, type LiveOutageLike, type RouteIndex } from "./score";
+import { defaultIndex } from "./defaultIndex";
 
 const TRANSFER_COST = 4;
 /** How many times one (station, line) state may be settled. Higher = more alternatives, slower. */
 const K_PER_STATE = 6;
 const MAX_CANDIDATES = 24;
 
+/**
+ * `index` defaults to `src/lib/index` (the reliability index). `live` accepts the
+ * raw outage array, a `LiveSnapshot` (`{ outages: [...] }`), or `deps.outages`,
+ * because the API adapter and the WebMCP tools pass different shapes.
+ */
 export type FindRoutesDeps = {
   graph?: StationGraph;
   index?: RouteIndex;
-  live?: LiveOutageLike[];
+  live?: LiveOutageLike[] | { outages?: LiveOutageLike[] } | null;
+  outages?: LiveOutageLike[] | null;
 };
+
+function toOutages(deps: FindRoutesDeps): LiveOutageLike[] {
+  if (Array.isArray(deps.outages)) return deps.outages;
+  if (Array.isArray(deps.live)) return deps.live;
+  const nested = deps.live && typeof deps.live === "object" ? (deps.live as { outages?: LiveOutageLike[] }).outages : null;
+  return Array.isArray(nested) ? nested : [];
+}
 
 export type RouteSearchResult = {
   from?: { id: string; name: string; lines: string[] };
@@ -41,6 +55,8 @@ export function findRoutes(
   deps: FindRoutesDeps = {},
 ): RouteSearchResult {
   const graph = deps.graph ?? getGraph();
+  const index = deps.index ?? defaultIndex();
+  const live = toOutages(deps);
   const maxTransfers = Number.isFinite(constraints.maxTransfers) ? Math.max(0, Number(constraints.maxTransfers)) : 3;
   const notes: string[] = [];
   const source = {
@@ -81,8 +97,8 @@ export function findRoutes(
     const dependencies = routeElevators(s.legs, graph);
     const result = scoreRoute(
       { legs: s.legs, transfers: s.transfers, dependencies, avoidEscalators: Boolean(constraints.avoidEscalators) },
-      deps.index,
-      deps.live ?? [],
+      index,
+      live,
     );
     const legs: RouteLeg[] = s.legs.map(({ direction: _direction, ...leg }) => leg);
     const route: Route = {

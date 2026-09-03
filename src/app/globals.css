@@ -1,26 +1,80 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+/*
+ * Transit signage. Helvetica, black on white, one accent per meaning.
+ * Colour is never decoration here: it is the tier of an elevator or the
+ * line bullet of a train. No gradients, no shadows, no rounded cards.
+ */
+
+@theme {
+  --font-sans: "Helvetica Neue", Helvetica, Arial, "Liberation Sans", sans-serif;
+  --font-mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+
+  --color-ink: #000000;
+  --color-paper: #ffffff;
+  --color-rule: #000000;
+  --color-muted: #58595b;
+  --color-hair: #d5d5d5;
+
+  --color-tier-reliable: #00873d;
+  --color-tier-watch: #b45309;
+  --color-tier-unreliable: #c4271a;
+  --color-tier-unknown: #58595b;
+  --color-sim: #6c2bd9;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html {
+  -webkit-font-smoothing: antialiased;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--color-paper);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  font-synthesis-weight: none;
+}
+
+/* Signage type: tight, heavy, uppercase where it labels rather than reads. */
+.signage {
+  letter-spacing: -0.025em;
+  font-weight: 700;
+  line-height: 0.95;
+}
+
+.label {
+  font-size: 0.6875rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  font-weight: 700;
+  color: var(--color-muted);
+}
+
+.rule {
+  border-color: var(--color-ink);
+}
+
+/* Focus is a black box, visible on every control, never removed. */
+:where(a, button, input, select, summary, [tabindex]):focus-visible {
+  outline: 3px solid var(--color-ink);
+  outline-offset: 2px;
+}
+
+/* Provenance expander: a dotted underline you can click or tab to. */
+.sourced > summary {
+  cursor: help;
+  list-style: none;
+  text-decoration: underline dotted from-font;
+  text-underline-offset: 3px;
+}
+.sourced > summary::-webkit-details-marker {
+  display: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
 }
