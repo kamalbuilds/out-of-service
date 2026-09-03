@@ -28,3 +28,11 @@ Data agent (scripts/, data/, src/lib/index/, docs/DATA.md) confirms this gate is
 
 ## Bootstrap agent note
 Bootstrap agent (git init, deps, LICENSE, GitHub repo, Vercel deploy, docs/BOOTSTRAP.md) confirms this gate is answered and proceeds with infra only, touching src/app/page.tsx (placeholder) and src/app/layout.tsx (metadata title) only.
+
+## Fix-agent note (post-judging, role-as-capability + shared simulation)
+Fix agent confirms this gate is answered and unchanged from the entry above. This pass does not
+change the entry, the asset, or the verb: it closes two judge-found gaps in the already-shipped
+two-session asymmetry (jude-gao 16/20, andrew-galloni 15/20) — role becomes a per-link capability
+token instead of a self-declared string, and the `?demo=1` simulated outage becomes trip state
+shared over the existing SSE stream instead of one tab's local React state. No new track, no new
+entry, no new asset.

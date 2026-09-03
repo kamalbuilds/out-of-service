@@ -7,11 +7,18 @@ Everything a person or an agent touches in this app, and how to check it still w
 | Route | What it is |
 |---|---|
 | `/` | Product name, one-line subtitle, the live ADA-outage strip, and the create-trip form with two searchable station pickers. Server-rendered from the index and the live feed on every request. |
-| `/t/[tripId]` | The shared trip. Two columns: trip on the left, live on the right. Role comes from `?role=`, default `rider`. |
+| `/t/[tripId]` | The shared trip. Two columns: trip on the left, live on the right. Role is derived from the `?k=` capability key, never from `?role=`. |
 | `/t/[tripId]` (not found) | A trip id that is not in the store returns 404 with a page that says so. |
+| `/t/[tripId]` (bad key) | A `?k=` that matches neither the trip's rider nor companion key renders "This link is not valid" with no trip data. |
 
-`?role=companion` switches the session to the companion. `?demo=1` adds the demo control.
-Nothing else is read from the query string.
+Every trip has two URLs, both minted once at creation and shown only there (and, for the
+companion link, again to the rider session that created it): the rider URL is
+`/t/<tripId>?k=<riderKey>`, the companion URL is `/t/<tripId>?k=<companionKey>`. The key is a
+capability, not a display setting: it is what the server checks before deciding which role's
+data and actions this session gets. `?role=` in the query string is a harmless display hint only
+now and decides nothing. `?demo=1` adds the demo control to a rider window; the simulated outage
+it sets is trip state (`trip.simulatedOut`), shared with the companion window over the same SSE
+stream, not local to one tab. Nothing else is read from the query string.
 
 ### `/` home
 
@@ -85,15 +92,21 @@ acting at once both land instead of one silently winning.
 
 ### Role enforcement
 
-| Action | rider | companion |
-|---|---|---|
-| `accept_route`, `accept_reroute`, `report` | yes | **403** |
-| `propose_reroute` | **403** | yes |
-| `watch`, `note` | yes | yes |
+`POST /api/trip/:id/action` takes `{type, key, payload}`. `key` is the capability token from the
+caller's URL (`riderKey` or `companionKey`); role is derived from which one matches, and any
+`role` field in the body is ignored. A key that matches neither 403s before the action type is
+even checked.
+
+| Action | rider key | companion key | no / wrong key |
+|---|---|---|---|
+| `accept_route`, `accept_reroute`, `report` | yes | **403** | **403** |
+| `propose_reroute` | **403** | yes | **403** |
+| `simulate` (needs `payload.demo === true` too) | yes | **403** | **403** |
+| `watch`, `note` | yes | yes | **403** |
 
 A 403 body is a sentence a model can act on, for example: *"Only the rider can accept route. You are
-the companion: propose a reroute instead and the rider confirms it."* Hiding a tool from a session is
-a UI affordance; this is the actual boundary.
+the companion: propose a reroute instead and the rider confirms it."* or *"This link's key does not
+match this trip."* Hiding a tool from a session is a UI affordance; the key is the actual boundary.
 
 Every accepted action appends a `TimelineEvent` and bumps `version` by one.
 
@@ -120,13 +133,21 @@ was observed, not theorised.
 
 ## Demo flag
 
-The demo control renders only with `?demo=1` (or the server-side `DEMO_OVERRIDES=1`). It forces one
-equipment code on this trip's routes to "out" **in this browser session only**:
+The demo control renders, rider window only, with `?demo=1` (or the server-side
+`DEMO_OVERRIDES=1`). It forces one equipment code on this trip's routes to "out" as **trip
+state, shared with the companion window**:
 
-- labelled `SIMULATED` on the chip, on the outage row, and in the text of every tool result that
-  returns it;
-- never written to the trip, never sent to the store, never near the index or the MTA feed;
-- cleared by the "clear" button or by a reload.
+- a `simulate` action (`{code, on, demo: true}`, rider key required) appends the code to
+  `trip.simulatedOut`, re-scores every candidate through the same scorer `/api/route` uses
+  (`explainRoute` + `scoreRoute` against the live feed merged with the simulated codes), and
+  bumps `version`, so both windows see the flip over the existing trip SSE stream, no reload;
+- labelled `SIMULATED` on the chip, on the outage row, and as `simulated: true` plus a top-level
+  note in every tool result that returns it (`route_accessible`, `compare_routes`,
+  `station_status`, `current_outages`, `get_trip`);
+- never written to the index, never sent to the MTA feed, and never accepted from the companion
+  key or without `demo: true` — both 403;
+- cleared by the "clear" button (a second `simulate` with `on: false`), which re-scores back to
+  the live truth for both windows.
 
 The real feed is the default and remains the default. The control exists so an on-camera reroute can
 be forced if no elevator on the demo route happens to fail while the camera is running.
@@ -137,20 +158,27 @@ Two windows side by side, same trip.
 
 1. `/` shows a non-zero ADA outage count and three example rows. Open the count: it names the feed
    URL and the row count.
-2. Pick two stations, plan the trip. You land on `/t/<id>` with up to three routes, each with
-   elevator chips coloured by tier, and an explanation naming the weakest elevator.
-3. **Rider window** (`/t/<id>`): header says *You are the rider* on black. Accept buttons on each
-   route. Companion link with a copy button. Report form present.
-4. **Companion window** (`/t/<id>?role=companion`): header says *You are the companion* on MTA
-   yellow. No accept buttons anywhere, no companion link, no report form. A reason field and a
-   "propose" button per route instead. The WebMCP panel lists a different tool set.
+2. Pick two stations, plan the trip. You land on the rider URL, `/t/<id>?k=<riderKey>`, with up
+   to three routes, each with elevator chips coloured by tier, and an explanation naming the
+   weakest elevator.
+3. **Rider window** (`/t/<id>?k=<riderKey>`): header says *You are the rider* on black. Accept
+   buttons on each route. Companion link (with its own key) and a copy button. Report form
+   present.
+4. **Companion window** (open the copied companion URL, `/t/<id>?k=<companionKey>`): header says
+   *You are the companion* on MTA yellow. No accept buttons anywhere, no companion link, no
+   report form. A reason field and a "propose" button per route instead. The WebMCP panel lists a
+   different tool set.
 5. Companion types a reason and proposes a route. **The rider window shows "1 pending proposal"
    within about two seconds with no reload**, and the version counter in the header goes up by one.
 6. Rider accepts. Both windows show the new accepted route inverted to black, the proposal marked
    `accepted`, and two new timeline entries.
-7. Companion presses an accept path anyway (via the API): 403 with a sentence explaining the role.
-8. `?demo=1` on either window: pick an elevator on the route, simulate the outage. The chip turns
-   black and struck through with `SIM`, the outage list gains a purple `SIMULATED` row, and nothing
-   changes for the other window, because a simulation is never persisted.
-9. `GET /api/health`: `store.backend` is `vercel-blob` in production, `index.rows` is non-zero, and
-   `live.stale` is `false`.
+7. Companion presses an accept path anyway (via the API, with its own key): 403 with a sentence
+   explaining the role. A caller with no key, or a guessed one, also 403s, on this or any action.
+8. `?demo=1` on the rider window: pick an elevator on the route, simulate the outage. The chip
+   turns black and struck through with `SIM`, the outage list gains a `SIMULATED` row, the route's
+   risk score and broken state update for real, and **the companion window updates within about
+   two seconds with no reload**, because the simulation is trip state now, not one tab's memory.
+9. Open the rider URL with the key edited to something else: "This link is not valid", no trip
+   content.
+10. `GET /api/health`: `store.backend` is `vercel-blob` in production, `index.rows` is non-zero,
+    and `live.stale` is `false`.

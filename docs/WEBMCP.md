@@ -162,7 +162,9 @@ and is not used here.
 
 Chrome 149+ with WebMCP on (Origin Trial token, or `chrome://flags/#enable-webmcp-testing`).
 
-1. Open `/t/<tripId>` and `/t/<tripId>?role=companion` in two windows.
+1. Create a trip, then open the rider URL (`/t/<tripId>?k=<riderKey>`) and the companion URL
+   (`/t/<tripId>?k=<companionKey>`, shown on the rider page) in two windows. The `k` is what
+   decides the role; `?role=` in the query string is display-only.
 2. **DevTools > Application > WebMCP** in each. The **Available Tools** list differs:
    the rider has `accept_reroute`, `accept_route`, `share_trip` and the declarative
    `report_broken_equipment`; the companion has `propose_reroute` and none of those.
@@ -248,6 +250,31 @@ unaffected: `execute` always receives a parsed object.
 
 ## Security
 
+- **Role is a capability carried by the link, not a self-declared label.** Two judges
+  (Andrew Galloni, Cloudflare; Jude Gao, Vercel) proved with cold, anonymous `curl` that the
+  earlier design's `POST /api/trip/:id/action {"role":"rider",...}` executed rider-only actions
+  against a stranger's trip: `parseRole()` read `role` off the wire and trusted it. "Hiding a
+  tool from a session" and "the server checks a role" were both true and neither stopped an
+  unauthenticated caller that simply typed the word "rider". Fixed by minting two unguessable
+  capability tokens at `createTrip` (`trip.riderKey`, `trip.companionKey`,
+  `crypto.randomBytes(18).toString("base64url")`): the rider URL is `/t/<id>?k=<riderKey>`, the
+  companion URL is `/t/<id>?k=<companionKey>`, and `POST /api/trip/:id/action` derives role from
+  whichever key is presented (`roleForKey()` in `src/lib/store/actions.ts`), ignoring any `role`
+  field in the body outright. A key that matches neither token is not "companion by default"; it
+  authenticates nobody, and every gated action 403s. `role=` in the query string is now a
+  harmless display hint only — a wrong or missing `k` renders an "This link is not valid" page
+  with no trip data, computed server-side before any trip content is composed.
+- **Both keys are stripped from every unauthenticated or model-facing surface**: `GET
+  /api/trip/:id`, the SSE stream, and every WebMCP tool result (`get_trip`, `route_accessible`,
+  `compare_routes`, `share_trip`) via `stripKeys()`. The single exception is the one-time `POST
+  /api/trip` response, which hands both tokens to the creator because that is the only moment
+  either token needs to leave the server. `share_trip` mints the companion link from the
+  rider session's own one-time view of `companionKey` (handed down by the page, itself gated on
+  the server having just verified the caller's `riderKey`), never from a re-served trip field.
+- **`simulate` (the shared demo control) needs the rider key and an explicit `demo: true` flag.**
+  Without the flag, or with the companion key, it 403s with the same sentence pattern as every
+  other role-gated action — it is not a normal rider action a companion or an honest-but-confused
+  agent should be able to reach.
 - **`untrustedContentHint: true` on `get_trip`, and only there.** It is the one tool that returns
   free text a different human typed: notes, broken-equipment descriptions, and the reason
   attached to a reroute proposal.
@@ -258,16 +285,17 @@ unaffected: `execute` always receives a parsed object.
   Delimiting is the low-cost end of the spotlighting spectrum (arxiv 2403.14720); base64 is the
   robust end, at about 33% more tokens. A trip timeline is short and human-read, so delimiting is
   the right trade here, and the choice is deliberate rather than accidental.
-- **The tool list is not the security boundary.** Hiding `accept_reroute` from the companion
-  stops an honest agent from trying. `POST /api/trip/:id/action` re-checks the role server-side
-  and rejects an accept from a companion, so a forged call from a page that registers its own
-  tools still fails.
+- **The tool list is a UI affordance; the capability key is the boundary.** Hiding
+  `accept_reroute` from the companion stops an honest agent from trying. `POST
+  /api/trip/:id/action` derives role from the presented key and rejects an accept from anyone who
+  does not hold `riderKey` — including a forged call from a page that registers its own tools and
+  never held a cookie, which is exactly the attack both judges ran.
 - **`readOnlyHint` is the only lever WebMCP gives us over an agent's confirmation behaviour**,
   and it is a hint. Everything that mutates is gated by our own card, not by the annotation.
 - **Honesty about the current state of the spec:** webmcp#288 shows that a confirmation flow like
   this one can be bypassed today by an agent that also automates the raw page, clicking Confirm
   itself. Our card raises the cost and creates a record; it is not a capability boundary. The
-  server-side role check and the eventual `requestUserInteraction()` (drafted, not shipped) are
+  server-side key check and the eventual `requestUserInteraction()` (drafted, not shipped) are
   the parts that would be.
 - Cross-origin exposure is not used: no `exposedTo`, no `fromOrigins`, so every tool is
   same-origin only, which is `registerTool`'s default.

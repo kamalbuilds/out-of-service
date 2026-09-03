@@ -20,8 +20,9 @@ outages a day with a median of about four hours (Gothamist, same URL).
 
 ## What it does
 
-1. The rider opens `/`, picks two accessible stations and their constraints, and gets a trip id
-   plus a companion link (`/t/<tripId>?role=companion`).
+1. The rider opens `/`, picks two accessible stations and their constraints, and is redirected to
+   their own rider URL (`/t/<tripId>?k=<riderKey>`), which carries the companion link
+   (`/t/<tripId>?k=<companionKey>`) with its own capability key.
 2. The rider's agent calls `route_accessible`. It gets back up to three routes. Each one lists
    the specific elevators it depends on, each elevator's reliability tier, its 24-month numbers,
    and the exact query those numbers came from.
@@ -52,7 +53,8 @@ and is non-redundant (see docs/ROUTING.md, section 5).
 
 **Two people, two agents, one origin, one page, different tools.** A rider and the person helping
 them are not the same user with the same permissions. WebMCP registers tools per session, from the
-page, so the same URL under `?role=companion` presents a different tool list to a different agent
+page, so the same trip under a second capability key presents a different tool list to a different
+agent
 without a second deployment, a second server, or an auth handshake. A server-side MCP server
 cannot express that, because it does not know which browser tab is asking. The asymmetry is
 visible in DevTools > Application > WebMCP before anyone says a word.
@@ -211,10 +213,12 @@ the ChatGPT in-app browser, which speaks WebMCP.
    the page; the call stays pending until a human presses Confirm. **Invoked Tools** shows Status,
    Input and Output for every call, and the page renders the same log for the last 20 calls with
    durations.
-5. Add `?demo=1` to force an outage on one elevator of the route if the real feed happens to be
-   quiet on camera. Everything it touches is labelled `SIMULATED`, in the chip, in the outage row
-   and in the text of every tool result. It is never written to the trip, never sent to the store,
-   and cleared by a reload.
+5. Add `?demo=1` to the rider URL to force an outage on one elevator of the route if the real feed
+   happens to be quiet on camera. Everything it touches is labelled `SIMULATED`, in the chip, in
+   the outage row and in every tool result. Unlike the trip's other fields it never reaches the
+   MTA feed or the index, but it *is* trip state now: the companion window sees the same forced
+   outage within about two seconds, no reload, because it goes over the same SSE stream as
+   everything else. Cleared by the panel's "clear" button.
 
 For a live cross-check of any equipment code, the MTA publishes the same feed at
 https://new.mta.info/elevator-escalator-status. EL290X at 42 St/Port Authority-Bus Terminal has
@@ -299,8 +303,18 @@ browser windows on different machines.
   covers everything else.
 - **The confirmation card is not a capability boundary.** webmcp#288 shows an agent that also
   automates the raw page can click Confirm itself. The card raises the cost and creates a record.
-  The server-side role check is the part that actually holds, and the drafted
+  The capability key described below is the part that actually holds, and the drafted
   `requestUserInteraction()` has not shipped.
+- **Role used to be a self-declared string; it is now a capability carried by the link.** Two
+  judges (Andrew Galloni, Cloudflare; Jude Gao, Vercel) proved with cold `curl`, no cookie, no
+  session, that `POST /api/trip/:id/action {"role":"rider"}` executed rider-only actions against a
+  trip they had never touched: the server checked *that* a role was present, not *who* was
+  claiming it. Fixed: `createTrip` mints two unguessable tokens (`trip.riderKey`,
+  `trip.companionKey`), the rider URL is `/t/<id>?k=<riderKey>`, the companion URL is
+  `/t/<id>?k=<companionKey>`, and the action route derives role from whichever key is presented,
+  ignoring any `role` field in the body. Both keys are stripped from `GET /api/trip/:id`, the SSE
+  stream, and every WebMCP tool result; a wrong or missing key renders "This link is not valid"
+  with no trip data. See docs/WEBMCP.md, Security.
 - **Blob store eventual consistency.** Every trip version is a separate immutable object at
   `trips/<id>/<version>.json`; reads `list()` the prefix, which is an immediately consistent API
   call, and fetch the highest version's URL, so the 60-second CDN cache on a blob URL can never
