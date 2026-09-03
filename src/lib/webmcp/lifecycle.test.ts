@@ -70,6 +70,9 @@ function makeTrip(overrides: Partial<Trip> = {}): Trip {
     watch: ["EL240"],
     notes: [],
     reports: [],
+    riderKey: "rider-key-test",
+    companionKey: "companion-key-test",
+    simulatedOut: [],
     version: 4,
     ...overrides,
   };
@@ -90,9 +93,10 @@ const tripWithProposal = makeTrip({
 });
 
 const actions = {
-  createTrip: async () => makeTrip(),
+  createTrip: async () => ({ ...makeTrip(), riderUrl: "/t/t_demo?k=rider-key-test", companionUrl: "/t/t_demo?k=companion-key-test" }),
   acceptRoute: async () => makeTrip({ acceptedRouteId: "r2", version: 6 }),
   acceptReroute: async () => makeTrip({ acceptedRouteId: "r2", version: 6 }),
+  rejectReroute: async () => makeTrip({ version: 6 }),
   proposeReroute: async () => tripWithProposal,
   watch: async () => makeTrip({ watch: ["EL240", "EL118"], version: 6 }),
   addNote: async () => makeTrip({ version: 6 }),
