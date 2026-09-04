@@ -59,7 +59,13 @@ in the `deepsurge` profile:
 
 ## Token
 
-(not yet obtained — paste the token string here once registered)
+Registered 2026-09-04 for https://out-of-service-sepia.vercel.app (feature WebMCP, expiry 2026-11-17). Token, public page config:
+
+```
+AsalTzjMuR8bZgu8t8O7vDJ0wA+3db23zadvqnnReCnN9xct7jjbwTw5EYk35pi7twl1chLJuEnPdAB6SCcsJQ0AAABfeyJvcmlnaW4iOiJodHRwczovL291dC1vZi1zZXJ2aWNlLXNlcGlhLnZlcmNlbC5hcHA6NDQzIiwiZmVhdHVyZSI6IldlYk1DUCIsImV4cGlyeSI6MTc5NDg3MzYwMH0=
+```
+
+Wired as `<meta http-equiv="origin-trial">` in src/app/layout.tsx and as an `Origin-Trial` response header in next.config.ts.
 
 ## Integration snippet (to be added by the UI agent once the token above is filled in)
 

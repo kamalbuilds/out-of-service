@@ -27,9 +27,15 @@ export const metadata: Metadata = {
     "Accessible NYC subway routing for people and their agents, scored on real elevator outage history.",
 };
 
+const ORIGIN_TRIAL_TOKEN =
+  "AsalTzjMuR8bZgu8t8O7vDJ0wA+3db23zadvqnnReCnN9xct7jjbwTw5EYk35pi7twl1chLJuEnPdAB6SCcsJQ0AAABfeyJvcmlnaW4iOiJodHRwczovL291dC1vZi1zZXJ2aWNlLXNlcGlhLnZlcmNlbC5hcHA6NDQzIiwiZmVhdHVyZSI6IldlYk1DUCIsImV4cGlyeSI6MTc5NDg3MzYwMH0=";
+
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html lang="en" className={`${archivo.variable} ${plexMono.variable} h-full`}>
+      <head>
+        <meta httpEquiv="origin-trial" content={ORIGIN_TRIAL_TOKEN} />
+      </head>
       <body className="min-h-full bg-paper text-ink antialiased">{children}</body>
     </html>
   );
