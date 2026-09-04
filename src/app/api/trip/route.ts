@@ -1,6 +1,6 @@
 import { findRoutes } from "@/lib/adapters/routes";
 import { liveSnapshotOrEmpty } from "@/lib/adapters/live";
-import { listStations, resolveStation } from "@/lib/adapters/stations";
+import { ambiguousStationMessage, listStations, resolveStationOrAmbiguous } from "@/lib/adapters/stations";
 import { parseConstraints } from "@/lib/adapters/input";
 import { createTrip, stripKeys } from "@/lib/store";
 import { checkRateLimit, clientIp } from "@/lib/store/ratelimit";
@@ -43,14 +43,41 @@ export async function POST(request: Request) {
 
   try {
     const stations = listStations();
-    const fromStation = resolveStation(from, stations);
-    const toStation = resolveStation(to, stations);
-    if (!fromStation) {
+
+    const fromResolved = resolveStationOrAmbiguous(from, stations);
+    if (fromResolved && "ambiguous" in fromResolved) {
+      return Response.json(
+        {
+          error: "ambiguous_station",
+          field: "from",
+          candidates: fromResolved.candidates,
+          message: ambiguousStationMessage(from, fromResolved),
+        },
+        { status: 400 },
+      );
+    }
+    if (!fromResolved) {
       return Response.json({ error: `No accessible station matches "${from}".` }, { status: 400 });
     }
-    if (!toStation) {
+
+    const toResolved = resolveStationOrAmbiguous(to, stations);
+    if (toResolved && "ambiguous" in toResolved) {
+      return Response.json(
+        {
+          error: "ambiguous_station",
+          field: "to",
+          candidates: toResolved.candidates,
+          message: ambiguousStationMessage(to, toResolved),
+        },
+        { status: 400 },
+      );
+    }
+    if (!toResolved) {
       return Response.json({ error: `No accessible station matches "${to}".` }, { status: 400 });
     }
+
+    const fromStation = fromResolved;
+    const toStation = toResolved;
     if (fromStation.id === toStation.id) {
       return Response.json(
         { error: "Origin and destination are the same station." },
@@ -65,8 +92,8 @@ export async function POST(request: Request) {
     const trip = await createTrip({
       from: fromStation.id,
       to: toStation.id,
-      fromName: fromStation.name,
-      toName: toStation.name,
+      fromName: fromStation.displayName,
+      toName: toStation.displayName,
       constraints,
       candidates,
     });

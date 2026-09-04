@@ -69,7 +69,7 @@ export function StationPicker({
         </option>
         {matches.map((s) => (
           <option key={s.id} value={s.id}>
-            {s.name} · {s.lines.join(" ")} · {s.elevatorCount} elevator
+            {s.displayName} · {s.lines.join(" ")} · {s.elevatorCount} elevator
             {s.elevatorCount === 1 ? "" : "s"}
           </option>
         ))}
@@ -79,7 +79,7 @@ export function StationPicker({
         {selected ? (
           <>
             <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
-              <span className="plate text-[1.0625rem]">{selected.name}</span>
+              <span className="plate text-[1.0625rem]">{selected.displayName}</span>
               <LineBullets lines={selected.lines} size="xs" />
             </div>
             <div className="mt-1 flex flex-wrap items-center gap-x-2 text-[0.75rem] text-ink-soft">

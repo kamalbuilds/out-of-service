@@ -157,7 +157,7 @@ export function listAccessibleStations(ctx: Ctx): WebMcpToolDef {
     name: "list_accessible_stations",
     title: "List accessible stations",
     description:
-      "List NYC subway stations that have at least one ADA elevator, with their lines, elevator count and worst reliability tier. Use this to turn a station name the rider said out loud into the complex id that route_accessible needs. Filter by name fragment or by line.",
+      "List NYC subway stations that have at least one ADA elevator, with their lines, elevator count and worst reliability tier. Use this to turn a station name the rider said out loud into the complex id that route_accessible needs. Each station's displayName is its name, plus the lines in parentheses when that bare name is shared by more than one complex (two different complexes are both \"34 St-Penn Station\"); pass the id or the displayName to create_trip to avoid an ambiguous-name rejection. Filter by name fragment or by line.",
     inputSchema: schema({
       query: str('Part of a station name, e.g. "Union Sq" or "Jay St".'),
       line: str('A single subway line letter or number, e.g. "A", "L", "6".'),
@@ -452,11 +452,15 @@ export function createTrip(ctx: Ctx): WebMcpToolDef {
     name: "create_trip",
     title: "Create a trip",
     description:
-      "Start a shared trip between two stations with the rider's accessibility constraints, then return the trip id and the companion link. Registered from the create-trip form on the home page, so the rider reviews the filled fields and presses Create themselves.",
+      "Start a shared trip between two stations with the rider's accessibility constraints, then return the trip id and the companion link. Registered from the create-trip form on the home page, so the rider reviews the filled fields and presses Create themselves. Some station names are shared by more than one complex (e.g. \"34 St-Penn Station\" is both an A C E complex and a 1 2 3 complex); call list_accessible_stations first and pass the complex id, or the name with its lines in parentheses exactly as list_accessible_stations returns it in displayName. A bare ambiguous name returns HTTP 400 with the matching candidates instead of guessing one.",
     inputSchema: schema(
       {
-        from: str("Origin station name or complex id."),
-        to: str("Destination station name or complex id."),
+        from: str(
+          "Origin station complex id, or a station name. If the name is shared by more than one complex, pass the complex id from list_accessible_stations, or the name with lines in parentheses, e.g. \"34 St-Penn Station (A C E)\"."
+        ),
+        to: str(
+          "Destination station complex id, or a station name. Same ambiguity rule as from: an ambiguous bare name is rejected rather than guessed."
+        ),
         wheelchair: bool("True when the rider needs a fully step-free path."),
         avoidEscalators: bool("True when escalators are not an acceptable substitute for an elevator."),
         maxTransfers: int("Most transfers the rider will accept.", { minimum: 0, maximum: 4 }),

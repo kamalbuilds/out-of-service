@@ -36,7 +36,14 @@ function createReq(ip: string, body: Record<string, unknown>) {
 describe("POST /api/trip is rate-limited per IP", () => {
   it("61st trip creation from the same IP within a minute: 429 with Retry-After", async () => {
     const ip = "203.0.113.10";
-    const body = { from: "Times Sq-42 St", to: "34 St-Penn Station", constraints: { wheelchair: true } };
+    // Lines-qualified so this resolves to one complex: "34 St-Penn Station" alone is
+    // shared by two complexes (164 A C E, 318 1 2 3 LIRR) and now correctly returns a 400
+    // ambiguous_station rather than a silent pick, which would sink these rate-limit tests.
+    const body = {
+      from: "Times Sq-42 St",
+      to: "34 St-Penn Station (A C E)",
+      constraints: { wheelchair: true },
+    };
     let last: Response | undefined;
     for (let i = 0; i < 61; i++) {
       last = await createTripRoute(createReq(ip, body));
@@ -48,7 +55,14 @@ describe("POST /api/trip is rate-limited per IP", () => {
   }, 20_000);
 
   it("a different IP is unaffected by another IP's 60 requests", async () => {
-    const body = { from: "Times Sq-42 St", to: "34 St-Penn Station", constraints: { wheelchair: true } };
+    // Lines-qualified so this resolves to one complex: "34 St-Penn Station" alone is
+    // shared by two complexes (164 A C E, 318 1 2 3 LIRR) and now correctly returns a 400
+    // ambiguous_station rather than a silent pick, which would sink these rate-limit tests.
+    const body = {
+      from: "Times Sq-42 St",
+      to: "34 St-Penn Station (A C E)",
+      constraints: { wheelchair: true },
+    };
     for (let i = 0; i < 60; i++) {
       await createTripRoute(createReq("203.0.113.20", body));
     }

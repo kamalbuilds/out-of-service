@@ -117,6 +117,11 @@ export type CreateTripInput = {
 export type StationSummary = {
   id: string;
   name: string;
+  /** `name`, unless that bare name is shared by more than one complex, in which case
+   * `"${name} (${lines.join(" ")})"` - e.g. two complexes are both "34 St-Penn Station",
+   * so each gets a `displayName` that names the lines it actually serves. Always safe to
+   * render in place of `name` when a rider or an agent needs to tell two complexes apart. */
+  displayName: string;
   gtfsStopIds: string[];
   lines: string[];
   elevatorCount: number;

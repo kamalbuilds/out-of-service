@@ -12,12 +12,13 @@
  * malformed shapes and assert the guarded function returns `false` instead of throwing.
  */
 import { describe, expect, it } from "vitest";
-import { stationMatchesQuery, listStations } from "./stations";
+import { stationMatchesQuery, listStations, resolveStationOrAmbiguous } from "./stations";
 import type { StationSummary } from "@/lib/types";
 
 const BASE: StationSummary = {
   id: "1",
   name: "Jay St-MetroTech",
+  displayName: "Jay St-MetroTech",
   gtfsStopIds: ["A41"],
   lines: ["A", "C", "F", "R"],
   elevatorCount: 4,
@@ -75,5 +76,42 @@ describe("stationMatchesQuery", () => {
       expect(Array.isArray(s.lines)).toBe(true);
       for (const l of s.lines) expect(typeof l).toBe("string");
     }
+  });
+});
+
+/**
+ * `POST /api/trip {"from":"Times Sq-42 St","to":"34 St-Penn Station"}` used to silently
+ * resolve "34 St-Penn Station" to whichever of its two real complexes `resolveStation`'s
+ * `.find()` chain hit first, so the same request produced different scored routes on
+ * different runs (complex 164, A C E, vs complex 318, 1 2 3 LIRR). These tests are the
+ * check that must be able to fail: the bare, ambiguous name asserts NO id comes back at
+ * all, only a structured candidate list, which would fail immediately if the resolver
+ * regressed to picking one silently.
+ */
+describe("resolveStationOrAmbiguous", () => {
+  it("a bare name shared by two complexes returns an ambiguity with both candidates, no id", () => {
+    const result = resolveStationOrAmbiguous("34 St-Penn Station");
+    expect(result).not.toBeNull();
+    expect(result && "ambiguous" in result).toBe(true);
+    if (!result || !("ambiguous" in result)) throw new Error("expected an ambiguous result");
+    expect(result.candidates).toHaveLength(2);
+    expect(result.candidates.map((c) => c.id).sort()).toEqual(["164", "318"]);
+    // The check that can fail: an ambiguous result must never carry a resolved id.
+    expect((result as unknown as { id?: string }).id).toBeUndefined();
+  });
+
+  it("the name qualified with its lines resolves uniquely to the A C E complex", () => {
+    const result = resolveStationOrAmbiguous("34 St-Penn Station (A C E)");
+    expect(result && !("ambiguous" in result) ? result.id : null).toBe("164");
+  });
+
+  it("an exact complex id resolves uniquely, bypassing the name entirely", () => {
+    const result = resolveStationOrAmbiguous("318");
+    expect(result && !("ambiguous" in result) ? result.id : null).toBe("318");
+  });
+
+  it("a station name that is not shared by any other complex resolves to its own id", () => {
+    const result = resolveStationOrAmbiguous("Court Sq");
+    expect(result && !("ambiguous" in result) ? result.id : null).toBe("606");
   });
 });

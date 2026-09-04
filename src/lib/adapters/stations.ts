@@ -33,7 +33,7 @@ export function stationId(s: { station_complex_mrn: string | null; gtfs_stop_ids
 }
 
 export function listStations(): StationSummary[] {
-  return rawListStations().map((s) => {
+  const base = rawListStations().map((s) => {
     let worst: Tier = "reliable";
     let elevators = 0;
     for (const code of s.equipment_codes) {
@@ -58,6 +58,19 @@ export function listStations(): StationSummary[] {
       ada: true,
     };
   });
+
+  // Two different complexes can share the exact same bare station name - "34 St-Penn
+  // Station" is complex 164 (A C E) and complex 318 (1 2 3 LIRR). Any station whose name
+  // is not unique across complexes gets a `displayName` that names its lines, so a picker
+  // option, a tool result or a trip record never shows the same bare string for two
+  // different places.
+  const nameCounts = new Map<string, number>();
+  for (const s of base) nameCounts.set(s.name, (nameCounts.get(s.name) ?? 0) + 1);
+
+  return base.map((s) => ({
+    ...s,
+    displayName: (nameCounts.get(s.name) ?? 0) > 1 ? `${s.name} (${s.lines.join(" ")})` : s.name,
+  }));
 }
 
 export function getEquipment(code: string): EquipmentIndexEntry | undefined {
@@ -120,6 +133,58 @@ export function resolveStation(query: string, stations = listStations()): Statio
     stations.find((s) => s.name.toLowerCase().includes(q)) ??
     null
   );
+}
+
+export type StationCandidate = { id: string; name: string; lines: string[] };
+export type AmbiguousStation = { ambiguous: true; candidates: StationCandidate[] };
+
+/**
+ * Same lookup order as `resolveStation`, except a bare name that matches more than one
+ * complex is never narrowed to the first match: it comes back as a structured ambiguity
+ * instead, so the caller can ask for the complex id or the lines-qualified name rather
+ * than silently guessing. "34 St-Penn Station" is the concrete case: complex 164 (A C E)
+ * and complex 318 (1 2 3 LIRR) share the bare name, and only one of them is the trip the
+ * rider meant. An exact complex id, a GTFS stop id, or a `displayName` match (the name
+ * with its lines in parentheses) always resolves uniquely and never hits the ambiguous
+ * branch, because those are already specific to one complex.
+ */
+export function resolveStationOrAmbiguous(
+  query: string,
+  stations = listStations(),
+): StationSummary | AmbiguousStation | null {
+  const q = query.trim().toLowerCase();
+  if (!q) return null;
+
+  const byId = stations.find((s) => s.id.toLowerCase() === q);
+  if (byId) return byId;
+
+  const byGtfs = stations.find((s) => s.gtfsStopIds.some((g) => g.toLowerCase() === q));
+  if (byGtfs) return byGtfs;
+
+  const byDisplayName = stations.find((s) => s.displayName.toLowerCase() === q);
+  if (byDisplayName) return byDisplayName;
+
+  const nameMatches = stations.filter((s) => s.name.toLowerCase() === q);
+  if (nameMatches.length > 1) {
+    return {
+      ambiguous: true,
+      candidates: nameMatches.map((s) => ({ id: s.id, name: s.name, lines: s.lines })),
+    };
+  }
+  if (nameMatches.length === 1) return nameMatches[0];
+
+  const byStart = stations.find((s) => s.name.toLowerCase().startsWith(q));
+  if (byStart) return byStart;
+
+  return stations.find((s) => s.name.toLowerCase().includes(q)) ?? null;
+}
+
+/** The `message` field of the 400 response `POST /api/trip` returns for an ambiguous name. */
+export function ambiguousStationMessage(query: string, ambiguous: AmbiguousStation): string {
+  const list = ambiguous.candidates
+    .map((c) => `${c.name} (${c.lines.join(" ")}) [${c.id}]`)
+    .join(", ");
+  return `"${query.trim()}" matches ${ambiguous.candidates.length} complexes: ${list}. Send the complex id or the name with lines.`;
 }
 
 /** One index row as the `ElevatorRef` the UI renders and the tools return. */
