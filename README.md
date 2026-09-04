@@ -350,7 +350,7 @@ browser windows on different machines.
 - **`POST /api/trip` stays unauthenticated by design, not by oversight.** Creation is cheap: it
   runs a route search and writes one trip object, no different in cost from any other write on
   this service. It mints the two capability keys described above but holds no data anyone has
-  a stake in protecting until one of those keys is actually used — there is no rider or companion
+  a stake in protecting until one of those keys is actually used, there is no rider or companion
   to authenticate against before the first key exists, so a role check on this endpoint would have
   nothing to check a caller's identity against. The abuse this endpoint needs to resist is
   volume, not impersonation, and that is what the per-IP rate limit already bounds (60 creations

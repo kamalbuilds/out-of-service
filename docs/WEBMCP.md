@@ -289,13 +289,13 @@ Confirm, the same gate a screen reader user would hit.
   whichever key is presented (`roleForKey()` in `src/lib/store/actions.ts`), ignoring any `role`
   field in the body outright. A key that matches neither token is not "companion by default"; it
   authenticates nobody, and every gated action 403s. `role=` in the query string is now a
-  harmless display hint only — a wrong or missing `k` renders an "This link is not valid" page
+  harmless display hint only, a wrong or missing `k` renders an "This link is not valid" page
   with no trip data, computed server-side before any trip content is composed.
 - **`POST /api/trip` has no role check, deliberately.** `roleForKey()` gates every action against
   a trip that already exists; creation is the one endpoint with no trip, and therefore no
   `riderKey` or `companionKey` yet to check a caller against. The request is cheap (one route
   search, one write) and holds no data anyone has a stake in protecting until the response hands
-  back a key and someone starts using it — there is no "who is this" question to answer at the
+  back a key and someone starts using it, there is no "who is this" question to answer at the
   moment of creation, only "how many is this caller minting." That is a volume problem, and the
   per-IP limiter in `src/lib/store/ratelimit.ts` already bounds it (60 creations per minute per
   address, checked in `src/app/api/trip/route.ts` before the body is even parsed). Adding a role
@@ -311,7 +311,7 @@ Confirm, the same gate a screen reader user would hit.
   the server having just verified the caller's `riderKey`), never from a re-served trip field.
 - **`simulate` (the shared demo control) needs the rider key and an explicit `demo: true` flag.**
   Without the flag, or with the companion key, it 403s with the same sentence pattern as every
-  other role-gated action — it is not a normal rider action a companion or an honest-but-confused
+  other role-gated action, it is not a normal rider action a companion or an honest-but-confused
   agent should be able to reach.
 - **`untrustedContentHint: true` on `get_trip`, and only there.** It is the one tool that returns
   free text a different human typed: notes, broken-equipment descriptions, and the reason
@@ -326,7 +326,7 @@ Confirm, the same gate a screen reader user would hit.
 - **The tool list is a UI affordance; the capability key is the boundary.** Hiding
   `accept_reroute` from the companion stops an honest agent from trying. `POST
   /api/trip/:id/action` derives role from the presented key and rejects an accept from anyone who
-  does not hold `riderKey` — including a forged call from a page that registers its own tools and
+  does not hold `riderKey`, including a forged call from a page that registers its own tools and
   never held a cookie, which is exactly the attack both judges ran.
 - **The trip-scoped action rate limit is tiered by write cost.** Two judges (Jude Gao, Vercel;
   Andrew Galloni, Cloudflare) independently flagged that one shared per-trip ceiling made the
