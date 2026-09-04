@@ -109,4 +109,62 @@ describe("POST /api/trip/[id]/action is rate-limited per IP and per trip", () =>
     } as never);
     expect(res.status).toBe(429);
   });
+
+  function acceptRouteReq(ip: string, tripId: string, key: string, routeId: string) {
+    return new Request(`http://test/api/trip/${tripId}/action`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json", "x-forwarded-for": ip },
+      body: JSON.stringify({ type: "accept_route", key, payload: { routeId } }),
+    });
+  }
+
+  function noteReq(ip: string, tripId: string, key: string, i: number) {
+    return new Request(`http://test/api/trip/${tripId}/action`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json", "x-forwarded-for": ip },
+      body: JSON.stringify({ type: "note", key, payload: { text: `note ${i}` } }),
+    });
+  }
+
+  it("the contended tier (accept_route) caps at 12/min per trip: the 12th passes, the 13th is 429", async () => {
+    const trip = await buildTrip();
+    const ip = "203.0.113.40";
+    const routeId = trip.candidates[0]!.id;
+
+    let twelfth: Response | undefined;
+    for (let i = 0; i < 12; i++) {
+      twelfth = await actionRoute(acceptRouteReq(ip, trip.id, trip.riderKey, routeId), {
+        params: Promise.resolve({ id: trip.id }),
+      } as never);
+    }
+    // A check that can fail: the 12th contended action must clear the ceiling, not trip it.
+    expect(twelfth!.status).toBe(200);
+
+    const thirteenth = await actionRoute(acceptRouteReq(ip, trip.id, trip.riderKey, routeId), {
+      params: Promise.resolve({ id: trip.id }),
+    } as never);
+    expect(thirteenth.status).toBe(429);
+    expect(thirteenth.headers.get("Retry-After")).toBeTruthy();
+    const payload = await thirteenth.json();
+    expect(payload.error).toMatch(/contended/i);
+  });
+
+  it("the cheap tier (note) has its own counter: still 200 after the contended tier is exhausted on the same trip", async () => {
+    const trip = await buildTrip();
+    const ip = "203.0.113.41";
+    const routeId = trip.candidates[0]!.id;
+
+    for (let i = 0; i < 13; i++) {
+      await actionRoute(acceptRouteReq(ip, trip.id, trip.riderKey, routeId), {
+        params: Promise.resolve({ id: trip.id }),
+      } as never);
+    }
+
+    for (let i = 0; i < 5; i++) {
+      const res = await actionRoute(noteReq(ip, trip.id, trip.riderKey, i), {
+        params: Promise.resolve({ id: trip.id }),
+      } as never);
+      expect(res.status).toBe(200);
+    }
+  });
 });

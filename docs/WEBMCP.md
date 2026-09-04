@@ -268,6 +268,17 @@ and evals use the string form.
   authenticates nobody, and every gated action 403s. `role=` in the query string is now a
   harmless display hint only — a wrong or missing `k` renders an "This link is not valid" page
   with no trip data, computed server-side before any trip content is composed.
+- **`POST /api/trip` has no role check, deliberately.** `roleForKey()` gates every action against
+  a trip that already exists; creation is the one endpoint with no trip, and therefore no
+  `riderKey` or `companionKey` yet to check a caller against. The request is cheap (one route
+  search, one write) and holds no data anyone has a stake in protecting until the response hands
+  back a key and someone starts using it — there is no "who is this" question to answer at the
+  moment of creation, only "how many is this caller minting." That is a volume problem, and the
+  per-IP limiter in `src/lib/store/ratelimit.ts` already bounds it (60 creations per minute per
+  address, checked in `src/app/api/trip/route.ts` before the body is even parsed). Adding a role
+  or auth requirement to this endpoint would not remove an attacker's reach, since anyone can
+  still hit it anonymously and immediately hold both keys the way a real user would; it would
+  only add friction for the one legitimate caller, a fresh visitor with no key yet.
 - **Both keys are stripped from every unauthenticated or model-facing surface**: `GET
   /api/trip/:id`, the SSE stream, and every WebMCP tool result (`get_trip`, `route_accessible`,
   `compare_routes`, `share_trip`) via `stripKeys()`. The single exception is the one-time `POST
@@ -294,6 +305,18 @@ and evals use the string form.
   /api/trip/:id/action` derives role from the presented key and rejects an accept from anyone who
   does not hold `riderKey` — including a forged call from a page that registers its own tools and
   never held a cookie, which is exactly the attack both judges ran.
+- **The trip-scoped action rate limit is tiered by write cost.** Two judges (Jude Gao, Vercel;
+  Andrew Galloni, Cloudflare) independently flagged that one shared per-trip ceiling made the
+  409-vs-429 boundary illegible: a `StaleWriteError` retry (409, a losing write, safe to retry
+  immediately) and a rate-limit rejection (429, back off) look identical to an agent if both
+  `accept_route` and `note` draw from the same counter. `accept_route`, `accept_reroute`,
+  `propose_reroute` and `simulate` write the trip's optimistic-concurrency version and can force
+  `applyAction`'s retry loop; they now share a 12/minute-per-trip ceiling. `watch`, `note` and
+  `report` append without contending on that field and share a separate 60/minute-per-trip
+  ceiling. Each tier is its own counter (`trip:<id>:action:contended`, `trip:<id>:action:cheap`
+  in `src/app/api/trip/[id]/action/route.ts`), so a burst on one tier never consumes the other's
+  budget, and the 429 body names the tier that tripped. The per-IP ceiling in
+  `src/lib/store/ratelimit.ts` is unchanged and still applies first, on every action type alike.
 - **`readOnlyHint` is the only lever WebMCP gives us over an agent's confirmation behaviour**,
   and it is a hint. Everything that mutates is gated by our own card, not by the annotation.
 - **Honesty about the current state of the spec:** webmcp#288 shows that a confirmation flow like

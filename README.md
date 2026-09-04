@@ -324,6 +324,27 @@ browser windows on different machines.
   ignoring any `role` field in the body. Both keys are stripped from `GET /api/trip/:id`, the SSE
   stream, and every WebMCP tool result; a wrong or missing key renders "This link is not valid"
   with no trip data. See docs/WEBMCP.md, Security.
+- **`POST /api/trip` stays unauthenticated by design, not by oversight.** Creation is cheap: it
+  runs a route search and writes one trip object, no different in cost from any other write on
+  this service. It mints the two capability keys described above but holds no data anyone has
+  a stake in protecting until one of those keys is actually used — there is no rider or companion
+  to authenticate against before the first key exists, so a role check on this endpoint would have
+  nothing to check a caller's identity against. The abuse this endpoint needs to resist is
+  volume, not impersonation, and that is what the per-IP rate limit already bounds (60 creations
+  per minute per address, `src/app/api/trip/route.ts`); a role or auth requirement here would add
+  friction to the one legitimate caller (a fresh visitor with no key yet) without shrinking the
+  set of things an attacker could reach. See docs/WEBMCP.md, Security, for the same reasoning
+  next to `roleForKey()`.
+- **The trip-scoped action rate limit is tiered by write cost, not flat.** `accept_route`,
+  `accept_reroute`, `propose_reroute` and `simulate` all write the trip's optimistic-concurrency
+  version and can force a losing writer's retry in `applyAction`; they share a tighter 12/minute
+  ceiling per trip. `watch`, `note` and `report` append without contending on that version field
+  and share a separate 60/minute ceiling. Each tier has its own counter
+  (`trip:<id>:action:contended` / `trip:<id>:action:cheap`) so a burst of one never starves the
+  other's budget, and the 429 body names which tier tripped so an agent retrying after a 409 (a
+  losing write, try again) can tell it apart from a 429 on the same action (back off, this trip's
+  write path is hot). The per-IP ceiling (`src/lib/store/ratelimit.ts`) is unchanged and still
+  applies on top, regardless of action type.
 - **Blob store eventual consistency.** Every trip version is a separate immutable object at
   `trips/<id>/<version>.json`; reads `list()` the prefix, which is an immediately consistent API
   call, and fetch the highest version's URL, so the 60-second CDN cache on a blob URL can never
