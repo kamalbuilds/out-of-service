@@ -158,6 +158,8 @@ after that date. No prior codebase was reused.
 
 ## Testing instructions (submission field)
 
+Agent clients: the WebMCP-capable ChatGPT client is the ChatGPT desktop app or Atlas in-app browser. chatgpt.com on the web reads the page and can name the tools but cannot call them (no in-app browser on that surface; see docs/CHATGPT-TEST.md). Stock Chrome 149+ needs no flag: the site ships a WebMCP origin trial token. Brave or Chrome with chrome://flags/#enable-webmcp-testing also works.
+
 No login, no API key, no setup. Chrome 149 or later with WebMCP turned on at
 `chrome://flags/#enable-webmcp-testing`, or the ChatGPT in-app browser. Open
 https://out-of-service-sepia.vercel.app.
