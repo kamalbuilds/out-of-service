@@ -347,11 +347,7 @@ browser windows on different machines.
 
 ## Known limitations
 
-- **The Chrome Origin Trial token is not in the page yet.** Registration requires a signed-in
-  Google session on the origin trials site and that flow was not completed (docs/ORIGIN-TRIAL.md
-  has the exact blocker and the four steps left). Until it is, the deployed site needs
-  `chrome://flags/#enable-webmcp-testing` or a browser that ships WebMCP on, and the polyfill
-  covers everything else.
+- **Chrome Origin Trial token is live.** It ships as a `<meta http-equiv="origin-trial">` tag in the root layout and as an `Origin-Trial` response header, so stock Chrome 149 to 156 gets native WebMCP on this origin without a flag (verified in a browser without the flag; expiry 2026-11-17, docs/ORIGIN-TRIAL.md).
 - **The confirmation card is not a capability boundary.** webmcp#288 shows an agent that also
   automates the raw page can click Confirm itself. The card raises the cost and creates a record.
   The capability key described below is the part that actually holds, and the drafted

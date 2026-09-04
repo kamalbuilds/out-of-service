@@ -1,6 +1,6 @@
 # Chrome Origin Trial: WebMCP
 
-Status: BLOCKED. Token not yet obtained. Everything below is confirmed by reading the live
+Status: LIVE since 2026-09-04. Token registered and shipped (see the Token section). The notes below record how the registration page reads and were confirmed by reading the live
 registration page in the `deepsurge` browser profile; nothing here is guessed.
 
 ## Trial details (read from the registration page)
