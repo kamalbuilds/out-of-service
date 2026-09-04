@@ -252,6 +252,29 @@ directly: in Chrome 149 to 152 builds, `document.modelContext.executeTool(name, 
 saying `object` (webmachinelearning/webmcp issue #278). Passing an object throws. Our tool log
 and evals use the string form.
 
+## What a judge sees in DevTools
+
+Real screenshots, `DevTools > Application > WebMCP`, taken against the live rider and companion
+windows for the same trip (Court Sq to Bleecker St), Chrome/Brave 152, native `document.modelContext`.
+
+![Rider WebMCP panel](devtools-rider.jpg)
+
+Rider window: **Available Tools** lists all twelve imperative tools plus the declarative
+`report_broken_equipment`, including `accept_route` and `accept_reroute`, the two tools the
+companion never registers.
+
+![Companion WebMCP panel](devtools-companion.jpg)
+
+Companion window, same trip: ten tools, `propose_reroute` present, `accept_reroute` and
+`accept_route` both absent from the list Chrome itself reports.
+
+![Invoked tool call in the WebMCP panel](devtools-rider-invoked.jpg)
+
+A real `watch_equipment` call fired through `document.modelContext.executeTool`: the panel's
+**Invoked Tools** table shows it in progress with its input (`{"equipment":["EL328"]}`) while
+the page's own "AGENT WANTS TO ACT" confirm card blocks completion until a human presses
+Confirm, the same gate a screen reader user would hit.
+
 ## Security
 
 - **Role is a capability carried by the link, not a self-declared label.** Two judges

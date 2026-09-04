@@ -227,7 +227,9 @@ the ChatGPT in-app browser, which speaks WebMCP.
    mezzanine-to-platform elevator at Penn Station on the C/E side, is out (94.1% availability over
    24 months, 35 unscheduled outages, 7 entrapments). Numbers move with the live feed; EL228 is due
    back 2026-09-05.
-2. Open DevTools > **Application > WebMCP** in that window. **Available Tools** lists 13.
+2. Open DevTools > **Application > WebMCP** in that window. **Available Tools** lists 13. Real
+   screenshots of this panel for both windows, including an invoked call, are in
+   [`docs/WEBMCP.md#what-a-judge-sees-in-devtools`](docs/WEBMCP.md#what-a-judge-sees-in-devtools).
 3. Copy the companion link, open it in a second window, open the same pane. It lists 10. The three
    missing imperative tools are `accept_route`, `accept_reroute` and `share_trip`, plus the
    declarative `report_broken_equipment`, which appears with no `annotations` object because Chrome
