@@ -1,28 +1,36 @@
 # Out of Service
 
-Two people, two agents, one page: a rider in a wheelchair and the companion tracking their trip
-each get a different set of tools, registered per session from inside the page and enforced
-server-side, visible in DevTools before either agent says a word. The rider can accept a route or
-a reroute; the companion can only propose one.
+**Two people, two agents, one page.** A rider in a wheelchair and the companion tracking their trip
+open the same trip and get different tools, registered per session from inside the page and
+enforced server-side by the trip's capability key. The rider can accept a route or a reroute. The
+companion's agent can only propose one, and a forged accept presented with the companion's key is
+rejected.
 
-Demo video (2:39): https://youtu.be/Ui_1FORk94w
-
+Step-free NYC subway routing, scored on how often the specific elevators a route depends on have
+actually failed: eleven years of MTA outage history joined to the live outage feed.
 
 Live: https://out-of-service-sepia.vercel.app
 Repo: https://github.com/kamalbuilds/out-of-service (MIT)
-Built for The WebMCP Challenge.
+Demo video (2:39): https://youtu.be/Ui_1FORk94w
 
 ## Why this matters
 
-The CIDNY v. MTA settlement, reached July 29, 2026, requires the MTA to give advance
-elevator-outage notice, platform announcements every 15 minutes and real-time rerouting
-information (https://dralegal.org/press/ny-subway-elevators-settlement/). Today, checking three
-routes by hand means four equipment-code lookups across two MTA pages and roughly two minutes of
-manual cross-referencing; here, one `route_accessible` call returns the same three routes scored,
-in under a second. MTA reports 160 accessible stations of 472
+New York's subway has 160 accessible stations out of 472
 (https://www.mta.info/article/accessibility-disability-pride-month-2026,
-https://gothamist.com/news/mta-settles-suit-to-make-subway-elevators-more-reliable); advocates
-count at least 25 elevator outages a day with a median of about four hours (Gothamist, same URL).
+https://gothamist.com/news/mta-settles-suit-to-make-subway-elevators-more-reliable), and almost
+every one of them depends on an elevator. Advocates counted at least 25 elevator outages a day,
+median about four hours (Gothamist, same URL). If the one you need is out, you find out standing in
+front of it, and the person tracking your trip can only text.
+
+The MTA status page says what is broken this minute, never what breaks often. Checking whether the
+F out of Court Sq is a safe bet takes four equipment-code lookups across two MTA pages and about
+two minutes of cross-referencing; here, one `route_accessible` call returns three routes scored,
+each with its elevators' 24-month history attached, in under a second.
+
+In July 2026 a class action about exactly this settled. CIDNY v. MTA now requires the MTA to give
+advance notice of elevator outages, platform announcements every 15 minutes and real-time alternate
+accessible routes (https://dralegal.org/press/ny-subway-elevators-settlement/). The obligation
+exists now. The thing a rider actually holds does not.
 
 ## What it does
 

@@ -10,9 +10,7 @@ Out of Service
 
 ## Tagline (under 100 characters)
 
-Two people, two agents, one page: only the rider can accept the reroute. Step-free NYC routing.
-
-(97 characters)
+Two people, two agents, one page. The companion's agent cannot accept the reroute. Step-free NYC.
 
 ## Links
 
@@ -21,73 +19,147 @@ Two people, two agents, one page: only the rider can accept the reroute. Step-fr
 
 ---
 
-## Why this use case is a strong fit for WebMCP
+## The problem
 
-Two humans and two agents share one page: a rider in a wheelchair and the companion tracking their
-trip each get a different tool list, registered per session from inside the page and enforced
-server-side by the trip's capability key, visible in DevTools > Application > WebMCP before either
-agent says a word. The rider can accept a route or a reroute; the companion can only propose one,
-and a forged accept call presented with the companion's key still gets rejected. The CIDNY v. MTA
-settlement, reached July 29, 2026, requires the MTA to give advance elevator-outage notice,
-platform announcements and real-time rerouting information
-(https://dralegal.org/press/ny-subway-elevators-settlement/). Today, checking three routes by hand
-means four equipment-code lookups across two MTA pages and roughly two minutes of manual
-cross-referencing; here, one `route_accessible` call returns the same three routes scored, in
-under a second. DevTools > Application > WebMCP shows 13 tools in the rider's window and 10 in the
-companion's; a server-side MCP server would need a second deployment and an auth handshake to
-express that, because with DOM scraping or a shared login the page cannot tell which person's
-agent is asking. The tools also change with the world: when the MTA feed says an elevator went
-out, the page re-registers and `toolchange` fires, so the agent's picture of what it can do
-updates because the subway changed.
+A wheelchair user is at Court Sq trying to reach Bleecker St. New York's subway has
+[160 accessible stations](https://www.mta.info/article/accessibility-disability-pride-month-2026)
+out of
+[472](https://gothamist.com/news/mta-settles-suit-to-make-subway-elevators-more-reliable), and
+almost every one depends on an elevator. Advocates counted at least 25 elevator outages a day,
+median about four hours
+([Gothamist](https://gothamist.com/news/mta-settles-suit-to-make-subway-elevators-more-reliable)).
+If the one you need is out, you find out standing in front of it.
 
-## How it creates a better user experience
+The person tracking that trip, a partner, an aide, an adult child, is somewhere else with a phone.
+They can read the same feed the rider can, and do nothing with it but text.
 
-Court Sq (E M G 7) to Bleecker St (6, with a transfer to B D F M) has one clean one-seat ride
-today, the F, at 26 (moderate). Deciding whether that holds means opening the MTA status page,
-checking whatever equipment code touches your route by hand, and learning only whether it is out
-right now, nothing about how often it fails before. Before: an equipment-code lookup across two
-MTA pages and roughly two minutes of manual cross-referencing, then a guess. After: one
-`route_accessible` call that returns three scored routes with every dependent elevator's history
-attached: F direct at 26, G then F at 35, F then M at 43, all live as of the 2026-09-03 build. When
-the demo control simulates EL328 going out at Bleecker, the F flips to 86 (avoid, broken) and G
-then F becomes the recommendation at 35, and every number still carries the query that produced
-it, so the rider can check the claim rather than trust it. The same call resolves 34 St-Penn
-Station's two complexes correctly too: Times Sq-42 St to the A C E one returns the A at 13 (low
-risk), the C and the E at 88 (avoid, broken), because EL228 is out and non-redundant.
+Planning around it barely works. The MTA status page says what is broken this minute, never what
+breaks often.
 
-## What people and agents can now do together that was difficult before
+In July 2026 a class action about exactly this settled. *CIDNY v. MTA* now requires advance notice
+of elevator outages, platform announcements every 15 minutes, and real-time alternate accessible
+routes
+([Disability Rights Advocates](https://dralegal.org/press/ny-subway-elevators-settlement/)). The
+obligation exists now. The thing a rider holds does not.
 
-Two agents work the same trip with a real division of labour. The companion's agent watches
-the live feed and calls `propose_reroute` with a reason; the rider's agent surfaces it and calls
-`accept_reroute`, which parks inside a confirmation card until the rider presses Confirm, or
-Reject with a typed reason that reaches the model as a sentence: "The rider rejected the reroute:
-that transfer is too long for me." The companion's agent cannot accept anything, even by forging
-the call, because the server re-checks the role. DOM scraping gets you one tool surface and a
-shared login gets you one identity; neither gives the companion's agent a different set of tools
-on the same page.
+## What Out of Service is
 
-MTA reports 160 accessible stations of 472
-(https://www.mta.info/article/accessibility-disability-pride-month-2026,
-https://gothamist.com/news/mta-settles-suit-to-make-subway-elevators-more-reliable). The CIDNY v.
-MTA settlement, reached July 29, 2026, requires advance elevator-outage notice, platform
-announcements every 15 minutes and real-time rerouting information
-(https://dralegal.org/press/ny-subway-elevators-settlement/); advocates count at least 25 elevator
-outages a day with a median of about four hours (Gothamist, same URL).
+Out of Service scores every step-free route between two accessible stations on the specific
+elevators it depends on, using eleven years of MTA outage history joined to the live feed, so a
+route arrives as a number and a named list of equipment instead of a hope. The rider and the
+companion open the same trip on the same page, each with their own agent, and the two agents get
+different tools.
 
-## How WebMCP was implemented
+## How it works
 
-`document.modelContext.registerTool` only, never `navigator.modelContext`, which moved to Document
-in the 27 May 2026 draft. The runtime reads `document.modelContext` once before anything touches
-it, then falls back to `@mcp-b/webmcp-polyfill`, and an on-page badge prints `native`, `polyfill`
-or `unavailable`. Fifteen tools, each with a strict `inputSchema` and `readOnlyHint`;
-`untrustedContentHint` on `get_trip` alone, the one tool returning text another human typed, which
-is delimited before the model sees it. Every mutating tool builds its own confirm gate inside
-`execute`, because WebMCP has no destructive-action annotation and `requestUserInteraction()` has
-not shipped. `create_trip` and `report_broken_equipment` are declarative forms with no
-`toolautosubmit`, so a person presses Submit. The Chrome origin trial token is not registered on
-this origin yet, so stock Chrome 149+ needs `chrome://flags/#enable-webmcp-testing`, or the
-ChatGPT in-app browser, to get the native path; `@mcp-b/webmcp-polyfill` covers every other browser
-and the badge on the page says which one you are on.
+Three keyless MTA sources, joined into one committed artifact (`docs/DATA.md`): 82,385 monthly
+availability rows over 695 equipment codes, 2015-01 to 2026-07, from NY State dataset `rc78-7x78`; the 704-row
+equipment master, which names what each unit connects; and the live outage feed, 85 records at
+build time.
+
+The join is `data/index.json`: 695 records, 413 elevators and 282 escalators across 123 accessible
+complexes, each with 24 months of metrics, a percentile rank inside its own equipment type, a tier, and a `tier_reason` naming the thresholds behind it (`unreliable:
+availability_24h_mean_24m 0.9688 <= p25 0.9764`). All 77 live-outage ids join into the index
+(`data/index-meta.json`). Routing runs on a graph from the master alone: 123 nodes, 558 ride edges over 23 lines, 472
+asserted by the MTA's own next-accessible-station fields (`docs/ROUTING.md`).
+
+The score is a sum, not a verdict: 25 per dependent unreliable elevator, 10 watch, 8 unknown, 2
+reliable, halved where a second elevator makes the same move, 15 per transfer, plus 60 and a `broken` flag if a required non-redundant elevator is out live. Broken is never
+"this station has an outage", always "this route needs this elevator, nothing else makes that
+move, and it is out". Every number on screen is dotted, and clicking it opens the dataset, the
+query and the row count.
+
+## Two people, two agents, one page
+
+Creating a trip mints two unguessable keys. The rider gets `/t/<id>?k=<riderKey>`; the companion
+link is the same trip with the other key. Tools register per session from those keys, so DevTools >
+Application > WebMCP lists 13 tools in the rider's window and 10 in the companion's, same origin,
+same page, before either agent says a word.
+
+Hiding a tool is not the boundary. `POST /api/trip/:id/action` derives the role from the key
+and ignores any role in the body, so a forged accept from the companion's session comes
+back 403: "Only the rider can accept route. You are the
+companion: propose a reroute instead and the rider confirms it."
+
+Every write parks inside `execute` behind a confirmation card and does not resolve until a person
+presses Confirm. Reject rejects it in the rider's own typed words, so the agent hears "that
+transfer is too long for me" and offers something else. The broken-equipment report is a
+declarative HTML form with no `toolautosubmit`: the agent fills it in and stops, a person sends it.
+
+When the feed changes, the whole set re-registers and `toolchange` fires, and `accept_reroute`'s
+description goes from "0 pending proposals" to "1 pending proposal from your companion right now
+(p1)".
+
+## Features
+
+- **Route scoring with tiers.** Three routes, each with a risk number, a label and the elevators
+  behind it.
+- **Live station panel.** Outages at both ends with the MTA's return estimates.
+- **Companion link.** Its own capability key, its own tool set.
+- **Proposals and acceptance.** The companion proposes with a reason, the rider accepts or rejects,
+  both windows updating in about two seconds.
+- **Watch equipment.** Subscribe to codes, see them in a watch list.
+- **Broken-equipment report.** A declarative form the agent fills and a person sends.
+- **Source on hover.** Every dotted number opens its dataset, query and row count.
+- **Simulated outage.** Forces one elevator out for the session, labelled SIMULATED throughout.
+- **Origin trial.** The Chrome WebMCP token is in the page head, so stock Chrome needs no flag.
+
+## Why WebMCP is the right fit
+
+**Why this use case is a strong fit for WebMCP.** Two humans with different authority share one
+page. WebMCP registers tools per session from inside the page, so one origin and one path present
+13 tools to the rider's agent and 10 to the companion's, decided by the key in the link. A server-side MCP server can express two roles, but not without a second deployment, an auth
+handshake and an account for the companion.
+
+**How it creates a better experience.** Before: four equipment-code lookups across two MTA pages,
+two minutes of cross-referencing, an answer good only for this minute. After: one
+`route_accessible` call, under a second, three routes scored on their elevators' 24-month history. Court Sq (E M G 7) to Bleecker St returns the F at 26, G then F at 35,
+F then M at 43 on the 2026-09-03 build. Take EL328 at Bleecker out and the F flips to 86,
+avoid, broken, and G then F becomes the recommendation.
+
+**What people and agents can now do together that was difficult or impossible before.** Two agents split one trip: the companion's watches the feed and proposes, the rider's surfaces it,
+a person confirms. The rider never has to trust the companion's agent, or ours, because the
+difference is enforced by the server and visible in DevTools.
+
+**How we implemented WebMCP.** `document.modelContext.registerTool` only, never
+`navigator.modelContext`, which moved to Document in the 27 May 2026 draft. Fifteen tools,
+registered per session by role, each with a strict `inputSchema` and `readOnlyHint`, and
+`untrustedContentHint` on `get_trip` alone, the one tool returning text another human typed.
+Mutations build their own confirm gate inside `execute`, because WebMCP has no destructive-action
+annotation and `requestUserInteraction()` has not shipped; `create_trip` and
+`report_broken_equipment` are declarative forms without `toolautosubmit`. `evals/` follows
+Chrome's guidance with 17 fixtures carrying `role`, `page` and `state`, one of them a companion
+asking to accept, where the right answer is no tool call. The runtime reads
+`document.modelContext` once before anything touches it and otherwise loads `@mcp-b/webmcp-
+polyfill`, with a badge on the page printing `native`, `polyfill` or `unavailable`.
+
+## What is real today, and what is next
+
+NYCT subway only: no PATH, no commuter rail, no buses. Tiers are percentiles of the equipment's own population, so
+"unreliable" means unreliable for New York, not against an absolute standard.
+Direction is the honest blind spot: 65 of 264 platform-touching elevators call themselves
+"Manhattan-bound", meaning south from the Bronx and north from Brooklyn, and the master's borough
+column is empty on all 704 rows. Those are reported as possible dependencies, inflating a route's risk rather than hiding one.
+
+Next: MTA alert subscriptions per watched elevator, so a watch list pushes instead of polls; more
+cities, because the same open-data shape exists elsewhere; and the two-agent pattern outside
+transit, a pharmacist and a caregiver on one prescription page, where one proposes a substitution
+and only the other can accept it.
+
+## Built with
+
+Next.js 16, React 19, TypeScript, Tailwind CSS 4, WebMCP (`document.modelContext`),
+`@mcp-b/webmcp-polyfill`, Server-Sent Events, Vercel, Vercel Blob, Vitest, Node.js. Data, all
+keyless:
+[monthly availability](https://data.ny.gov/resource/rc78-7x78.json) (NY State `rc78-7x78`),
+[MTA equipment master](https://api-endpoint.mta.info/Dataservice/mtagtfsfeeds/nyct%2Fnyct_ene_equipments.json),
+[MTA live outage feed](https://api-endpoint.mta.info/Dataservice/mtagtfsfeeds/nyct%2Fnyct_ene.json).
+Counts above are the 2026-09-03 build snapshot; `GET /api/health` returns current live values.
+Impact figures:
+[MTA](https://www.mta.info/article/accessibility-disability-pride-month-2026),
+[Gothamist](https://gothamist.com/news/mta-settles-suit-to-make-subway-elevators-more-reliable),
+[Disability Rights Advocates](https://dralegal.org/press/ny-subway-elevators-settlement/). Licence:
+MIT.
 
 ---
 
@@ -96,15 +168,6 @@ and the badge on the page says which one you are on.
 Everything. The repository was created on 3 September 2026 and every line of this project,
 including the derived reliability index, the routing graph and the WebMCP tool layer, was written
 after that date. No prior codebase was reused.
-
-## Built with
-
-Next.js 16, React 19, TypeScript, Tailwind CSS 4, WebMCP (`document.modelContext`),
-`@mcp-b/webmcp-polyfill`, `@mcp-b/webmcp-types`, `usewebmcp`, Server-Sent Events, Vercel, Vercel
-Blob, Vitest, Node.js, MTA elevator and escalator open data (NY State dataset `rc78-7x78`, MTA
-equipment master, MTA live outage feed).
-
----
 
 ## Testing instructions (submission field)
 
