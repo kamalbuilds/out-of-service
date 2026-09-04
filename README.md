@@ -71,6 +71,17 @@ elevator at Penn Station: the A lands on EL227, the C and the E both land on EL2
 broken), because EL228 is out and non-redundant (see docs/ROUTING.md, section 5). Numbers move
 with the live feed; EL228 is due back 2026-09-05.
 
+## Architecture
+
+![Architecture diagram: three MTA sources feed build-index.ts, which writes the committed reliability index; Next.js API routes score the ADA graph and hold trip state in Upstash Redis; the page registers WebMCP tools per session for the agent to call](docs/architecture.png)
+
+Three keyless MTA sources (the `rc78-7x78` history, the live outage feed, the equipment master)
+feed `build-index.ts`, which writes the committed reliability index. Next.js API routes
+(`/api/route`, `/api/trip`, `/api/live`) score routes against that index and hold trip state and
+rate limits in Upstash Redis on Vercel. The page reads that state over SSE and registers WebMCP
+tools per session, rider or companion, for whichever agent is attached to read. Full interactive
+diagram: [docs/architecture.html](docs/architecture.html).
+
 ## Why WebMCP is the right fit here
 
 **Two people, two agents, one origin, one page, different tools.** A rider and the person helping
