@@ -99,8 +99,8 @@ export function StationPicker({
           </>
         ) : (
           <p className="num text-[0.75rem] leading-snug text-ink-soft">
-            {matches.length} of {stations.length} step-free stations listed. Pick one to see its
-            elevators.
+            Showing {matches.length} of {stations.length} accessible stations, keep typing to
+            narrow. Pick one to see its elevators.
           </p>
         )}
       </div>

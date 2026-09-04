@@ -1,8 +1,9 @@
 # Out of Service
 
-NYC subway routing for wheelchair users, where every route is scored on the real outage history
-of the elevators it depends on, and a rider and a companion each get their own agent on the same
-page with different tools.
+Two people, two agents, one page: a rider in a wheelchair and the companion tracking their trip
+each get a different set of tools, registered per session from inside the page and enforced
+server-side, visible in DevTools before either agent says a word. The rider can accept a route or
+a reroute; the companion can only propose one.
 
 Demo video (2:39): https://youtu.be/Ui_1FORk94w
 
@@ -13,13 +14,15 @@ Built for The WebMCP Challenge.
 
 ## Why this matters
 
-MTA reports 160 accessible stations of 472
+The CIDNY v. MTA settlement, reached July 29, 2026, requires the MTA to give advance
+elevator-outage notice, platform announcements every 15 minutes and real-time rerouting
+information (https://dralegal.org/press/ny-subway-elevators-settlement/). Today, checking three
+routes by hand means four equipment-code lookups across two MTA pages and roughly two minutes of
+manual cross-referencing; here, one `route_accessible` call returns the same three routes scored,
+in under a second. MTA reports 160 accessible stations of 472
 (https://www.mta.info/article/accessibility-disability-pride-month-2026,
-https://gothamist.com/news/mta-settles-suit-to-make-subway-elevators-more-reliable). The CIDNY v.
-MTA settlement, reached July 29, 2026, requires advance elevator-outage notice, platform
-announcements every 15 minutes and real-time rerouting information
-(https://dralegal.org/press/ny-subway-elevators-settlement/); advocates count at least 25 elevator
-outages a day with a median of about four hours (Gothamist, same URL).
+https://gothamist.com/news/mta-settles-suit-to-make-subway-elevators-more-reliable); advocates
+count at least 25 elevator outages a day with a median of about four hours (Gothamist, same URL).
 
 ## What it does
 
@@ -44,13 +47,21 @@ outages a day with a median of about four hours (Gothamist, same URL).
    fills the fields and stops. A human presses Submit, because the form carries no
    `toolautosubmit`.
 
-Concretely: Times Sq-42 St to 34 St-Penn Station has three one-seat rides, the A, the C and the E.
-All three share the same Port Authority entrance elevators and differ on one elevator at Penn
-Station: the A lands on EL227, the C and the E both land on EL228. Deciding between them by hand
-means looking up four equipment codes on the MTA status page, which reports whether a unit is out
-right now and nothing about how often it has failed before. One `route_accessible` call returns
-all three routes scored: A at 13 (low risk), C and E at 88 (avoid, broken), because EL228 is out
-and is non-redundant (see docs/ROUTING.md, section 5).
+Concretely: Court Sq (E M G 7) to Bleecker St (6, with a transfer to B D F M), wheelchair, is the
+demo pair. Live as of the 2026-09-03 build: the F direct scores 26 (moderate), G to Church Av then
+F scores 35 (moderate), F to 6 Av/14 St then M scores 43 (moderate). EL445X at Court Sq is out on
+the 7 platform to mezzanine, which is not on any of these routes, so the trip reads clean while the
+station panel still shows a real outage. The demo control simulates EL328 going out at Bleecker
+(labelled SIMULATED everywhere it appears): the F flips to 86 (avoid, broken), F then M reaches 100
+(broken), and G then F becomes the recommendation at 35.
+
+A second worked example: 34 St-Penn Station (A C E). Two complexes share that name, one on the
+A/C/E and one on the 1/2/3/LIRR; the station picker shows both, so pick the A C E one. Times
+Sq-42 St to that complex has three one-seat rides, the A, the C and the E, differing on one
+elevator at Penn Station: the A lands on EL227, the C and the E both land on EL228. One
+`route_accessible` call returns all three routes scored: A at 13 (low risk), C and E at 88 (avoid,
+broken), because EL228 is out and non-redundant (see docs/ROUTING.md, section 5). Numbers move
+with the live feed; EL228 is due back 2026-09-05.
 
 ## Why WebMCP is the right fit here
 
@@ -59,8 +70,9 @@ them are not the same user with the same permissions. WebMCP registers tools per
 page, so the same trip under a second capability key presents a different tool list to a different
 agent
 without a second deployment, a second server, or an auth handshake. A server-side MCP server
-cannot express that, because it does not know which browser tab is asking. The asymmetry is
-visible in DevTools > Application > WebMCP before anyone says a word.
+would need a second deployment and an auth handshake to express that: with DOM scraping or a
+shared login the page cannot tell which person's agent is asking. The asymmetry is visible in
+DevTools > Application > WebMCP before anyone says a word.
 
 **The tool set is state, not configuration.** `toolsForRole` rebuilds every description from the
 current trip and the current live feed, so re-registering a generation produces text a model can
@@ -202,10 +214,19 @@ propose a reroute instead and the rider confirms it."
 You need Chrome 149 or later with WebMCP enabled at `chrome://flags/#enable-webmcp-testing`, or
 the ChatGPT in-app browser, which speaks WebMCP.
 
-1. Open https://out-of-service-sepia.vercel.app and plan **Times Sq-42 St to 34 St-Penn Station**.
-   That is the demo pair: the A scores 13 (low risk), the C and the E score 88 (avoid) because
-   EL228, the non-redundant mezzanine-to-platform elevator at Penn Station on the C/E side, is out.
-   EL228 is `unreliable`: 94.1% availability over 24 months, 35 unscheduled outages, 7 entrapments.
+1. Open https://out-of-service-sepia.vercel.app and plan **Court Sq (E M G 7) to Bleecker St (6,
+   with a transfer to B D F M)**, wheelchair. That is the demo pair: live as of the 2026-09-03
+   build, the F direct scores 26 (moderate), G to Church Av then F scores 35 (moderate), and F to
+   6 Av/14 St then M scores 43 (moderate). EL445X is out at Court Sq on the 7 platform to
+   mezzanine, which is not on any of these routes, so the trip reads clean while the station panel
+   still shows a real outage. Add `?demo=1` (step 5) to simulate EL328 going out at Bleecker,
+   labelled SIMULATED throughout: the F flips to 86 (avoid, broken) and G then F becomes the
+   recommendation. A second worked example: plan **Times Sq-42 St to 34 St-Penn Station**, picking
+   the A C E complex (Penn has two complexes with that name; the picker shows both). The A scores
+   13, low risk; the C and the E score 88, avoid, broken, because EL228, the non-redundant
+   mezzanine-to-platform elevator at Penn Station on the C/E side, is out (94.1% availability over
+   24 months, 35 unscheduled outages, 7 entrapments). Numbers move with the live feed; EL228 is due
+   back 2026-09-05.
 2. Open DevTools > **Application > WebMCP** in that window. **Available Tools** lists 13.
 3. Copy the companion link, open it in a second window, open the same pane. It lists 10. The three
    missing imperative tools are `accept_route`, `accept_reroute` and `share_trip`, plus the
